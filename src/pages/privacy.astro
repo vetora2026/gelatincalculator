@@ -1,16 +1,14 @@
 ---
 import "../styles/global.css";
+import BaseHead from "../components/BaseHead.astro";
 import Footer from "../components/Footer.astro";
 ---
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>Privacy — gelatincalculator.com</title>
-    <meta
-      name="description"
-      content="Privacy policy for gelatincalculator.com — what data we collect (almost none), cookies, and contact information."
+    <BaseHead
+      title="Privacy Policy — gelatincalculator.com"
+      description="Privacy policy for gelatincalculator.com. No accounts, no tracking, no personal data collected."
+      path="/privacy/"
     />
   </head>
   <body class="bg-white text-stone-900">

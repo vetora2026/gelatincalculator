@@ -1,18 +1,16 @@
 ---
 import "../styles/global.css";
+import BaseHead from "../components/BaseHead.astro";
 import Diagnostic from "../components/Diagnostic.jsx";
 import TwoLegos from "../components/TwoLegos.astro";
 import Footer from "../components/Footer.astro";
 ---
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>Gelatin Calculator — Find your gelatin's bloom strength and convert recipes</title>
-    <meta
-      name="description"
-      content="Diagnose your gelatin's bloom strength and convert pastry recipes between sheet and powder gelatin. A free tool for home cooks."
+    <BaseHead
+      title="Gelatin Bloom Calculator — Knox, Gold Sheet, Silver & More | gelatincalculator.com"
+      description="Convert gelatin amounts between bloom strengths. Covers Knox (~225), gold (~200), silver (~160), platinum (~240), and more. Free diagnostic tool for home bakers working from pastry recipes."
+      path="/"
     />
   </head>
   <body class="bg-white text-stone-900">
@@ -29,26 +27,16 @@ import Footer from "../components/Footer.astro";
     </nav>
 
     <header class="max-w-5xl mx-auto px-5 pt-16 sm:pt-24 pb-12 sm:pb-20 text-center">
-      <div class="text-xs uppercase tracking-widest text-amber-700 font-semibold mb-4">
-        The missing step most recipes skip
-      </div>
       <h1 class="font-serif text-5xl sm:text-6xl md:text-7xl text-stone-900 mb-10">
         Know your gelatin.
       </h1>
       <TwoLegos />
-      <p class="mt-10 text-stone-600 max-w-xl mx-auto leading-relaxed">
-        Most home cooks don't know their gelatin's bloom strength. Most recipes assume they do.
-      </p>
-      <a
-        href="#tool"
-        class="mt-10 inline-block rounded-full bg-amber-500 hover:bg-amber-600 text-white font-medium px-6 py-3 transition shadow-sm"
-      >
-        Find my gelatin's bloom →
-      </a>
     </header>
 
     <main class="max-w-5xl mx-auto px-5">
-      <Diagnostic client:load />
+      <div class="mt-16">
+        <Diagnostic client:load />
+      </div>
 
       <section class="mt-24 max-w-3xl mx-auto">
         <h2 class="font-serif text-3xl sm:text-4xl text-stone-900 mb-6">

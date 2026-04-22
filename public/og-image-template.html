@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>OG Image — gelatincalculator.com</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@500;600&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: #ffffff; }
+  body {
+    width: 1200px;
+    height: 630px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #1c1917; /* stone-900 */
+    position: relative;
+    overflow: hidden;
+  }
+  .accent {
+    position: absolute;
+    top: 56px;
+    left: 56px;
+    width: 120px;
+    height: 3px;
+    background: #d97706; /* amber-600 */
+  }
+  .domain {
+    position: absolute;
+    top: 48px;
+    right: 56px;
+    font-size: 22px;
+    font-weight: 500;
+    color: #78716c; /* stone-500 */
+  }
+  h1 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-weight: 400;
+    font-size: 136px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin: 0 0 80px 0;
+    text-align: center;
+  }
+  .cards {
+    display: flex;
+    gap: 32px;
+  }
+  .card {
+    width: 340px;
+    padding: 28px 32px;
+    border: 1px solid #e7e5e4; /* stone-200 */
+    border-radius: 16px;
+    background: #fafaf9; /* stone-50 */
+    text-align: left;
+  }
+  .card .label {
+    font-size: 20px;
+    color: #57534e; /* stone-600 */
+    margin-bottom: 10px;
+    letter-spacing: 0.01em;
+  }
+  .card .value {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 64px;
+    color: #1c1917;
+    line-height: 1;
+  }
+  .card .value .unit {
+    font-family: 'Inter', sans-serif;
+    font-size: 22px;
+    color: #78716c;
+    font-weight: 500;
+    margin-left: 8px;
+  }
+  .footer {
+    position: absolute;
+    bottom: 48px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 20px;
+    color: #78716c;
+    letter-spacing: 0.02em;
+  }
+</style>
+</head>
+<body>
+  <div class="accent"></div>
+  <div class="domain">gelatincalculator.com</div>
+
+  <h1>Know your gelatin.</h1>
+
+  <div class="cards">
+    <div class="card">
+      <div class="label">Knox</div>
+      <div class="value">~225<span class="unit">bloom</span></div>
+    </div>
+    <div class="card">
+      <div class="label">French pastry</div>
+      <div class="value">~200<span class="unit">bloom</span></div>
+    </div>
+  </div>
+
+  <div class="footer">Diagnose your gelatin's bloom. Convert any recipe.</div>
+</body>
+</html>
