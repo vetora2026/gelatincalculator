@@ -1,0 +1,109 @@
+name: Data Validation Reminder
+
+on:
+  schedule:
+    # Twice a year: April 1 and October 1 at 09:00 UTC
+    - cron: '0 9 1 4,10 *'
+  workflow_dispatch: {}
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  open-reminder-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Ensure labels exist and open reminder issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            const dataPath = 'src/data/gelatin-bloom.json';
+            const raw = fs.readFileSync(dataPath, 'utf8');
+            const data = JSON.parse(raw);
+
+            const today = new Date();
+            const pad = (n) => String(n).padStart(2, '0');
+            const todayStr = `${today.getUTCFullYear()}-${pad(today.getUTCMonth() + 1)}-${pad(today.getUTCDate())}`;
+
+            const next = new Date(today);
+            next.setUTCMonth(next.getUTCMonth() + 6);
+            const nextStr = `${next.getUTCFullYear()}-${pad(next.getUTCMonth() + 1)}-${pad(next.getUTCDate())}`;
+
+            // Ensure labels exist
+            const desiredLabels = [
+              { name: 'data-validation', color: '0E8A16', description: 'Scheduled bloom data re-verification' },
+              { name: 'scheduled', color: 'BFDADC', description: 'Triggered by a scheduled workflow' }
+            ];
+            for (const label of desiredLabels) {
+              try {
+                await github.rest.issues.getLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: label.name
+                });
+              } catch (err) {
+                if (err.status === 404) {
+                  await github.rest.issues.createLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    name: label.name,
+                    color: label.color,
+                    description: label.description
+                  });
+                } else {
+                  throw err;
+                }
+              }
+            }
+
+            // Build a single flat list of current entries across all categories
+            const rows = [];
+            for (const [category, entries] of Object.entries(data)) {
+              if (!Array.isArray(entries)) continue;
+              for (const e of entries) {
+                const bloom = e.range ? `${e.bloom} (range ${e.range[0]}–${e.range[1]})` : String(e.bloom);
+                const notes = (e.notes || '').replace(/\|/g, '\\|');
+                rows.push(`| ${e.name} | ${bloom} | ${e.confidence} | ${notes} |`);
+              }
+            }
+
+            const fileUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/blob/main/src/data/gelatin-bloom.json`;
+
+            const body = [
+              `This is a scheduled reminder to re-verify the bloom values in \`src/data/gelatin-bloom.json\`. Values there drive every conversion on gelatincalculator.com, so they need a human sanity-check roughly every six months. This workflow does not scrape or edit any data — the work below is manual.`,
+              ``,
+              `Current values at the time this issue was opened (${todayStr}):`,
+              ``,
+              `| Name | Bloom | Confidence | Notes |`,
+              `| --- | --- | --- | --- |`,
+              ...rows,
+              ``,
+              `Checklist:`,
+              ``,
+              `- [ ] Re-verify Knox bloom (check: David Lebovitz "How to Use Gelatin", Good Food Gourmet "All About Gelatin", Modernist Pantry, any manufacturer statement)`,
+              `- [ ] Confirm industry standard sheet grade ranges (titanium, bronze, silver, gold, platinum) still match published ranges`,
+              `- [ ] Spot-check generic powder estimates against current consumer gelatin packaging where visible`,
+              `- [ ] Note any new major US/EU consumer brand that has entered the market since last check`,
+              `- [ ] Update \`last_verified\` date in \`src/data/gelatin-bloom.json\` if no changes needed`,
+              `- [ ] If any value changed, update the JSON file and commit the change with message \`data: refresh bloom verification ${todayStr}\``,
+              ``,
+              `Data file: ${fileUrl}`,
+              ``,
+              `Next scheduled review: ${nextStr}`,
+            ].join('\n');
+
+            const title = `Gelatin bloom data review due — ${todayStr}`;
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title,
+              body,
+              labels: ['data-validation', 'scheduled']
+            });

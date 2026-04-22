@@ -55,3 +55,16 @@ Diagnostic and explanatory, not promotional. No stock marketing phrases. The sit
 
 - The converter's default recipe bloom is 200 (gold) because that's the most common target in professional pastry recipes. Changing this default silently changes conversion output for users who don't touch the preset — do so deliberately.
 - The diagnostic's "I don't know" paths all resolve to 215 bloom (the middle of the US grocery powder range). This is a deliberate "safe middle" fallback.
+
+## Known Version Pins
+
+- `@astrojs/sitemap` pinned at 3.2.1 — version 3.7.x crashes with Astro 4.16 ("Cannot read properties of undefined (reading 'reduce')"). When Astro is eventually upgraded past 4.x, re-upgrade sitemap to the then-current version.
+
+## Deployment
+
+- **Target:** Cloudflare Pages
+- **Build command:** `npm run build`
+- **Output directory:** `dist`
+- **Node version:** 20 or newer
+- **Custom domain:** `gelatincalculator.com` (registered on Cloudflare)
+- **Email forwarding:** `contact@gelatincalculator.com` → user's personal inbox, via Cloudflare Email Routing
