@@ -1,0 +1,106 @@
+---
+import "../styles/global.css";
+import Footer from "../components/Footer.astro";
+---
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Privacy — gelatincalculator.com</title>
+    <meta
+      name="description"
+      content="Privacy policy for gelatincalculator.com — what data we collect (almost none), cookies, and contact information."
+    />
+  </head>
+  <body class="bg-white text-stone-900">
+    <nav class="border-b border-stone-200">
+      <div class="max-w-5xl mx-auto px-5 py-4 flex items-center justify-between">
+        <a href="/" class="font-serif text-xl text-stone-900">gelatincalculator.com</a>
+        <div class="flex gap-5 text-sm text-stone-600">
+          <a href="/about" class="hover:text-amber-700">About</a>
+          <a href="/privacy" class="text-amber-700">Privacy</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="max-w-2xl mx-auto px-5 py-16">
+      <h1 class="font-serif text-5xl text-stone-900 mb-4">Privacy policy</h1>
+      <p class="text-sm text-stone-500 mb-8">Last updated: April 22, 2026</p>
+
+      <div class="text-stone-700 leading-relaxed space-y-5">
+        <h2 class="font-serif text-2xl text-stone-900 mt-6 mb-2">
+          What we collect
+        </h2>
+        <p>
+          gelatincalculator.com collects no personal data. You do not need
+          an account to use the calculator. We do not use localStorage,
+          sessionStorage, cookies, or any form of client-side tracking. The
+          entire site is static HTML, CSS, and JavaScript served from a
+          content delivery network — nothing you type into the calculator
+          is sent anywhere. Inputs stay in your browser and are discarded
+          when you close the tab.
+        </p>
+
+        <h2 class="font-serif text-2xl text-stone-900 mt-8 mb-2">
+          Server logs
+        </h2>
+        <p>
+          Our hosting provider (Cloudflare Pages) records standard HTTP
+          request logs that include IP address, user agent, and the page
+          requested. These logs are retained per Cloudflare's standard
+          policies and are used only for abuse prevention and operational
+          troubleshooting. We do not run any additional analytics on top of
+          these logs.
+        </p>
+
+        <h2 class="font-serif text-2xl text-stone-900 mt-8 mb-2">
+          Advertising (future)
+        </h2>
+        <p>
+          This site does not currently display advertisements. In the
+          future we may add Google AdSense to help cover hosting costs. If
+          and when that happens, Google may use cookies to serve ads based
+          on a user's prior visits to this and other websites. You can opt
+          out of personalized advertising by visiting{" "}
+          <a class="text-amber-700 underline underline-offset-4" href="https://www.google.com/settings/ads">
+            Google's Ads Settings
+          </a>
+          . This section will be updated with specific details when AdSense
+          is enabled; until then, no advertising cookies are set by this
+          site.
+        </p>
+
+        <h2 class="font-serif text-2xl text-stone-900 mt-8 mb-2">
+          Third parties
+        </h2>
+        <p>
+          The site loads the Google Fonts typeface "DM Serif Display" and
+          "Inter" from fonts.googleapis.com. Google's own privacy policy
+          applies to that font request. Aside from Google Fonts and the
+          hosting CDN, no other third-party services are called from our
+          pages.
+        </p>
+
+        <h2 class="font-serif text-2xl text-stone-900 mt-8 mb-2">
+          Children's privacy
+        </h2>
+        <p>
+          This site is a general-audience cooking reference and does not
+          knowingly collect information from anyone, including children.
+        </p>
+
+        <h2 class="font-serif text-2xl text-stone-900 mt-8 mb-2">Contact</h2>
+        <p>
+          Questions about privacy? Email{" "}
+          <a class="text-amber-700 underline underline-offset-4" href="mailto:contact@gelatincalculator.com">
+            contact@gelatincalculator.com
+          </a>
+          .
+        </p>
+      </div>
+    </main>
+
+    <Footer />
+  </body>
+</html>

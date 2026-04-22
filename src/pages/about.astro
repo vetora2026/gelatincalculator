@@ -1,0 +1,93 @@
+---
+import "../styles/global.css";
+import Footer from "../components/Footer.astro";
+---
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>About — gelatincalculator.com</title>
+    <meta
+      name="description"
+      content="About gelatincalculator.com — an independent tool for diagnosing gelatin bloom strength and converting pastry recipes."
+    />
+  </head>
+  <body class="bg-white text-stone-900">
+    <nav class="border-b border-stone-200">
+      <div class="max-w-5xl mx-auto px-5 py-4 flex items-center justify-between">
+        <a href="/" class="font-serif text-xl text-stone-900">gelatincalculator.com</a>
+        <div class="flex gap-5 text-sm text-stone-600">
+          <a href="/about" class="text-amber-700">About</a>
+          <a href="/privacy" class="hover:text-amber-700">Privacy</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="max-w-2xl mx-auto px-5 py-16">
+      <h1 class="font-serif text-5xl text-stone-900 mb-8">About</h1>
+      <div class="text-stone-700 leading-relaxed space-y-5">
+        <p>
+          <strong>gelatincalculator.com</strong> is a free, independent tool
+          that helps home cooks follow pastry recipes that specify a
+          particular bloom strength of gelatin. It does two things: it helps
+          you figure out what bloom strength your gelatin actually is, and
+          it converts a recipe's gelatin quantity to match what you have.
+        </p>
+        <p>
+          The site exists because most existing gelatin calculators assume
+          you already know your gelatin's bloom value. Most home cooks don't —
+          and most consumer gelatin packaging doesn't print it. Starting with
+          a diagnostic step before the conversion makes the tool usable
+          without a spec sheet in hand.
+        </p>
+        <h2 class="font-serif text-2xl text-stone-900 mt-10 mb-3">Who it's for</h2>
+        <p>
+          Home cooks, pastry enthusiasts, and anyone working from a recipe
+          that specifies a bloom value (for example, a translated French
+          pastry book that calls for "200-bloom gelatin") using gelatin from
+          a different source.
+        </p>
+        <h2 class="font-serif text-2xl text-stone-900 mt-10 mb-3">How the data was sourced</h2>
+        <p>
+          Sheet gelatin grades (titanium, bronze, silver, gold, platinum)
+          correspond to published industry-standard bloom ranges used across
+          European pastry suppliers. Those values are well-established.
+        </p>
+        <p>
+          The bloom value for Knox Unflavored Gelatin (~225) is not printed
+          on retail packaging but is consistently cited across independent
+          cooking references including David Lebovitz's
+          <em>How to Use Gelatin</em> and Good Food Gourmet's
+          <em>All About Gelatin</em>. We label that value "Confirmed."
+        </p>
+        <p>
+          For generic US grocery powder and European pastry-grade powder
+          where the brand isn't specified, we use a typical range and label
+          the confidence as "Typical estimate." For everything else, we
+          label "Rough estimate" and include a plain-language disclaimer.
+        </p>
+        <h2 class="font-serif text-2xl text-stone-900 mt-10 mb-3">Independence</h2>
+        <p>
+          This site is independent and is not affiliated with any gelatin
+          brand, manufacturer, or retailer. There are no affiliate links and
+          no sponsored placements in the data.
+        </p>
+        <h2 class="font-serif text-2xl text-stone-900 mt-10 mb-3">
+          Report an error or suggest a brand
+        </h2>
+        <p>
+          If a bloom value looks wrong, or you have a brand with a published
+          bloom strength you'd like added, email{" "}
+          <a class="text-amber-700 underline underline-offset-4" href="mailto:contact@gelatincalculator.com">
+            contact@gelatincalculator.com
+          </a>
+          . Please include a source — a manufacturer spec sheet, a published
+          book, or another citation we can verify.
+        </p>
+      </div>
+    </main>
+
+    <Footer />
+  </body>
+</html>

@@ -1,0 +1,20 @@
+---
+import data from "../data/gelatin-bloom.json";
+const verified = data.last_verified;
+---
+<footer class="border-t border-stone-200 mt-24 py-10 bg-stone-50">
+  <div class="max-w-4xl mx-auto px-5 text-sm text-stone-600">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div class="flex gap-5">
+        <a href="/about" class="hover:text-amber-700 underline underline-offset-4">About</a>
+        <a href="/privacy" class="hover:text-amber-700 underline underline-offset-4">Privacy</a>
+      </div>
+      <div class="text-stone-500">
+        Data last verified: {verified}
+      </div>
+    </div>
+    <p class="mt-5 text-xs text-stone-500 leading-relaxed">
+      This tool provides estimates. Always test a small batch for critical recipes.
+    </p>
+  </div>
+</footer>

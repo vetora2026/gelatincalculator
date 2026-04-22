@@ -1,0 +1,16 @@
+{
+  "last_verified": "2026-04-22",
+  "sheet_gelatin": [
+    { "id": "titanium", "name": "Titanium", "bloom": 115, "range": [100, 125], "confidence": "standard", "notes": "Softest common sheet grade. Industry standard." },
+    { "id": "bronze", "name": "Bronze", "bloom": 135, "range": [125, 140], "confidence": "standard", "notes": "Industry-standard sheet grade." },
+    { "id": "silver", "name": "Silver", "bloom": 160, "range": [155, 165], "confidence": "standard", "notes": "Industry-standard sheet grade. Common in home baking." },
+    { "id": "gold", "name": "Gold", "bloom": 200, "range": [190, 220], "confidence": "standard", "notes": "Industry-standard sheet grade. Most common in professional pastry recipes." },
+    { "id": "platinum", "name": "Platinum", "bloom": 240, "range": [230, 265], "confidence": "standard", "notes": "Firmest common sheet grade. Industry standard." }
+  ],
+  "powder_gelatin": [
+    { "id": "knox", "name": "Knox Unflavored", "bloom": 225, "confidence": "verified", "sources": ["David Lebovitz 'How to Use Gelatin'", "Good Food Gourmet 'All About Gelatin'", "multiple independent secondary sources"], "notes": "Most common US grocery powder. Bloom strength is not printed on retail packaging but has been independently confirmed." },
+    { "id": "us-grocery-generic", "name": "Generic US grocery powder (brand unlisted)", "bloom": 215, "range": [200, 230], "confidence": "typical", "notes": "Most US grocery unflavored gelatin powders cluster in this range. When the brand does not publish a bloom value, 215 is a reasonable estimate." },
+    { "id": "european-powder", "name": "European pastry-grade powder", "bloom": 200, "confidence": "typical", "notes": "Typical for European pastry applications. Check packaging for exact value when possible." },
+    { "id": "unknown", "name": "I don't know / not labeled", "bloom": 215, "confidence": "low", "notes": "If you can't identify your gelatin, 215 is a reasonable middle-of-the-road assumption. Results may be slightly off — if your final gel is too firm or too loose, adjust by 10-15% next time." }
+  ]
+}

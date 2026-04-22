@@ -1,0 +1,182 @@
+---
+import "../styles/global.css";
+import Diagnostic from "../components/Diagnostic.jsx";
+import TwoLegos from "../components/TwoLegos.astro";
+import Footer from "../components/Footer.astro";
+---
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Gelatin Calculator — Find your gelatin's bloom strength and convert recipes</title>
+    <meta
+      name="description"
+      content="Diagnose your gelatin's bloom strength and convert pastry recipes between sheet and powder gelatin. A free tool for home cooks."
+    />
+  </head>
+  <body class="bg-white text-stone-900">
+    <nav class="border-b border-stone-200">
+      <div class="max-w-5xl mx-auto px-5 py-4 flex items-center justify-between">
+        <a href="/" class="font-serif text-xl text-stone-900">
+          gelatincalculator.com
+        </a>
+        <div class="flex gap-5 text-sm text-stone-600">
+          <a href="/about" class="hover:text-amber-700">About</a>
+          <a href="/privacy" class="hover:text-amber-700">Privacy</a>
+        </div>
+      </div>
+    </nav>
+
+    <header class="max-w-5xl mx-auto px-5 pt-16 sm:pt-24 pb-12 sm:pb-20 text-center">
+      <div class="text-xs uppercase tracking-widest text-amber-700 font-semibold mb-4">
+        The missing step most recipes skip
+      </div>
+      <h1 class="font-serif text-5xl sm:text-6xl md:text-7xl text-stone-900 mb-10">
+        Know your gelatin.
+      </h1>
+      <TwoLegos />
+      <p class="mt-10 text-stone-600 max-w-xl mx-auto leading-relaxed">
+        Most home cooks don't know their gelatin's bloom strength. Most recipes assume they do.
+      </p>
+      <a
+        href="#tool"
+        class="mt-10 inline-block rounded-full bg-amber-500 hover:bg-amber-600 text-white font-medium px-6 py-3 transition shadow-sm"
+      >
+        Find my gelatin's bloom →
+      </a>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-5">
+      <Diagnostic client:load />
+
+      <section class="mt-24 max-w-3xl mx-auto">
+        <h2 class="font-serif text-3xl sm:text-4xl text-stone-900 mb-6">
+          How bloom strength works
+        </h2>
+        <div class="prose prose-stone max-w-none text-stone-700 leading-relaxed space-y-4">
+          <p>
+            Bloom strength measures how firm a gel becomes. The test is narrow
+            and specific: prepare a 6.67% gelatin solution in water, chill it
+            for 17 hours, and measure the force in grams required to push a
+            12.7 mm plunger 4 mm into the surface. The resulting number — a
+            "bloom value" — is the firmness of that gel.
+          </p>
+          <p>
+            Different gelatins have different bloom values for two reasons.
+            First, raw material: pork, beef, and fish collagen all behave
+            differently. Second, processing: the length of the protein chains
+            after extraction determines how strong a network the gelatin forms
+            when it sets. Manufacturers sort their output into grades — sheet
+            gelatin is commonly sold as titanium, bronze, silver, gold, or
+            platinum, each corresponding to a bloom range. Powdered gelatins
+            are rarely graded as clearly on the box, but they still fall in a
+            measurable range.
+          </p>
+          <p>
+            This matters because if a recipe calls for 6 grams of 200-bloom
+            gelatin and you substitute 6 grams of 160-bloom silver sheets,
+            your final gel will be noticeably softer. Swapping gelatins
+            one-to-one by weight only works when the bloom values happen to
+            match. They usually don't.
+          </p>
+          <p>
+            The ratio formula — multiply the recipe amount by (recipe bloom ÷
+            your bloom) — works because gel strength scales approximately
+            linearly with the amount of gelatin protein in solution, within
+            the range of bloom values used in cooking. If your gelatin is
+            weaker than the recipe's target, you need proportionally more of
+            it to hit the same firmness. If yours is stronger, you need less.
+            The formula is a well-established rule of thumb in pastry kitchens
+            and gets you within a few percent of the right amount — close
+            enough for most recipes, though for texture-critical work
+            (clarity, mouthfeel, delicate mousses) a small test batch is
+            still worth running.
+          </p>
+        </div>
+      </section>
+
+      <section class="mt-24 max-w-3xl mx-auto">
+        <h2 class="font-serif text-3xl sm:text-4xl text-stone-900 mb-8">
+          Frequently asked questions
+        </h2>
+        <div class="space-y-6">
+          <div>
+            <h3 class="font-serif text-xl text-stone-900 mb-2">
+              What is bloom strength?
+            </h3>
+            <p class="text-stone-700 leading-relaxed">
+              A standardized measurement of how firm a gelatin sets. It's the
+              force (in grams) needed to push a small plunger a fixed depth
+              into a chilled 6.67% gelatin solution. Higher numbers mean
+              firmer gels.
+            </p>
+          </div>
+          <div>
+            <h3 class="font-serif text-xl text-stone-900 mb-2">
+              Why doesn't my gelatin box list a bloom value?
+            </h3>
+            <p class="text-stone-700 leading-relaxed">
+              Consumer brands rarely print it. Bloom strength is a technical
+              spec meant for bakeries and food manufacturers; packaging for
+              home cooks usually just says "unflavored gelatin." Professional
+              sheet gelatin is an exception because the color grades (silver,
+              gold, platinum) correspond to published bloom ranges.
+            </p>
+          </div>
+          <div>
+            <h3 class="font-serif text-xl text-stone-900 mb-2">
+              What bloom strength is Knox?
+            </h3>
+            <p class="text-stone-700 leading-relaxed">
+              Knox Unflavored Gelatin is widely reported at around 225 bloom.
+              The manufacturer doesn't print this on consumer packaging, but
+              the value is confirmed by multiple independent cooking
+              references.
+            </p>
+          </div>
+          <div>
+            <h3 class="font-serif text-xl text-stone-900 mb-2">
+              What's the difference between sheet and powder gelatin?
+            </h3>
+            <p class="text-stone-700 leading-relaxed">
+              Sheet and powder gelatin work the same way chemically, but
+              they're handled differently. Sheets are bloomed (soaked) in
+              cold water, squeezed out, and stirred into warm liquid; powder
+              is sprinkled over cold liquid, allowed to absorb, and then
+              warmed. A sheet and a gram of powder don't necessarily have
+              the same bloom strength — always go by weight and bloom, not
+              by "sheets" or "packets."
+            </p>
+          </div>
+          <div>
+            <h3 class="font-serif text-xl text-stone-900 mb-2">
+              Can I use less of a stronger gelatin instead of converting?
+            </h3>
+            <p class="text-stone-700 leading-relaxed">
+              Yes — that's exactly what the conversion does. If your gelatin
+              is stronger than what the recipe calls for, the formula tells
+              you how much less to use to hit the same firmness.
+            </p>
+          </div>
+          <div>
+            <h3 class="font-serif text-xl text-stone-900 mb-2">
+              Is this calculator accurate enough for professional baking?
+            </h3>
+            <p class="text-stone-700 leading-relaxed">
+              The ratio formula is a widely accepted industry rule of thumb
+              and is accurate enough for most home and small-batch pastry
+              work. That said, bloom values for consumer brands are often
+              inferred from secondary sources rather than published by the
+              manufacturer — we label our confidence level for each value.
+              For texture-critical applications, always test a small batch
+              first.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <Footer />
+  </body>
+</html>
