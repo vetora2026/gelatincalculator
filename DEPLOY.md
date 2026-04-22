@@ -78,3 +78,22 @@ Once AdSense approves the site:
 1. The GitHub Action at `.github/workflows/data-validation-reminder.yml` opens an issue every six months (April 1 and October 1 at 09:00 UTC) reminding you to re-verify the bloom data.
 2. When the issue appears, work through the checklist it contains, update `src/data/gelatin-bloom.json` if any value has drifted, update `last_verified`, and close the issue when done.
 3. To trigger a reminder issue immediately (useful to test the workflow end-to-end after the first push), go to the repository's **Actions** tab, open **Data Validation Reminder**, and click **Run workflow**.
+
+## Auto-deploy via GitHub Actions
+
+This project deploys via a GitHub Action at .github/workflows/deploy.yml.
+The workflow runs on every push to main and also supports manual triggering
+via the Actions tab in GitHub.
+
+The workflow requires two repository secrets:
+
+- CLOUDFLARE_API_TOKEN — a scoped API token with Cloudflare Pages edit permission
+- CLOUDFLARE_ACCOUNT_ID — your Cloudflare account ID (visible in the Cloudflare
+  dashboard sidebar or in any dashboard URL after the account slug)
+
+To set these up, follow the step-by-step guide provided after the initial
+deployment. Secrets are added at:
+https://github.com/vetora2026/gelatincalculator/settings/secrets/actions
+
+Once both secrets are in place, push any commit to main (or manually trigger
+the workflow) and the site auto-deploys.
