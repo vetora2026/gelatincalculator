@@ -1,0 +1,182 @@
+---
+import "../../styles/global.css";
+import BaseHead from "../../components/BaseHead.astro";
+import Footer from "../../components/Footer.astro";
+import SheetsToPowderConverter from "../../components/SheetsToPowderConverter.jsx";
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "How many gelatin sheets equal one Knox packet?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "One Knox packet (7g, approximately 225 bloom) is roughly equivalent to 3 gold sheets or 3.5 silver sheets — but these are approximations. Sheet weights and bloom values vary by manufacturer. For precise work, use weight-based conversions rather than counting sheets.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Are all gelatin sheets the same?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "No. Different grades (titanium, bronze, silver, gold, platinum) have different weights per sheet and different bloom strengths. They are designed to be interchangeable sheet-for-sheet within the same grade, but swapping across grades changes the set strength unless you adjust the count by weight.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Can I convert gelatin to agar agar?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "They are different gelling systems. A rough starting point is 1 teaspoon agar powder for every 1 tablespoon gelatin powder, but the texture differs significantly — agar sets firmer and does not melt at body temperature the way gelatin does. Treat it as an approximation that will need testing, not a formula.",
+      },
+    },
+  ],
+};
+---
+
+<html lang="en">
+  <head>
+    <BaseHead
+      title="Gelatin Sheets to Powder Conversion (With Calculator)"
+      description="Convert gelatin sheets to powder and back. Enter your sheet type (bronze, silver, gold, platinum) and get the exact powder equivalent in grams."
+      path="/sheets-to-powder/"
+    />
+    <Fragment set:html={`<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>`} />
+  </head>
+  <body class="bg-white text-stone-900">
+    <nav class="border-b border-stone-200">
+      <div class="max-w-5xl mx-auto px-5 py-4 flex items-center justify-between">
+        <a href="/" class="font-serif text-xl text-stone-900">gelatincalculator.com</a>
+        <div class="flex gap-5 text-sm text-stone-600">
+          <a href="/about" class="hover:text-amber-700">About</a>
+          <a href="/privacy" class="hover:text-amber-700">Privacy</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="max-w-2xl mx-auto px-5 py-16">
+      <h1 class="font-serif text-5xl text-stone-900 mb-3">Gelatin Sheets to Powder Conversion</h1>
+      <p class="text-stone-500 text-sm mb-8">For home bakers working across different gelatin formats</p>
+
+      <div class="text-stone-700 leading-relaxed space-y-10">
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-3">The quick answer</h2>
+          <p>
+            For most home baking: <strong class="text-stone-900">1 Knox packet (7g) ≈ 3 gold sheets or 3.5 silver sheets</strong>.
+            For precise work, use the converter below — the correct amount depends on which grade of sheet
+            and which powder you have.
+          </p>
+        </section>
+
+        <section>
+          <SheetsToPowderConverter client:load />
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-3">Why the conversion isn't a single rule</h2>
+          <p>
+            Sheet gelatin grades are designed to be interchangeable <em>within the same grade</em> —
+            3 gold sheets from one brand will behave similarly to 3 gold sheets from another. But sheets
+            have two variables that affect conversion: bloom strength and weight per sheet. These are
+            independent. A gold sheet is roughly 2g at 200 bloom; a silver sheet is roughly 2.5g at
+            160 bloom.
+          </p>
+          <p class="mt-3">
+            Powder gelatin adds a third variable: different brands have different bloom values. Knox is
+            approximately 225 bloom; European pastry powders are often closer to 200.
+          </p>
+          <p class="mt-3">
+            This is why "1 packet equals 3 sheets" is an approximation for a specific pair of products,
+            not a universal rule. The converter above accounts for all three variables.
+          </p>
+          <p class="mt-3">
+            Not sure what bloom strength means?{" "}
+            <a href="/what-is-bloom-strength/" class="text-amber-700 underline underline-offset-4 hover:text-amber-600">
+              Read the plain-English explanation.
+            </a>
+          </p>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-5">Common conversion scenarios</h2>
+          <div class="space-y-4">
+            <div class="border border-stone-200 rounded-xl p-4">
+              <p class="font-medium text-stone-900 mb-2">
+                "Recipe says 3 gold sheets — I only have Knox powder"
+              </p>
+              <p class="text-stone-600 text-sm leading-relaxed">
+                3 gold sheets = 3 × 2g = 6g of 200-bloom gelatin. Knox is ~225 bloom, so you need
+                6 × (200 ÷ 225) = <strong class="text-stone-800">5.3g Knox</strong>. That's just under
+                one packet. Weigh it; don't eyeball a packet and call it close enough.
+              </p>
+            </div>
+            <div class="border border-stone-200 rounded-xl p-4">
+              <p class="font-medium text-stone-900 mb-2">
+                "Recipe says 1 Knox packet — I only have silver sheets"
+              </p>
+              <p class="text-stone-600 text-sm leading-relaxed">
+                1 Knox packet = 7g at ~225 bloom. Silver sheets are ~160 bloom at ~2.5g/sheet. You need
+                7 × (225 ÷ 160) ÷ 2.5 = <strong class="text-stone-800">≈ 3.9 silver sheets</strong>. Round to 4.
+              </p>
+            </div>
+            <div class="border border-stone-200 rounded-xl p-4">
+              <p class="font-medium text-stone-900 mb-2">
+                "European recipe says 10g gelatin, no type specified"
+              </p>
+              <p class="text-stone-600 text-sm leading-relaxed">
+                European recipes that list grams without a grade typically mean gold sheets (the most
+                common in European professional kitchens). Assume 200 bloom and 2g/sheet, giving you
+                10g = 5 gold sheets. If you're using Knox (~225), use 10 × (200 ÷ 225) = <strong class="text-stone-800">8.9g Knox</strong>.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-7">Frequently asked questions</h2>
+          <div class="space-y-7">
+            <div>
+              <h3 class="font-serif text-lg text-stone-900 mb-2">
+                How many gelatin sheets equal one Knox packet?
+              </h3>
+              <p class="text-stone-600 leading-relaxed">
+                One Knox packet is 7g at approximately 225 bloom. That's roughly 3 gold sheets or
+                3.5 silver sheets — but these are approximations. Sheet weights vary by manufacturer,
+                so for anything texture-critical, weigh your gelatin rather than counting sheets.
+              </p>
+            </div>
+            <div>
+              <h3 class="font-serif text-lg text-stone-900 mb-2">Are all gelatin sheets the same?</h3>
+              <p class="text-stone-600 leading-relaxed">
+                No. Titanium, bronze, silver, gold, and platinum sheets each have different weights and
+                bloom strengths. They're designed to be interchangeable sheet-for-sheet within a grade,
+                but swapping across grades (using silver where a recipe calls for gold, for example) will
+                change the set strength unless you adjust by weight. The converter above handles this.
+              </p>
+            </div>
+            <div>
+              <h3 class="font-serif text-lg text-stone-900 mb-2">Can I convert gelatin to agar agar?</h3>
+              <p class="text-stone-600 leading-relaxed">
+                They're different systems. A rough starting point is 1 teaspoon agar powder per
+                1 tablespoon gelatin powder, but the texture differs significantly — agar sets firmer,
+                gels at room temperature, and doesn't melt at body temperature the way gelatin does.
+                Treat any gelatin-to-agar conversion as an approximation that needs testing, not a
+                formula. The{" "}
+                <a href="/" class="text-amber-700 underline underline-offset-4">
+                  bloom calculator
+                </a>{" "}
+                covers gelatin only.
+              </p>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <Footer />
+  </body>
+</html>

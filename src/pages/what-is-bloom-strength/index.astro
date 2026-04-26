@@ -1,0 +1,284 @@
+---
+import "../../styles/global.css";
+import BaseHead from "../../components/BaseHead.astro";
+import Footer from "../../components/Footer.astro";
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "What bloom strength is Knox gelatin?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Knox Unflavored Gelatin is approximately 225 bloom. The manufacturer does not print this on retail packaging, but the value is confirmed by multiple independent cooking references including David Lebovitz and several pastry handbooks.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Can I substitute gold sheets for silver sheets?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes, but you need to adjust the weight. Gold sheets (approximately 200 bloom) are stronger than silver (approximately 160 bloom), so you need less gold to achieve the same set. Use a bloom strength converter to calculate the exact weight.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Does higher bloom mean better quality gelatin?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "No. Higher bloom means a firmer set — that is a different property from quality. A 225-bloom Knox packet is not better or worse than a 200-bloom gold sheet. They are suited to different applications. The right bloom is the one that matches your recipe.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What is the bloom strength of agar agar?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Agar agar does not use bloom ratings. It is a completely different gelling agent derived from seaweed, not collagen. Bloom is a gelatin-specific measurement. Agar sets firmer at lower concentrations and does not re-melt the same way gelatin does. Conversions between the two are rough approximations that depend on the specific application.",
+      },
+    },
+  ],
+};
+---
+
+<html lang="en">
+  <head>
+    <BaseHead
+      title="What Is Gelatin Bloom Strength? (Simple Guide for Home Cooks)"
+      description="Bloom strength measures how firm gelatin sets. Learn what the numbers mean, which bloom to use for your recipe, and how to convert between different strengths."
+      path="/what-is-bloom-strength/"
+    />
+    <Fragment set:html={`<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>`} />
+  </head>
+  <body class="bg-white text-stone-900">
+    <nav class="border-b border-stone-200">
+      <div class="max-w-5xl mx-auto px-5 py-4 flex items-center justify-between">
+        <a href="/" class="font-serif text-xl text-stone-900">gelatincalculator.com</a>
+        <div class="flex gap-5 text-sm text-stone-600">
+          <a href="/about" class="hover:text-amber-700">About</a>
+          <a href="/privacy" class="hover:text-amber-700">Privacy</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="max-w-2xl mx-auto px-5 py-16">
+      <h1 class="font-serif text-5xl text-stone-900 mb-3">What Is Gelatin Bloom Strength?</h1>
+      <p class="text-stone-500 text-sm mb-12">A plain-English reference for home bakers and cooks</p>
+
+      <div class="text-stone-700 leading-relaxed space-y-12">
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-3">The short answer</h2>
+          <p>
+            Bloom strength is a number — typically between 50 and 300 — that tells you how firm your
+            gelatin will set. Higher number means a firmer gel. That's it.
+          </p>
+          <p class="mt-3">
+            The number comes from a standardized lab test: prepare a 6.67% gelatin solution, chill
+            it for 17 hours, and measure how many grams of force it takes to push a small plunger
+            4&nbsp;mm into the surface. That reading is the bloom value.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-3">Why it matters for your recipe</h2>
+          <p>
+            Swap gelatins of different bloom strengths at the same weight and you'll get a
+            noticeably different result — a rubbery panna cotta, or a mousse that won't set.
+            The bloom value tells you exactly how to adjust.
+          </p>
+          <ul class="mt-4 space-y-3">
+            <li class="flex gap-2.5">
+              <span class="text-amber-600 mt-0.5 shrink-0">→</span>
+              <span>
+                Most US grocery store gelatin (Knox) is around 225 bloom — but the box doesn't say so.
+              </span>
+            </li>
+            <li class="flex gap-2.5">
+              <span class="text-amber-600 mt-0.5 shrink-0">→</span>
+              <span>
+                European sheet gelatin comes in named grades — bronze, silver, gold, platinum — each
+                corresponding to a different bloom range.
+              </span>
+            </li>
+            <li class="flex gap-2.5">
+              <span class="text-amber-600 mt-0.5 shrink-0">→</span>
+              <span>
+                A recipe from a French pastry book that calls for "200-bloom gelatin" is asking for
+                gold-sheet strength. If you use Knox (~225), you need a little less.
+              </span>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-4">Common gelatin grades and their bloom values</h2>
+          <p class="text-stone-500 text-sm mb-4">
+            Sheet grades follow published industry-standard ranges. Knox's bloom value is not printed
+            on packaging but is confirmed by multiple independent cooking sources.
+          </p>
+          <div class="overflow-x-auto -mx-1">
+            <table class="w-full text-sm border-collapse">
+              <thead>
+                <tr class="border-b border-stone-200 text-left text-stone-500">
+                  <th class="py-2 px-2 font-medium">Product</th>
+                  <th class="py-2 px-2 font-medium">Form</th>
+                  <th class="py-2 px-2 font-medium">Bloom</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-stone-100">
+                <tr>
+                  <td class="py-2.5 px-2 font-medium text-stone-900">Knox Unflavored</td>
+                  <td class="py-2.5 px-2 text-stone-600">Powder</td>
+                  <td class="py-2.5 px-2 text-stone-900">~225</td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 px-2 text-stone-800">Titanium sheets</td>
+                  <td class="py-2.5 px-2 text-stone-600">Sheets</td>
+                  <td class="py-2.5 px-2 text-stone-900">~115</td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 px-2 text-stone-800">Bronze sheets</td>
+                  <td class="py-2.5 px-2 text-stone-600">Sheets</td>
+                  <td class="py-2.5 px-2 text-stone-900">~135</td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 px-2 text-stone-800">Silver sheets</td>
+                  <td class="py-2.5 px-2 text-stone-600">Sheets</td>
+                  <td class="py-2.5 px-2 text-stone-900">~160</td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 px-2 text-stone-800">Gold sheets</td>
+                  <td class="py-2.5 px-2 text-stone-600">Sheets</td>
+                  <td class="py-2.5 px-2 text-stone-900">~200</td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 px-2 text-stone-800">Platinum sheets</td>
+                  <td class="py-2.5 px-2 text-stone-600">Sheets</td>
+                  <td class="py-2.5 px-2 text-stone-900">~240</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-xs text-stone-500 mt-3 leading-relaxed">
+            Because Knox doesn't print its bloom value, weighing your gelatin matters more than
+            counting packets or sheets. A digital kitchen scale removes the guesswork.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-5">Which bloom strength for which recipe</h2>
+          <div class="space-y-3">
+            <div class="border border-stone-200 rounded-xl p-4">
+              <p class="font-medium text-stone-900 mb-1">Panna cotta, mousse, creamy desserts</p>
+              <p class="text-stone-600 text-sm leading-relaxed">
+                160–200 bloom (silver or gold sheets, European powder). A softer set that melts clean
+                on the tongue. Too-high bloom gives a bouncy, industrial texture.
+              </p>
+            </div>
+            <div class="border border-stone-200 rounded-xl p-4">
+              <p class="font-medium text-stone-900 mb-1">Gummy bears, marshmallows, chewy confections</p>
+              <p class="text-stone-600 text-sm leading-relaxed">
+                225–275 bloom. The firm set is the point here. Knox (~225) works; higher-bloom powder
+                from specialty suppliers gives an even chewier result.
+              </p>
+            </div>
+            <div class="border border-stone-200 rounded-xl p-4">
+              <p class="font-medium text-stone-900 mb-1">Mirror glaze</p>
+              <p class="text-stone-600 text-sm leading-relaxed">
+                200–225 bloom (gold sheets or Knox). Clarity matters here — platinum (~240 bloom)
+                can give a stiffer coat that drags rather than flows when poured.
+              </p>
+            </div>
+            <div class="border border-stone-200 rounded-xl p-4">
+              <p class="font-medium text-stone-900 mb-1">Stabilized whipped cream</p>
+              <p class="text-stone-600 text-sm leading-relaxed">
+                Knox (~225) works well. The goal is structure without detectable texture — stronger
+                bloom doesn't help here and can make the cream rubbery if overused.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-3">What if your gelatin doesn't match the recipe?</h2>
+          <p>
+            If your gelatin's bloom value differs from what the recipe specifies, adjust the amount
+            rather than hunting down a different product. The formula is:
+            <strong class="text-stone-900"> multiply the recipe quantity by (recipe bloom ÷ your bloom)</strong>.
+          </p>
+          <p class="mt-3 text-stone-600">
+            For example: a recipe calls for 6g of 200-bloom gold gelatin and you have Knox (~225 bloom).
+            You'd use 6 × (200 ÷ 225) = 5.3g of Knox.
+          </p>
+          <div class="mt-5 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+            <p class="text-sm text-amber-900">
+              The{" "}
+              <a href="/" class="underline underline-offset-4 font-medium hover:text-amber-700">
+                bloom strength calculator
+              </a>{" "}
+              handles this math — including a diagnostic step to identify your gelatin if you're not
+              sure what bloom value it is.
+            </p>
+          </div>
+          <p class="mt-4 text-stone-600">
+            Converting between sheets and powder instead?{" "}
+            <a href="/sheets-to-powder/" class="text-amber-700 underline underline-offset-4 hover:text-amber-600">
+              Use the sheets-to-powder converter.
+            </a>
+          </p>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-7">Frequently asked questions</h2>
+          <div class="space-y-7">
+            <div>
+              <h3 class="font-serif text-lg text-stone-900 mb-2">What bloom strength is Knox gelatin?</h3>
+              <p class="text-stone-600 leading-relaxed">
+                Knox Unflavored Gelatin is approximately 225 bloom. The manufacturer does not print this
+                on retail packaging, but the value is consistently confirmed by independent cooking
+                references including David Lebovitz and several professional pastry handbooks. It is one
+                of the most reliably sourced bloom values for a consumer product.
+              </p>
+            </div>
+            <div>
+              <h3 class="font-serif text-lg text-stone-900 mb-2">Can I substitute gold sheets for silver sheets?</h3>
+              <p class="text-stone-600 leading-relaxed">
+                Yes, but not one-for-one by count. Gold sheets (~200 bloom) are stronger than silver
+                (~160 bloom), so using 3 gold sheets where a recipe calls for 3 silver will give you a
+                firmer result. Use the{" "}
+                <a href="/sheets-to-powder/" class="text-amber-700 underline underline-offset-4">
+                  sheets converter
+                </a>{" "}
+                to calculate the correct weight adjustment between grades.
+              </p>
+            </div>
+            <div>
+              <h3 class="font-serif text-lg text-stone-900 mb-2">Does higher bloom mean better quality?</h3>
+              <p class="text-stone-600 leading-relaxed">
+                No. Higher bloom means a firmer set — that's a different property from quality. A
+                225-bloom Knox packet is not better or worse than a 200-bloom gold sheet. They're suited
+                to different applications. The right bloom is whichever matches your recipe.
+              </p>
+            </div>
+            <div>
+              <h3 class="font-serif text-lg text-stone-900 mb-2">What is the bloom strength of agar agar?</h3>
+              <p class="text-stone-600 leading-relaxed">
+                Agar agar doesn't use bloom ratings. It's a different gelling agent (derived from
+                seaweed, not collagen) with different behavior — it sets firmer at lower concentrations,
+                gels at room temperature, and doesn't re-melt the same way. Bloom is a
+                gelatin-specific measurement. Gelatin-to-agar conversions are rough approximations that
+                depend on the application and texture you're after.
+              </p>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <Footer />
+  </body>
+</html>
