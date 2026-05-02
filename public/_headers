@@ -1,0 +1,38 @@
+# Cloudflare Pages headers configuration
+# Docs: https://developers.cloudflare.com/pages/configuration/headers/
+# Pattern matching is path-based; first match wins per header name.
+
+# Hashed Astro build assets (filenames contain content hashes — immutable)
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Static images, fonts, icons (override per-file as needed)
+/*.svg
+  Cache-Control: public, max-age=31536000, immutable
+/*.png
+  Cache-Control: public, max-age=31536000, immutable
+/*.jpg
+  Cache-Control: public, max-age=31536000, immutable
+/*.jpeg
+  Cache-Control: public, max-age=31536000, immutable
+/*.webp
+  Cache-Control: public, max-age=31536000, immutable
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+/*.woff
+  Cache-Control: public, max-age=31536000, immutable
+
+# Favicon — moderate cache, can change occasionally
+/favicon.ico
+  Cache-Control: public, max-age=86400
+
+# Robots.txt and sitemap — short cache, may update with content
+/robots.txt
+  Cache-Control: public, max-age=3600
+/sitemap*.xml
+  Cache-Control: public, max-age=3600
+
+# HTML pages — cache at edge for 1 hour, allow stale serving while revalidating
+# This is the main fix for the 8.56% cache rate.
+/*
+  Cache-Control: public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400
