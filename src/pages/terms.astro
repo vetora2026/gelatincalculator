@@ -1,0 +1,99 @@
+---
+import "../styles/global.css";
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+---
+<html lang="en">
+  <head>
+    <BaseHead
+      title="Terms & Disclaimer — gelatincalculator.com"
+      description="Terms of use and disclaimer for gelatincalculator.com."
+      path="/terms/"
+    />
+  </head>
+  <body class="bg-white text-stone-900">
+    <nav class="border-b border-stone-200">
+      <div class="max-w-5xl mx-auto px-5 py-4 flex items-center justify-between">
+        <a href="/" class="font-serif text-xl text-stone-900">gelatincalculator.com</a>
+        <div class="flex gap-5 text-sm text-stone-600">
+          <a href="/about" class="hover:text-amber-700">About</a>
+          <a href="/privacy" class="hover:text-amber-700">Privacy</a>
+          <a href="/terms" class="text-amber-700">Terms</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="max-w-2xl mx-auto px-5 py-16">
+      <h1 class="font-serif text-5xl text-stone-900 mb-4">Terms &amp; disclaimer</h1>
+      <p class="text-sm text-stone-500 mb-8">Last updated: May 5, 2026</p>
+
+      <div class="text-stone-700 leading-relaxed space-y-5">
+        <h2 class="font-serif text-2xl text-stone-900 mt-6 mb-2">
+          Not professional advice
+        </h2>
+        <p>
+          All content on Gelatin Calculator is provided for educational and
+          informational purposes only. Nothing on this site constitutes
+          professional culinary, dietary, or food science advice. The tools
+          and calculators on this site provide general estimates based on
+          published conversion formulas and manufacturer specifications.
+        </p>
+
+        <h2 class="font-serif text-2xl text-stone-900 mt-8 mb-2">
+          Results are estimates
+        </h2>
+        <p>
+          All calculator outputs are mathematical estimates. Gelatin bloom
+          strength, sheet-to-powder conversions, and weight equivalencies can
+          vary by manufacturer, batch, storage conditions, and preparation
+          method. Always test a small batch for critical or professional
+          recipes.
+        </p>
+
+        <h2 class="font-serif text-2xl text-stone-900 mt-8 mb-2">
+          Data accuracy
+        </h2>
+        <p>
+          Bloom strength values for consumer brands are sourced from
+          manufacturer specifications where available and from widely cited
+          culinary references where not. Some values are inferred from
+          secondary sources rather than directly published by the
+          manufacturer — the calculator labels confidence levels accordingly.
+          We make no guarantee that the data presented is complete, current,
+          or accurate for your specific gelatin product.
+        </p>
+
+        <h2 class="font-serif text-2xl text-stone-900 mt-8 mb-2">
+          No affiliations
+        </h2>
+        <p>
+          Gelatin Calculator is not affiliated with, sponsored by, or endorsed
+          by any gelatin manufacturer, food brand, or culinary organization.
+          References to brand names (Knox, Dr. Oetker, etc.) are for
+          identification purposes only.
+        </p>
+
+        <h2 class="font-serif text-2xl text-stone-900 mt-8 mb-2">
+          Advertising
+        </h2>
+        <p>
+          This site uses Google AdSense to display advertisements. Ad content
+          is provided by Google and is not endorsed or controlled by Gelatin
+          Calculator.
+        </p>
+
+        <h2 class="font-serif text-2xl text-stone-900 mt-8 mb-2">
+          Limitation of liability
+        </h2>
+        <p>
+          To the fullest extent permitted by law, Gelatin Calculator and its
+          operators shall not be liable for any direct, indirect, incidental,
+          special, or consequential damages arising from your use of this site
+          or reliance on its content.
+        </p>
+      </div>
+    </main>
+
+    <Footer />
+  </body>
+</html>
