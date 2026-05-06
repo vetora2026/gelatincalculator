@@ -4,6 +4,77 @@ import BaseHead from "../components/BaseHead.astro";
 import Diagnostic from "../components/Diagnostic.jsx";
 import TwoLegos from "../components/TwoLegos.astro";
 import Footer from "../components/Footer.astro";
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "What is bloom strength?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "A standardized measurement of how firm a gelatin sets. It's the force (in grams) needed to push a small plunger a fixed depth into a chilled 6.67% gelatin solution. Higher numbers mean firmer gels.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Why doesn't my gelatin box list a bloom value?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Consumer brands rarely print it. Bloom strength is a technical spec meant for bakeries and food manufacturers. Professional sheet gelatin is an exception because the color grades (silver, gold, platinum) correspond to published bloom ranges.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What bloom strength is Knox?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Knox Unflavored Gelatin is widely reported at around 225 bloom. The manufacturer doesn't print this on consumer packaging, but the value is confirmed by multiple independent cooking references.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What's the difference between sheet and powder gelatin?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Sheet and powder gelatin work the same way chemically, but they're handled differently. Sheets are bloomed in cold water, squeezed out, and stirred into warm liquid. Powder is sprinkled over cold liquid, allowed to absorb, and then warmed. Always go by weight and bloom, not by sheets or packets.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Can I use less of a stronger gelatin instead of converting?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes — that's exactly what the conversion does. If your gelatin is stronger than what the recipe calls for, the formula tells you how much less to use to hit the same firmness.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Is this calculator accurate enough for professional baking?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "The ratio formula is a widely accepted industry rule of thumb and is accurate enough for most home and small-batch pastry work. For texture-critical applications, always test a small batch first.",
+      },
+    },
+  ],
+};
+
+const webAppSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "Gelatin Bloom Strength Calculator",
+  url: "https://gelatincalculator.com/",
+  applicationCategory: "UtilityApplication",
+  operatingSystem: "Any",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+  },
+  description:
+    "Convert gelatin amounts between bloom strengths. Covers Knox (~225), gold (~200), silver (~160), platinum (~240), and more.",
+};
 ---
 <html lang="en">
   <head>
@@ -12,6 +83,8 @@ import Footer from "../components/Footer.astro";
       description="Convert gelatin amounts between bloom strengths. Covers Knox (~225), gold (~200), silver (~160), platinum (~240), and more. Free diagnostic tool for home bakers working from pastry recipes."
       path="/"
     />
+    <Fragment set:html={`<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>`} />
+    <Fragment set:html={`<script type="application/ld+json">${JSON.stringify(webAppSchema)}</script>`} />
   </head>
   <body class="bg-white text-stone-900">
     <nav class="border-b border-stone-200">
