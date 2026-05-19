@@ -1,0 +1,293 @@
+---
+import "../../styles/global.css";
+import BaseHead from "../../components/BaseHead.astro";
+import Footer from "../../components/Footer.astro";
+
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: "What Is Gelatin Bloom Strength?",
+  description:
+    "Bloom strength measures gelatin's gelling power. Silver grade is 160, Gold is 190–220. Here's what the numbers mean and why they matter for recipe conversions.",
+  url: "https://gelatincalculator.com/what-is-gelatin-bloom-strength/",
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "What bloom strength is Knox gelatin powder?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Knox Unflavored Gelatin is approximately 225 bloom. This value is not printed on retail packaging but is consistently confirmed by independent culinary references including David Lebovitz and several professional pastry handbooks.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What is the bloom strength of gold sheet gelatin?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Gold grade sheet gelatin is approximately 190–220 bloom, with most suppliers targeting around 200. It is the most common grade used in European professional pastry and the grade most often assumed when a recipe specifies 'gelatin sheets' without naming a grade.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Does higher bloom mean better gelatin?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "No. Higher bloom means a firmer set — it is a property measurement, not a quality ranking. A 225-bloom Knox packet is not better or worse than a 160-bloom silver sheet. Each is suited to different applications. The correct bloom is whichever matches your recipe.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How do I convert between different bloom strengths?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Multiply the recipe quantity by (recipe bloom ÷ your bloom). For example: a recipe calls for 6g of 200-bloom gelatin and you have 225-bloom Knox. Use 6 × (200 ÷ 225) = 5.3g. The bloom strength calculator on this site handles this math automatically.",
+      },
+    },
+  ],
+};
+---
+
+<html lang="en">
+  <head>
+    <BaseHead
+      title="What Is Gelatin Bloom Strength? Explained for Home Cooks | gelatincalculator.com"
+      description="Bloom strength measures gelatin's gelling power. Silver grade is 160, Gold is 190–220. Here's what the numbers mean and why they matter for recipe conversions."
+      path="/what-is-gelatin-bloom-strength/"
+    />
+    <Fragment set:html={`<script type="application/ld+json">${JSON.stringify(articleSchema)}</script>`} />
+    <Fragment set:html={`<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>`} />
+  </head>
+  <body class="bg-white text-stone-900">
+    <nav class="border-b border-stone-200">
+      <div class="max-w-5xl mx-auto px-5 py-4 flex items-center justify-between">
+        <a href="/" class="font-serif text-xl text-stone-900">gelatincalculator.com</a>
+        <div class="flex gap-5 text-sm text-stone-600">
+          <a href="/about" class="hover:text-amber-700">About</a>
+          <a href="/privacy" class="hover:text-amber-700">Privacy</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="max-w-2xl mx-auto px-5 py-16">
+      <h1 class="font-serif text-5xl text-stone-900 mb-3">What Is Gelatin Bloom Strength?</h1>
+      <p class="text-stone-500 text-sm mb-12">A reference guide for home cooks and pastry enthusiasts</p>
+
+      <div class="text-stone-700 leading-relaxed space-y-12">
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-3">The definition</h2>
+          <p>
+            Bloom strength is a measure of the rigidity of a gelatin gel. It is determined
+            by the Bloom test: a 6.67% gelatin solution is prepared in water, chilled at
+            10°C for 17 hours, then measured for the force in grams required to depress
+            the surface 4mm with a standardized 12.7mm plunger. The resulting number is
+            the bloom value. A higher number means a firmer gel.
+          </p>
+          <p class="mt-3">
+            Bloom values used in cooking typically range from 100 to 270. The test was
+            developed by Oscar T. Bloom in 1925 and remains the industry standard for
+            characterizing gelatin gelling power.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-4">The grade scale</h2>
+          <p class="text-stone-500 text-sm mb-4">
+            Sheet gelatin grades follow published industry-standard bloom ranges. Knox
+            powder is not graded on packaging, but its bloom value is confirmed by multiple
+            independent culinary references.
+          </p>
+          <div class="overflow-x-auto -mx-1">
+            <table class="w-full text-sm border-collapse">
+              <thead>
+                <tr class="border-b border-stone-200 text-left text-stone-500">
+                  <th class="py-2 px-2 font-medium">Grade</th>
+                  <th class="py-2 px-2 font-medium">Bloom Range</th>
+                  <th class="py-2 px-2 font-medium">Set Strength</th>
+                  <th class="py-2 px-2 font-medium">Common Uses</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-stone-100 text-stone-700">
+                <tr>
+                  <td class="py-2.5 px-2 font-medium text-stone-900">Bronze</td>
+                  <td class="py-2.5 px-2">125–155</td>
+                  <td class="py-2.5 px-2">Soft, delicate</td>
+                  <td class="py-2.5 px-2">Bavarian creams, soft mousses</td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 px-2 font-medium text-stone-900">Silver</td>
+                  <td class="py-2.5 px-2">~160</td>
+                  <td class="py-2.5 px-2">Medium (industry standard)</td>
+                  <td class="py-2.5 px-2">Panna cotta, general desserts</td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 px-2 font-medium text-stone-900">Gold</td>
+                  <td class="py-2.5 px-2">190–220</td>
+                  <td class="py-2.5 px-2">Firm</td>
+                  <td class="py-2.5 px-2">Aspics, firmer desserts</td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 px-2 font-medium text-stone-900">Platinum</td>
+                  <td class="py-2.5 px-2">235–265</td>
+                  <td class="py-2.5 px-2">Very firm</td>
+                  <td class="py-2.5 px-2">Mirror glazes, structural applications</td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 px-2 font-medium text-stone-900">Knox powder</td>
+                  <td class="py-2.5 px-2">~225</td>
+                  <td class="py-2.5 px-2">Firm</td>
+                  <td class="py-2.5 px-2">General home baking</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-4">Why bloom strength matters for conversion</h2>
+          <div class="grid grid-cols-2 gap-4 mb-5">
+            <div class="border border-stone-200 rounded-xl p-5">
+              <p class="text-xs text-stone-500 uppercase tracking-wide mb-2">4 silver sheets (160 bloom)</p>
+              <p class="font-serif text-3xl text-stone-900 mb-1">6.8 g</p>
+              <p class="text-sm text-stone-600">of gelatin at 160 bloom</p>
+            </div>
+            <div class="border border-stone-200 rounded-xl p-5">
+              <p class="text-xs text-stone-500 uppercase tracking-wide mb-2">4 gold sheets (200 bloom)</p>
+              <p class="font-serif text-3xl text-stone-900 mb-1">~25% more</p>
+              <p class="text-sm text-stone-600">gelling power than 4 silver sheets</p>
+            </div>
+          </div>
+          <p>
+            Gel strength scales approximately linearly with the amount of gelatin protein
+            in solution, within the range of bloom values used in cooking. This means
+            substituting one grade for another at the same weight produces a measurably
+            different result — a softer or firmer set depending on the direction of the swap.
+          </p>
+          <p class="mt-3">
+            The adjustment formula is: <strong class="text-stone-900">recipe quantity × (recipe bloom ÷ your bloom)</strong>.
+            If a recipe calls for 6g of 200-bloom gold gelatin and you have Knox (~225 bloom),
+            you need 6 × (200 ÷ 225) = 5.3g. If you have silver sheets (~160 bloom), you
+            need 6 × (200 ÷ 160) = 7.5g.
+          </p>
+          <div class="mt-5 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+            <p class="text-sm text-amber-900">
+              <a href="/" class="underline underline-offset-4 font-medium hover:text-amber-700">
+                Calculate exact conversion between bloom strengths →
+              </a>{" "}
+              The diagnostic tool identifies your gelatin first if you're unsure of the bloom value.
+            </p>
+          </div>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-3">Knox and store-bought powder</h2>
+          <p>
+            Most US store-bought gelatin powder — including Knox Unflavored Gelatin, the
+            most common consumer brand — is approximately 200–225 bloom. Knox specifically
+            is widely cited at ~225 bloom across independent cooking references, though
+            the manufacturer does not print this value on retail packaging.
+          </p>
+          <p class="mt-3">
+            When a recipe says "1 packet of gelatin" without specifying bloom, it is
+            assumed to mean Knox or an equivalent US grocery powder. When a recipe says
+            "6g of gelatin" without specifying a bloom, and the recipe is from a European
+            source, it typically assumes gold sheets at approximately 200 bloom.
+          </p>
+          <p class="mt-3">
+            These unstated assumptions are the source of most gelatin substitution errors.
+            Knowing the bloom value — even an approximate one — removes the guesswork.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-3">Why consumer packaging doesn't list bloom</h2>
+          <p>
+            Bloom strength is an industrial specification designed for food manufacturers
+            and professional pastry operations, not home cooks. Bakeries ordering gelatin
+            in bulk specify bloom as a quality parameter. Consumer packaging skips it
+            because home cooks historically used gelatin from a single source (one brand,
+            one format) and never needed to convert between grades.
+          </p>
+          <p class="mt-3">
+            The rise of translated European pastry books and internet recipes from
+            professional kitchens changed that. A reader in the US following a French
+            pastry blog needs to know that "5 feuilles de gélatine" likely means 5 silver
+            or gold sheets — and how to convert that into Knox packets with the right
+            amount.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-7">Frequently asked questions</h2>
+          <div class="space-y-7">
+            <div>
+              <h3 class="font-serif text-lg text-stone-900 mb-2">What bloom strength is Knox gelatin powder?</h3>
+              <p class="text-stone-600 leading-relaxed">
+                Knox Unflavored Gelatin is approximately 225 bloom. The manufacturer does not
+                print this on retail packaging, but the value is consistently confirmed by
+                independent cooking references including David Lebovitz's gelatin reference and
+                several professional pastry handbooks. It is one of the most reliably sourced
+                consumer bloom values.
+              </p>
+            </div>
+            <div>
+              <h3 class="font-serif text-lg text-stone-900 mb-2">What is the bloom strength of gold sheet gelatin?</h3>
+              <p class="text-stone-600 leading-relaxed">
+                Gold grade sheet gelatin is approximately 190–220 bloom, with most suppliers
+                targeting around 200. Gold is the most common grade in European professional
+                pastry and the grade most often assumed when a recipe specifies "gelatin sheets"
+                without naming a grade. Individual sheets typically weigh approximately 2g.
+              </p>
+            </div>
+            <div>
+              <h3 class="font-serif text-lg text-stone-900 mb-2">Does higher bloom mean better gelatin?</h3>
+              <p class="text-stone-600 leading-relaxed">
+                No. Higher bloom means a firmer set — it is a property measurement, not a
+                quality ranking. A 225-bloom Knox packet is not better or worse than a
+                160-bloom silver sheet. The correct bloom is whichever one matches the
+                texture requirement of your recipe.
+              </p>
+            </div>
+            <div>
+              <h3 class="font-serif text-lg text-stone-900 mb-2">How do I convert between different bloom strengths?</h3>
+              <p class="text-stone-600 leading-relaxed">
+                Multiply the recipe quantity by (recipe bloom ÷ your bloom). The{" "}
+                <a href="/" class="text-amber-700 underline underline-offset-4">
+                  bloom strength calculator
+                </a>{" "}
+                on this site handles this calculation, with a diagnostic step if you're not
+                sure what bloom value your gelatin is.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-4">Related articles</h2>
+          <div class="space-y-3">
+            <a href="/gelatin-sheets-vs-powder/" class="block border border-stone-200 rounded-xl p-4 hover:border-amber-300 transition-colors">
+              <p class="font-medium text-stone-900 mb-1">Gelatin Sheets vs Powder: What's the Difference?</p>
+              <p class="text-stone-500 text-sm">Format comparison: measuring method, clarity, and when each format works best.</p>
+            </a>
+            <a href="/how-much-gelatin-per-cup-of-liquid/" class="block border border-stone-200 rounded-xl p-4 hover:border-amber-300 transition-colors">
+              <p class="font-medium text-stone-900 mb-1">How Much Gelatin Per Cup of Liquid?</p>
+              <p class="text-stone-500 text-sm">Reference ratios by desired texture, plus variables that affect the set.</p>
+            </a>
+            <a href="/sheets-to-powder/" class="block border border-stone-200 rounded-xl p-4 hover:border-amber-300 transition-colors">
+              <p class="font-medium text-stone-900 mb-1">Sheets-to-Powder Converter</p>
+              <p class="text-stone-500 text-sm">Convert any sheet grade to grams of powder, accounting for bloom strength.</p>
+            </a>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <Footer />
+  </body>
+</html>

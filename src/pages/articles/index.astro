@@ -1,0 +1,90 @@
+---
+import "../../styles/global.css";
+import BaseHead from "../../components/BaseHead.astro";
+import Footer from "../../components/Footer.astro";
+---
+
+<html lang="en">
+  <head>
+    <BaseHead
+      title="Gelatin Reference Articles | gelatincalculator.com"
+      description="Plain-English guides on gelatin bloom strength, sheet-to-powder conversion, and how much gelatin to use per cup of liquid."
+      path="/articles/"
+    />
+  </head>
+  <body class="bg-white text-stone-900">
+    <nav class="border-b border-stone-200">
+      <div class="max-w-5xl mx-auto px-5 py-4 flex items-center justify-between">
+        <a href="/" class="font-serif text-xl text-stone-900">gelatincalculator.com</a>
+        <div class="flex gap-5 text-sm text-stone-600">
+          <a href="/about" class="hover:text-amber-700">About</a>
+          <a href="/privacy" class="hover:text-amber-700">Privacy</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="max-w-2xl mx-auto px-5 py-16">
+      <h1 class="font-serif text-5xl text-stone-900 mb-3">Articles</h1>
+      <p class="text-stone-500 text-sm mb-12">Reference guides for working with gelatin</p>
+
+      <div class="space-y-4">
+        <a href="/what-is-gelatin-bloom-strength/" class="block border border-stone-200 rounded-xl p-5 hover:border-amber-300 transition-colors">
+          <p class="font-serif text-xl text-stone-900 mb-2">What Is Gelatin Bloom Strength?</p>
+          <p class="text-stone-500 text-sm leading-relaxed">
+            Bloom strength measures how firmly gelatin sets. Here's how the Bloom test works,
+            what the grade scale means (bronze through platinum), and why the number matters
+            when substituting one gelatin for another.
+          </p>
+        </a>
+
+        <a href="/gelatin-sheets-vs-powder/" class="block border border-stone-200 rounded-xl p-5 hover:border-amber-300 transition-colors">
+          <p class="font-serif text-xl text-stone-900 mb-2">Gelatin Sheets vs Powder: What's the Difference?</p>
+          <p class="text-stone-500 text-sm leading-relaxed">
+            Sheets and powder are chemically the same, but they're measured differently and have
+            different bloom strengths. This page covers the grade comparison table, when each
+            format is used, and the conversion math.
+          </p>
+        </a>
+
+        <a href="/how-much-gelatin-per-cup-of-liquid/" class="block border border-stone-200 rounded-xl p-5 hover:border-amber-300 transition-colors">
+          <p class="font-serif text-xl text-stone-900 mb-2">How Much Gelatin Per Cup of Liquid?</p>
+          <p class="text-stone-500 text-sm leading-relaxed">
+            Reference ratios by desired texture — soft set through very firm — plus the
+            variables that change how much you need: acid, sugar, dairy, proteolytic
+            enzymes, and temperature.
+          </p>
+        </a>
+
+        <a href="/what-is-bloom-strength/" class="block border border-stone-200 rounded-xl p-5 hover:border-amber-300 transition-colors">
+          <p class="font-serif text-xl text-stone-900 mb-2">Gelatin Bloom Strength — Plain-English Guide</p>
+          <p class="text-stone-500 text-sm leading-relaxed">
+            Which bloom strength to use for panna cotta, gummy bears, mirror glaze, and
+            stabilized whipped cream. Includes a grade table and worked conversion examples.
+          </p>
+        </a>
+
+        <a href="/sheets-to-powder/" class="block border border-stone-200 rounded-xl p-5 hover:border-amber-300 transition-colors">
+          <p class="font-serif text-xl text-stone-900 mb-2">Gelatin Sheets to Powder Conversion</p>
+          <p class="text-stone-500 text-sm leading-relaxed">
+            Convert any sheet grade (bronze, silver, gold, platinum) to grams of powder,
+            accounting for both bloom strength and sheet weight. Includes common conversion
+            scenarios.
+          </p>
+        </a>
+      </div>
+
+      <div class="mt-12 p-5 bg-stone-50 border border-stone-200 rounded-xl">
+        <p class="font-medium text-stone-900 mb-2">Not sure what bloom strength your gelatin is?</p>
+        <p class="text-stone-600 text-sm leading-relaxed mb-3">
+          The main calculator starts with a diagnostic step — answer a few questions about
+          your gelatin and it identifies the likely bloom value before running the conversion.
+        </p>
+        <a href="/" class="text-amber-700 underline underline-offset-4 text-sm hover:text-amber-600">
+          Go to the calculator →
+        </a>
+      </div>
+    </main>
+
+    <Footer />
+  </body>
+</html>
