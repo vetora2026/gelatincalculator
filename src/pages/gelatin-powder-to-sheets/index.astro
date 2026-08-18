@@ -1,0 +1,281 @@
+---
+import "../../styles/global.css";
+import BaseHead from "../../components/BaseHead.astro";
+import Footer from "../../components/Footer.astro";
+import { COUNT_PAGES } from "../../data/quantity-page-content.js";
+import {
+  GRADES,
+  POWDERS,
+  DEFAULT_SHEET_GRADE,
+  DEFAULT_POWDER,
+  PACKET_GRAMS,
+  TSP_GRAMS,
+  getGrade,
+  getPowder,
+  powderToSheets,
+  sheetsToPowderGrams,
+  powderGramsToSheetGrams,
+  gramsToTsp,
+  gramsToPackets,
+  fmt1,
+} from "../../lib/gelatin-conversion.js";
+
+const POWDER_ROWS = [1, 2, 3, 4, 5, PACKET_GRAMS, 10, 14, 20];
+const FEATURED = PACKET_GRAMS;
+
+const grade = getGrade(DEFAULT_SHEET_GRADE);
+const powder = getPowder(DEFAULT_POWDER);
+
+const sheets = (grams, gradeId) => powderToSheets(grams, "grams", DEFAULT_POWDER, gradeId);
+const answer = fmt1(sheets(FEATURED, DEFAULT_SHEET_GRADE));
+const answerMass = fmt1(powderGramsToSheetGrams(FEATURED, DEFAULT_SHEET_GRADE, DEFAULT_POWDER));
+const answerTsp = fmt1(gramsToTsp(FEATURED));
+const oneTspSheets = fmt1(sheets(TSP_GRAMS, DEFAULT_SHEET_GRADE));
+
+const path = "/gelatin-powder-to-sheets/";
+const title = `Gelatin Powder to Sheets: ${FEATURED}g = ${answer} Gold Sheets`;
+const description = `One ${FEATURED}g packet of gelatin powder equals ${answer} gold sheets. Chart converting powder in grams to bronze, silver, gold, platinum and titanium sheets.`;
+
+const faqs = [
+  {
+    q: `How many gelatin sheets replace one packet of powder?`,
+    a: `A standard envelope holds ${FEATURED}g of ${powder.label.toLowerCase()} at ${powder.bloom} bloom, which comes to ${answer} gold sheets — or ${fmt1(sheets(FEATURED, "silver"))} silver, ${fmt1(sheets(FEATURED, "platinum"))} platinum. The count differs by grade because sheet weight differs by grade. In practice most cooks round to ${Math.round(sheets(FEATURED, DEFAULT_SHEET_GRADE))} gold sheets, which is close enough for a jelly and worth being deliberate about for a mousse.`,
+  },
+  {
+    q: `My recipe lists teaspoons of powder, not grams. What do I do first?`,
+    a: `Convert the spoons to weight, then the weight to sheets. A level teaspoon of powder is about ${TSP_GRAMS}g, so one teaspoon comes to roughly ${oneTspSheets} gold sheets and the ${FEATURED}g envelope is about ${answerTsp} teaspoons. Spoon measurement is the least precise link in the chain — the same spoon holds different amounts depending on how the granules were scooped — so weigh where the texture matters.`,
+  },
+  {
+    q: `Can I round to a whole number of sheets?`,
+    a: `Usually, and downward. Sheets only come in whole units unless you are willing to cut and weigh them, and a set that is slightly soft can be re-melted with more gelatin while one that is rubbery cannot be rescued. The gap between ${answer} sheets and the nearest whole number is small in absolute terms — a fraction of ${grade.g}g — but it compounds if you scale the recipe up.`,
+  },
+];
+
+const stripTags = (s) => s.replace(/<[^>]+>/g, "");
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: stripTags(f.a) },
+  })),
+};
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://gelatincalculator.com/" },
+    { "@type": "ListItem", position: 2, name: "Gelatin Sheets to Powder", item: "https://gelatincalculator.com/sheets-to-powder/" },
+    { "@type": "ListItem", position: 3, name: "Gelatin Powder to Sheets", item: "https://gelatincalculator.com" + path },
+  ],
+};
+
+const th = "text-left font-medium text-stone-500 text-xs uppercase tracking-wide px-3 py-2 whitespace-nowrap";
+const td = "px-3 py-2.5 border-t border-stone-100 whitespace-nowrap";
+---
+
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} path={path} />
+    <Fragment set:html={`<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>`} />
+    <Fragment set:html={`<script type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>`} />
+  </head>
+  <body class="bg-white text-stone-900">
+    <nav class="border-b border-stone-200">
+      <div class="max-w-5xl mx-auto px-5 py-4 flex items-center justify-between">
+        <a href="/" class="font-serif text-xl text-stone-900">gelatincalculator.com</a>
+        <div class="flex gap-5 text-sm text-stone-600">
+          <a href="/about" class="hover:text-amber-700">About</a>
+          <a href="/privacy" class="hover:text-amber-700">Privacy</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="max-w-2xl mx-auto px-5 py-12 sm:py-16">
+      <nav aria-label="Breadcrumb" class="text-sm text-stone-500 mb-6">
+        <a href="/" class="hover:text-amber-700">Home</a>
+        <span class="mx-2 text-stone-300">/</span>
+        <a href="/sheets-to-powder/" class="hover:text-amber-700">Sheets to powder</a>
+      </nav>
+
+      <h1 class="font-serif text-4xl sm:text-5xl text-stone-900 mb-5">Gelatin Powder to Sheets</h1>
+
+      <p class="text-xl sm:text-2xl leading-snug text-stone-900 mb-3">
+        <strong class="font-semibold">
+          {FEATURED}g of gelatin powder = {answer} gold sheets.
+        </strong>
+      </p>
+      <p class="text-stone-500 text-sm mb-10">
+        One standard envelope of {powder.label} at {powder.bloom} bloom, converted to gold sheets
+        ({grade.bloom} bloom, {grade.g}g each). Every other weight and grade is in the chart below.
+      </p>
+
+      <div class="text-stone-700 leading-relaxed space-y-10">
+
+        <section>
+          <p>
+            This is the direction most American kitchens need. The recipe was written in Europe, it
+            asks for a number of sheets, and what is in the cupboard is a box of envelopes. The
+            arithmetic runs the same way as the forward conversion but ends in a count rather than a
+            weight, which introduces a problem the forward direction does not have: sheets are
+            discrete. A conversion that lands on {answer} sheets cannot be measured out as {answer}
+            {" "}sheets without cutting one, so the last step is a judgement about which way to round.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-2">Powder to sheets, by grade</h2>
+          <p class="text-sm text-stone-500 mb-4">
+            Figures are numbers of sheets, converting from {powder.label} at {powder.bloom} bloom.
+          </p>
+          <div class="overflow-x-auto -mx-5 px-5">
+            <table class="w-full text-sm border border-stone-200 rounded-xl border-separate border-spacing-0">
+              <thead class="bg-stone-50">
+                <tr>
+                  <th class={th}>Powder</th>
+                  <th class={th}>Packets</th>
+                  <th class={th}>Teaspoons</th>
+                  {GRADES.map((g) => <th class={th}>{g.name}<br /><span class="normal-case font-normal">{g.bloom} bloom</span></th>)}
+                </tr>
+              </thead>
+              <tbody>
+                {POWDER_ROWS.map((grams) => (
+                  <tr class={grams === FEATURED ? "bg-amber-50/60" : ""}>
+                    <td class={td + " font-medium text-stone-900"}>{grams}g</td>
+                    <td class={td + " text-stone-500"}>{fmt1(gramsToPackets(grams))}</td>
+                    <td class={td + " text-stone-500"}>{fmt1(gramsToTsp(grams))}</td>
+                    {GRADES.map((g) => <td class={td}>{fmt1(sheets(grams, g.id))}</td>)}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p class="text-xs text-stone-400 mt-3">
+            Starting from a different powder?
+            {POWDERS.filter((p) => p.id !== DEFAULT_POWDER).map((p) => (
+              <span>{" "}{FEATURED}g of {p.label.toLowerCase()} at {p.bloom} bloom is {fmt1(powderToSheets(FEATURED, "grams", p.id, DEFAULT_SHEET_GRADE))} gold sheets.</span>
+            ))}
+          </p>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-3">Why one weight gives five different counts</h2>
+          <p>
+            Sheet gelatin is portioned so that a single sheet sets a predictable volume of liquid
+            whichever grade you bought. Bloom strength describes gelling power per gram, so the only
+            way to keep the per-sheet result constant is to vary the grams in each sheet: the strongest
+            grade, platinum, is cut into the lightest sheets, and the softest, titanium, into the
+            heaviest. A fixed weight of powder therefore buys you more sheets of a light grade than of
+            a heavy one — but each of those sheets is doing a comparable amount of work, which is why
+            the counts in the platinum and titanium columns are closer together than the sheet weights
+            alone would suggest. Powder sits outside this system entirely, sold loose by weight at one
+            bloom value.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-3">Measuring and soaking, going this direction</h2>
+          <p>
+            Converting toward sheets makes the measuring easier and the handling harder. Sheets need no
+            scale — you count them — but they do need a bowl of genuinely cold water, five minutes to
+            soften without sticking to each other, and a firm squeeze before they go into the warm
+            base. Water that stays in the sheets dilutes the recipe; water that is too warm starts
+            dissolving them into the bowl. The other change is what happens to the recipe's liquid.
+            A powder-based method usually reserves some cold liquid for blooming and adds it back
+            later. If you are replacing {FEATURED}g of powder with sheets, that reserved liquid is no
+            longer doing a job and should go back into the main mixture, or the finished dish will be
+            short by that volume and set firmer than intended.
+          </p>
+        </section>
+
+        <section>
+          <p>
+            Two figures worth holding side by side: the envelope contains {FEATURED}g of powder, and
+            the sheets it replaces weigh {answerMass}g. Same setting power, different mass, because
+            bloom strength is the thing being matched rather than weight.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-4">Converting the other way</h2>
+          <div class="overflow-x-auto -mx-5 px-5">
+            <table class="w-full text-sm border border-stone-200 rounded-xl border-separate border-spacing-0">
+              <thead class="bg-stone-50">
+                <tr>
+                  <th class={th}>Gold sheets</th>
+                  <th class={th}>Powder ({powder.bloom} bloom)</th>
+                  <th class={th}></th>
+                </tr>
+              </thead>
+              <tbody>
+                {COUNT_PAGES.map((other) => (
+                  <tr>
+                    <td class={td + " font-medium text-stone-900"}>{other.count}</td>
+                    <td class={td}>{fmt1(sheetsToPowderGrams(other.count, DEFAULT_SHEET_GRADE, DEFAULT_POWDER))}g</td>
+                    <td class={td}>
+                      <a href={`/${other.slug}/`} class="text-amber-700 underline underline-offset-4">
+                        {other.count} {other.count === 1 ? "sheet" : "sheets"} to powder
+                      </a>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p class="text-sm text-stone-500 mt-3">
+            Starting from a weight of sheet gelatin instead?{" "}
+            <a href="/gelatin-grams-sheets-to-powder/" class="text-amber-700 underline underline-offset-4">Grams of sheet gelatin to powder</a>.
+          </p>
+        </section>
+
+        <section class="border border-stone-200 rounded-2xl p-6 bg-stone-50/60">
+          <h2 class="font-serif text-2xl text-stone-900 mb-2">Any other quantity</h2>
+          <p class="text-stone-600 mb-4">
+            The calculator takes powder in grams, packets or teaspoons and returns the sheet count for
+            any of the five grades.
+          </p>
+          <a
+            href="/sheets-to-powder/"
+            class="inline-block bg-amber-600 text-white rounded-lg px-5 py-2.5 text-sm font-medium hover:bg-amber-700 transition-colors"
+          >
+            Open the powder-to-sheets calculator
+          </a>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-7">Frequently asked questions</h2>
+          <div class="space-y-7">
+            {faqs.map((f) => (
+              <div>
+                <h3 class="font-serif text-lg text-stone-900 mb-2">{f.q}</h3>
+                <p class="text-stone-600 leading-relaxed" set:html={f.a} />
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-4">Related references</h2>
+          <div class="space-y-3">
+            <a href="/what-is-gelatin-bloom-strength/" class="block border border-stone-200 rounded-xl p-4 hover:border-amber-300 transition-colors">
+              <p class="font-medium text-stone-900 mb-1">What Is Gelatin Bloom Strength?</p>
+              <p class="text-stone-500 text-sm">Why a gram of powder and a gram of sheet do different work.</p>
+            </a>
+            <a href="/gelatin-sheets-vs-powder/" class="block border border-stone-200 rounded-xl p-4 hover:border-amber-300 transition-colors">
+              <p class="font-medium text-stone-900 mb-1">Gelatin Sheets vs Powder</p>
+              <p class="text-stone-500 text-sm">Soaking, clarity, and which format suits which job.</p>
+            </a>
+            <a href="/how-much-gelatin-per-cup-of-liquid/" class="block border border-stone-200 rounded-xl p-4 hover:border-amber-300 transition-colors">
+              <p class="font-medium text-stone-900 mb-1">How Much Gelatin Per Cup of Liquid?</p>
+              <p class="text-stone-500 text-sm">Reference ratios by finished texture.</p>
+            </a>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <Footer />
+  </body>
+</html>

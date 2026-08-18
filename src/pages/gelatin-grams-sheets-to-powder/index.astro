@@ -1,0 +1,289 @@
+---
+import "../../styles/global.css";
+import BaseHead from "../../components/BaseHead.astro";
+import Footer from "../../components/Footer.astro";
+import { COUNT_PAGES } from "../../data/quantity-page-content.js";
+import {
+  GRADES,
+  POWDERS,
+  DEFAULT_SHEET_GRADE,
+  DEFAULT_POWDER,
+  TSP_GRAMS,
+  PACKET_GRAMS,
+  getGrade,
+  getPowder,
+  sheetGramsToPowderGrams,
+  powderGramsToSheetGrams,
+  gramsToTsp,
+  gramsToPackets,
+  fmt1,
+} from "../../lib/gelatin-conversion.js";
+
+const GRAM_ROWS = [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 15, 20];
+const FEATURED = 5;
+
+const grade = getGrade(DEFAULT_SHEET_GRADE);
+const powder = getPowder(DEFAULT_POWDER);
+
+const answer = fmt1(sheetGramsToPowderGrams(FEATURED, DEFAULT_SHEET_GRADE, DEFAULT_POWDER));
+const answerTsp = fmt1(gramsToTsp(sheetGramsToPowderGrams(FEATURED, DEFAULT_SHEET_GRADE, DEFAULT_POWDER)));
+const featuredSheets = fmt1(FEATURED / grade.g);
+const packetAsSheetGrams = fmt1(powderGramsToSheetGrams(PACKET_GRAMS, DEFAULT_SHEET_GRADE, DEFAULT_POWDER));
+
+const path = "/gelatin-grams-sheets-to-powder/";
+const title = `${FEATURED}g Gelatin Sheet to Powder = ${answer}g (Gram Chart)`;
+const description = `${FEATURED}g of sheet gelatin converts to ${answer}g of powdered gelatin (gold sheets to Knox). Full gram-by-gram chart for every sheet grade, 1g to 20g.`;
+
+const faqs = [
+  {
+    q: `Does 5g of gelatin mean 5g of sheets or 5g of powder?`,
+    a: `It depends on what the recipe was written around, and the two are not interchangeable. ${FEATURED}g of gold sheet gelatin converts to ${answer}g of ${powder.label.toLowerCase()}, because the powder gels harder per gram. If the recipe is European and lists grams without naming a format, sheet gelatin is the more likely reading; if it is American, powder is. The clue is usually elsewhere in the method — a recipe that says "soak the gelatin in cold water and squeeze" means sheets, one that says "sprinkle over cold water" means powder.`,
+  },
+  {
+    q: `How many sheets is 5 grams of gelatin?`,
+    a: `At gold grade, ${FEATURED}g works out to about ${featuredSheets} sheets, since a gold sheet weighs ${grade.g}g. The count changes with grade — the same ${FEATURED}g is a different number of sheets in every row of the chart above. If your recipe gives you a sheet count rather than a weight, the <a href="/${COUNT_PAGES[4].slug}/" class="text-amber-700 underline underline-offset-4">5-sheet page</a> starts from the count instead.`,
+  },
+  {
+    q: `Why isn't the gram-to-gram conversion one-to-one?`,
+    a: `Because grams measure mass and bloom measures gelling power. A gram of ${grade.name.toLowerCase()} sheet stock at ${grade.bloom} bloom does not gel as hard as a gram of ${powder.label.toLowerCase()} at ${powder.bloom} bloom, so matching the recipe's set means matching gelling power rather than weight. The ratio between the two bloom values is the entire conversion. Where the two blooms happen to be equal, the conversion is one-to-one.`,
+  },
+];
+
+const stripTags = (s) => s.replace(/<[^>]+>/g, "");
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: stripTags(f.a) },
+  })),
+};
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://gelatincalculator.com/" },
+    { "@type": "ListItem", position: 2, name: "Gelatin Sheets to Powder", item: "https://gelatincalculator.com/sheets-to-powder/" },
+    { "@type": "ListItem", position: 3, name: "Grams of Sheet Gelatin to Powder", item: "https://gelatincalculator.com" + path },
+  ],
+};
+
+const th = "text-left font-medium text-stone-500 text-xs uppercase tracking-wide px-3 py-2 whitespace-nowrap";
+const td = "px-3 py-2.5 border-t border-stone-100 whitespace-nowrap";
+---
+
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} path={path} />
+    <Fragment set:html={`<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>`} />
+    <Fragment set:html={`<script type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>`} />
+  </head>
+  <body class="bg-white text-stone-900">
+    <nav class="border-b border-stone-200">
+      <div class="max-w-5xl mx-auto px-5 py-4 flex items-center justify-between">
+        <a href="/" class="font-serif text-xl text-stone-900">gelatincalculator.com</a>
+        <div class="flex gap-5 text-sm text-stone-600">
+          <a href="/about" class="hover:text-amber-700">About</a>
+          <a href="/privacy" class="hover:text-amber-700">Privacy</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="max-w-2xl mx-auto px-5 py-12 sm:py-16">
+      <nav aria-label="Breadcrumb" class="text-sm text-stone-500 mb-6">
+        <a href="/" class="hover:text-amber-700">Home</a>
+        <span class="mx-2 text-stone-300">/</span>
+        <a href="/sheets-to-powder/" class="hover:text-amber-700">Sheets to powder</a>
+      </nav>
+
+      <h1 class="font-serif text-4xl sm:text-5xl text-stone-900 mb-5">
+        Grams of Sheet Gelatin to Powder
+      </h1>
+
+      <p class="text-xl sm:text-2xl leading-snug text-stone-900 mb-3">
+        <strong class="font-semibold">
+          {FEATURED}g of sheet gelatin = {answer}g of powdered gelatin.
+        </strong>
+      </p>
+      <p class="text-stone-500 text-sm mb-10">
+        Gold-grade sheets at {grade.bloom} bloom converted to {powder.label} at {powder.bloom} bloom —
+        about {answerTsp} level teaspoons. Every gram amount and grade is in the chart below.
+      </p>
+
+      <div class="text-stone-700 leading-relaxed space-y-10">
+
+        <section>
+          <p>
+            A weight is a more useful starting point than a sheet count, and it is what most European
+            recipes actually give you. It also removes one of the two variables: when a recipe says
+            grams, you no longer need to know how heavy a sheet of that grade is, only how hard it
+            gels. What remains is the bloom ratio. {FEATURED}g of gold sheet stock and {FEATURED}g of
+            {" "}{powder.label} are the same mass of protein and different amounts of setting power,
+            which is why the number in the answer above is not {FEATURED}.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-2">Sheet gelatin, gram for gram, by grade</h2>
+          <p class="text-sm text-stone-500 mb-4">
+            Read down the left column for the weight your recipe gives, across for the grade you have.
+            All figures are grams of {powder.label} at {powder.bloom} bloom.
+          </p>
+          <div class="overflow-x-auto -mx-5 px-5">
+            <table class="w-full text-sm border border-stone-200 rounded-xl border-separate border-spacing-0">
+              <thead class="bg-stone-50">
+                <tr>
+                  <th class={th}>Sheet gelatin</th>
+                  {GRADES.map((g) => <th class={th}>{g.name}<br /><span class="normal-case font-normal">{g.bloom} bloom</span></th>)}
+                  <th class={th}>Sheets (gold)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {GRAM_ROWS.map((grams) => (
+                  <tr class={grams === FEATURED ? "bg-amber-50/60" : ""}>
+                    <td class={td + " font-medium text-stone-900"}>{grams}g</td>
+                    {GRADES.map((g) => (
+                      <td class={td}>{fmt1(sheetGramsToPowderGrams(grams, g.id, DEFAULT_POWDER))}g</td>
+                    ))}
+                    <td class={td + " text-stone-500"}>{fmt1(grams / grade.g)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p class="text-xs text-stone-400 mt-3">
+            If your powder is not {powder.label}, the ratio changes.
+            {POWDERS.filter((p) => p.id !== DEFAULT_POWDER).map((p) => (
+              <span>{" "}{FEATURED}g of gold sheets is {fmt1(sheetGramsToPowderGrams(FEATURED, DEFAULT_SHEET_GRADE, p.id))}g of {p.label.toLowerCase()} at {p.bloom} bloom.</span>
+            ))}
+          </p>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-3">Why the grade still matters when you have a weight</h2>
+          <p>
+            Sheets are manufactured so that one sheet sets a consistent volume of liquid whatever the
+            grade, which means the sheet weight has to move inversely to the bloom strength — platinum
+            stock gels hardest per gram and so is cut into the lightest sheets, titanium gels softest
+            and is cut heaviest. When a recipe hands you a weight instead of a count, the weight side
+            of that relationship drops out but the bloom side does not. {FEATURED}g of platinum stock
+            and {FEATURED}g of titanium stock are the same mass and roughly two different desserts.
+            The chart above keeps that visible rather than folding it into a single average, which is
+            why each grade gets its own column.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-3">Measuring it out</h2>
+          <p>
+            Powder is sold by weight, so a scale is the direct instrument and a spoon is the
+            approximation. A level teaspoon of powdered gelatin runs about {TSP_GRAMS}g, and a standard
+            envelope holds {PACKET_GRAMS}g, which stands in for {packetAsSheetGrams}g of gold sheet
+            gelatin. Spoon measurement is workable up to about three
+            teaspoons and gets unreliable past that, because each additional spoonful carries its own
+            packing error in the same direction. The blooming step also has to be adapted. A recipe
+            written for sheets assumes the gelatin arrives already hydrated and wrung out, contributing
+            no liquid. Powder arrives dry and needs roughly four to five times its own weight in cold
+            liquid to swell in, and that liquid stays in the finished dish — take it from the recipe's
+            cold ingredients rather than adding it. Let the granules stand until they look like wet
+            sand with no dry centres before any heat goes near them.
+          </p>
+        </section>
+
+        <section>
+          <p>
+            One caution about where these weights come from. Bloom values for retail powders are rarely
+            printed on the packaging; the site's figures are drawn from published references and are
+            labelled with a confidence level in the{" "}
+            <a href="/what-is-gelatin-bloom-strength/" class="text-amber-700 underline underline-offset-4">bloom strength reference</a>.
+            Sheet weights are European standards and vary between manufacturers. Both are good enough
+            for the arithmetic above and neither is a specification — for texture-critical work, test a
+            small batch.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-4">If your recipe gives a sheet count</h2>
+          <div class="overflow-x-auto -mx-5 px-5">
+            <table class="w-full text-sm border border-stone-200 rounded-xl border-separate border-spacing-0">
+              <thead class="bg-stone-50">
+                <tr>
+                  <th class={th}>Gold sheets</th>
+                  <th class={th}>Weight of sheets</th>
+                  <th class={th}>Powder</th>
+                  <th class={th}></th>
+                </tr>
+              </thead>
+              <tbody>
+                {COUNT_PAGES.map((other) => (
+                  <tr>
+                    <td class={td + " font-medium text-stone-900"}>{other.count}</td>
+                    <td class={td + " text-stone-500"}>{fmt1(other.count * grade.g)}g</td>
+                    <td class={td}>{fmt1(sheetGramsToPowderGrams(other.count * grade.g, DEFAULT_SHEET_GRADE, DEFAULT_POWDER))}g</td>
+                    <td class={td}>
+                      <a href={`/${other.slug}/`} class="text-amber-700 underline underline-offset-4">
+                        {other.count} {other.count === 1 ? "sheet" : "sheets"}
+                      </a>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p class="text-sm text-stone-500 mt-3">
+            Going the other direction?{" "}
+            <a href="/gelatin-powder-to-sheets/" class="text-amber-700 underline underline-offset-4">Powder to sheets</a>.
+          </p>
+        </section>
+
+        <section class="border border-stone-200 rounded-2xl p-6 bg-stone-50/60">
+          <h2 class="font-serif text-2xl text-stone-900 mb-2">Any other quantity</h2>
+          <p class="text-stone-600 mb-4">
+            The calculator handles weights that fall between the rows above, all five grades, and three
+            powder bloom values.
+          </p>
+          <a
+            href="/sheets-to-powder/"
+            class="inline-block bg-amber-600 text-white rounded-lg px-5 py-2.5 text-sm font-medium hover:bg-amber-700 transition-colors"
+          >
+            Open the sheets-to-powder calculator
+          </a>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-7">Frequently asked questions</h2>
+          <div class="space-y-7">
+            {faqs.map((f) => (
+              <div>
+                <h3 class="font-serif text-lg text-stone-900 mb-2">{f.q}</h3>
+                <p class="text-stone-600 leading-relaxed" set:html={f.a} />
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-4">Related references</h2>
+          <div class="space-y-3">
+            <a href="/what-is-gelatin-bloom-strength/" class="block border border-stone-200 rounded-xl p-4 hover:border-amber-300 transition-colors">
+              <p class="font-medium text-stone-900 mb-1">What Is Gelatin Bloom Strength?</p>
+              <p class="text-stone-500 text-sm">The measurement the whole gram conversion depends on.</p>
+            </a>
+            <a href="/gelatin-sheets-vs-powder/" class="block border border-stone-200 rounded-xl p-4 hover:border-amber-300 transition-colors">
+              <p class="font-medium text-stone-900 mb-1">Gelatin Sheets vs Powder</p>
+              <p class="text-stone-500 text-sm">What changes besides the number when you swap formats.</p>
+            </a>
+            <a href="/how-much-gelatin-per-cup-of-liquid/" class="block border border-stone-200 rounded-xl p-4 hover:border-amber-300 transition-colors">
+              <p class="font-medium text-stone-900 mb-1">How Much Gelatin Per Cup of Liquid?</p>
+              <p class="text-stone-500 text-sm">Ratios by texture once the weight is settled.</p>
+            </a>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <Footer />
+  </body>
+</html>

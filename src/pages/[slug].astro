@@ -1,0 +1,282 @@
+---
+import "../styles/global.css";
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import { COUNT_PAGES } from "../data/quantity-page-content.js";
+import {
+  GRADES,
+  POWDERS,
+  DEFAULT_SHEET_GRADE,
+  DEFAULT_POWDER,
+  PACKET_GRAMS,
+  TSP_GRAMS,
+  getGrade,
+  getPowder,
+  sheetMass,
+  sheetsToPowderGrams,
+  gramsToPackets,
+  gramsToTsp,
+  cupsSetBy,
+  fmt1,
+} from "../lib/gelatin-conversion.js";
+
+export function getStaticPaths() {
+  return COUNT_PAGES.map((page) => ({ params: { slug: page.slug }, props: { page } }));
+}
+
+const { page } = Astro.props;
+const n = page.count;
+
+// Every number below is produced by the shared conversion module.
+const powderGrams = (gradeId, powderId = DEFAULT_POWDER) =>
+  sheetsToPowderGrams(n, gradeId, powderId);
+
+const defaultGrade = getGrade(DEFAULT_SHEET_GRADE);
+const defaultPowder = getPowder(DEFAULT_POWDER);
+const headline = fmt1(powderGrams(DEFAULT_SHEET_GRADE));
+
+const v = {
+  n,
+  tspG: TSP_GRAMS,
+  packetGrams: PACKET_GRAMS,
+  knoxBloom: defaultPowder.bloom,
+  tspApprox: fmt1(gramsToTsp(powderGrams(DEFAULT_SHEET_GRADE))),
+  packets: fmt1(gramsToPackets(powderGrams(DEFAULT_SHEET_GRADE))),
+  goldCups: fmt1(cupsSetBy(powderGrams(DEFAULT_SHEET_GRADE))),
+  titaniumOverGold: fmt1(getGrade("titanium").g / getGrade("gold").g),
+  oneSheet: Object.fromEntries(GRADES.map((g) => [g.id, fmt1(sheetMass(1, g.id))])),
+};
+for (const g of GRADES) {
+  v[g.id] = fmt1(powderGrams(g.id));
+  v[g.id + "Mass"] = fmt1(sheetMass(n, g.id));
+  v[g.id + "Bloom"] = g.bloom;
+}
+
+const sheetWord = n === 1 ? "sheet" : "sheets";
+const title = `${n} Gelatin ${n === 1 ? "Sheet" : "Sheets"} to Powder = ${headline} Grams (Chart)`;
+const description = `${n} gelatin ${sheetWord} converts to ${headline}g of powdered gelatin (gold sheets, Knox powder). Chart for bronze, silver, gold, platinum and titanium.`;
+const path = `/${page.slug}/`;
+
+const faqs = page.faqs(v);
+const stripTags = (s) => s.replace(/<[^>]+>/g, "");
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: stripTags(f.a) },
+  })),
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://gelatincalculator.com/" },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Gelatin Sheets to Powder",
+      item: "https://gelatincalculator.com/sheets-to-powder/",
+    },
+    {
+      "@type": "ListItem",
+      position: 3,
+      name: page.h1,
+      item: `https://gelatincalculator.com${path}`,
+    },
+  ],
+};
+
+const th = "text-left font-medium text-stone-500 text-xs uppercase tracking-wide px-3 py-2 whitespace-nowrap";
+const td = "px-3 py-2.5 border-t border-stone-100 whitespace-nowrap";
+---
+
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} path={path} />
+    <Fragment set:html={`<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>`} />
+    <Fragment set:html={`<script type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>`} />
+  </head>
+  <body class="bg-white text-stone-900">
+    <nav class="border-b border-stone-200">
+      <div class="max-w-5xl mx-auto px-5 py-4 flex items-center justify-between">
+        <a href="/" class="font-serif text-xl text-stone-900">gelatincalculator.com</a>
+        <div class="flex gap-5 text-sm text-stone-600">
+          <a href="/about" class="hover:text-amber-700">About</a>
+          <a href="/privacy" class="hover:text-amber-700">Privacy</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="max-w-2xl mx-auto px-5 py-12 sm:py-16">
+      <nav aria-label="Breadcrumb" class="text-sm text-stone-500 mb-6">
+        <a href="/" class="hover:text-amber-700">Home</a>
+        <span class="mx-2 text-stone-300">/</span>
+        <a href="/sheets-to-powder/" class="hover:text-amber-700">Sheets to powder</a>
+      </nav>
+
+      <h1 class="font-serif text-4xl sm:text-5xl text-stone-900 mb-5">{page.h1}</h1>
+
+      <p class="text-xl sm:text-2xl leading-snug text-stone-900 mb-3">
+        <strong class="font-semibold">
+          {n} gelatin {sheetWord} = {headline} grams of powdered gelatin.
+        </strong>
+      </p>
+      <p class="text-stone-500 text-sm mb-10">
+        Gold-grade sheets ({defaultGrade.bloom} bloom, {defaultGrade.g}g each) converted to
+        {" "}{defaultPowder.label} at {defaultPowder.bloom} bloom. Other grades are in the table below.
+      </p>
+
+      <div class="text-stone-700 leading-relaxed space-y-10">
+
+        <section>
+          <p>{page.lede(v)}</p>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-2">
+            {n} {sheetWord} in powder, by sheet grade
+          </h2>
+          <p class="text-sm text-stone-500 mb-4">
+            Powder quantities in grams. Sheet weight and bloom strength both change with grade.
+          </p>
+          <div class="overflow-x-auto -mx-5 px-5">
+            <table class="w-full text-sm border border-stone-200 rounded-xl border-separate border-spacing-0">
+              <thead class="bg-stone-50">
+                <tr>
+                  <th class={th}>Sheet grade</th>
+                  <th class={th}>Bloom</th>
+                  <th class={th}>{n} {sheetWord} weigh</th>
+                  {POWDERS.map((p) => <th class={th}>{p.label}<br /><span class="normal-case font-normal">{p.bloom} bloom</span></th>)}
+                </tr>
+              </thead>
+              <tbody>
+                {GRADES.map((g) => (
+                  <tr class={g.id === DEFAULT_SHEET_GRADE ? "bg-amber-50/60" : ""}>
+                    <td class={td + " font-medium text-stone-900"}>{g.name}</td>
+                    <td class={td + " text-stone-500"}>{g.bloom}</td>
+                    <td class={td + " text-stone-500"}>{fmt1(sheetMass(n, g.id))}g</td>
+                    {POWDERS.map((p) => (
+                      <td class={td + " text-stone-900"}>{fmt1(powderGrams(g.id, p.id))}g</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p class="text-xs text-stone-400 mt-3">
+            Sheet weights are common European standard weights and vary by manufacturer. Bloom values
+            and their confidence levels are listed in the site's{" "}
+            <a href="/what-is-gelatin-bloom-strength/" class="text-amber-700 underline underline-offset-4">bloom strength reference</a>.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-3">Why the grades give different numbers</h2>
+          <p>{page.gradesProse}</p>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-3">Measuring the powder equivalent</h2>
+          <p>{page.measuring(v)}</p>
+        </section>
+
+        <section>
+          <p>{page.extra}</p>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-4">Other sheet counts</h2>
+          <div class="overflow-x-auto -mx-5 px-5">
+            <table class="w-full text-sm border border-stone-200 rounded-xl border-separate border-spacing-0">
+              <thead class="bg-stone-50">
+                <tr>
+                  <th class={th}>Sheets (gold)</th>
+                  <th class={th}>Powder ({defaultPowder.bloom} bloom)</th>
+                  <th class={th}>Level teaspoons</th>
+                  <th class={th}></th>
+                </tr>
+              </thead>
+              <tbody>
+                {COUNT_PAGES.map((other) => (
+                  <tr class={other.count === n ? "bg-amber-50/60" : ""}>
+                    <td class={td + " font-medium text-stone-900"}>{other.count}</td>
+                    <td class={td}>{fmt1(sheetsToPowderGrams(other.count, DEFAULT_SHEET_GRADE, DEFAULT_POWDER))}g</td>
+                    <td class={td + " text-stone-500"}>
+                      {fmt1(gramsToTsp(sheetsToPowderGrams(other.count, DEFAULT_SHEET_GRADE, DEFAULT_POWDER)))}
+                    </td>
+                    <td class={td}>
+                      {other.count === n ? (
+                        <span class="text-stone-400">this page</span>
+                      ) : (
+                        <a href={`/${other.slug}/`} class="text-amber-700 underline underline-offset-4">
+                          {other.count} {other.count === 1 ? "sheet" : "sheets"}
+                        </a>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p class="text-sm text-stone-500 mt-3">
+            Working from a weight instead of a count?{" "}
+            <a href="/gelatin-grams-sheets-to-powder/" class="text-amber-700 underline underline-offset-4">Grams of sheet gelatin to powder</a>.
+            Going the other direction?{" "}
+            <a href="/gelatin-powder-to-sheets/" class="text-amber-700 underline underline-offset-4">Powder to sheets</a>.
+          </p>
+        </section>
+
+        <section class="border border-stone-200 rounded-2xl p-6 bg-stone-50/60">
+          <h2 class="font-serif text-2xl text-stone-900 mb-2">Any other quantity</h2>
+          <p class="text-stone-600 mb-4">
+            The calculator takes half-sheet steps, all five grades, and three powder bloom values,
+            and returns the figure in grams, packets and teaspoons.
+          </p>
+          <a
+            href="/sheets-to-powder/"
+            class="inline-block bg-amber-600 text-white rounded-lg px-5 py-2.5 text-sm font-medium hover:bg-amber-700 transition-colors"
+          >
+            Open the sheets-to-powder calculator
+          </a>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-7">Frequently asked questions</h2>
+          <div class="space-y-7">
+            {faqs.map((f) => (
+              <div>
+                <h3 class="font-serif text-lg text-stone-900 mb-2">{f.q}</h3>
+                <p class="text-stone-600 leading-relaxed" set:html={f.a} />
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl text-stone-900 mb-4">Related references</h2>
+          <div class="space-y-3">
+            <a href="/what-is-gelatin-bloom-strength/" class="block border border-stone-200 rounded-xl p-4 hover:border-amber-300 transition-colors">
+              <p class="font-medium text-stone-900 mb-1">What Is Gelatin Bloom Strength?</p>
+              <p class="text-stone-500 text-sm">The measurement behind every number on this page.</p>
+            </a>
+            <a href="/gelatin-sheets-vs-powder/" class="block border border-stone-200 rounded-xl p-4 hover:border-amber-300 transition-colors">
+              <p class="font-medium text-stone-900 mb-1">Gelatin Sheets vs Powder</p>
+              <p class="text-stone-500 text-sm">Handling, clarity, and blooming differences between the two formats.</p>
+            </a>
+            <a href="/how-much-gelatin-per-cup-of-liquid/" class="block border border-stone-200 rounded-xl p-4 hover:border-amber-300 transition-colors">
+              <p class="font-medium text-stone-900 mb-1">How Much Gelatin Per Cup of Liquid?</p>
+              <p class="text-stone-500 text-sm">Ratios by texture, once you know the weight you are working with.</p>
+            </a>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <Footer />
+  </body>
+</html>
