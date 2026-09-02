@@ -56,7 +56,7 @@ export default function SheetsToPowderConverter() {
           <button
             key={m}
             onClick={() => setMode(m)}
-            className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+            className={`flex-1 py-3 rounded-lg text-sm font-medium transition-colors ${
               mode === m
                 ? "bg-amber-600 text-white"
                 : "bg-white border border-stone-200 text-stone-700 hover:border-amber-400"

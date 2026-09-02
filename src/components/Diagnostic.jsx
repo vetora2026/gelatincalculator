@@ -71,7 +71,7 @@ export default function Diagnostic() {
           <button
             type="button"
             onClick={reset}
-            className="shrink-0 text-sm text-stone-500 hover:text-amber-700 underline underline-offset-4"
+            className="shrink-0 py-3 px-2 -my-3 text-sm text-stone-500 hover:text-amber-700 underline underline-offset-4"
           >
             Start over
           </button>
