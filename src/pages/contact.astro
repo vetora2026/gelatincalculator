@@ -1,0 +1,78 @@
+---
+import "../styles/global.css";
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+---
+<html lang="en">
+  <head>
+    <BaseHead
+      title="Contact — gelatincalculator.com"
+      description="How to reach gelatincalculator.com by email with corrections to bloom values, conversion errors, or questions about the tool."
+      path="/contact/"
+    />
+  </head>
+  <body class="bg-white text-stone-900">
+    <nav class="border-b border-stone-200">
+      <div class="max-w-5xl mx-auto px-5 py-4 flex items-center justify-between">
+        <a href="/" class="font-serif text-xl text-stone-900">gelatincalculator.com</a>
+        <div class="flex gap-5 text-sm text-stone-600">
+          <a href="/about" class="hover:text-amber-700">About</a>
+          <a href="/privacy" class="hover:text-amber-700">Privacy</a>
+          <a href="/contact" class="text-amber-700">Contact</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="max-w-2xl mx-auto px-5 py-16">
+      <h1 class="font-serif text-5xl text-stone-900 mb-8">Contact</h1>
+
+      <div class="text-stone-700 leading-relaxed space-y-5">
+        <p>
+          gelatincalculator.com is a small, independent reference site for
+          home cooks working with gelatin. It identifies the likely bloom
+          strength of the gelatin you have on hand and converts recipe
+          quantities between grades and between sheets and powder. The site
+          is built and maintained by one person, and every bloom value it
+          publishes was checked against a manufacturer spec sheet, a
+          published cookbook, or several independent references before it
+          went in.
+        </p>
+
+        <p>
+          The best reason to write is a correction. If a bloom value on the
+          site looks wrong, if a conversion produces a result that does not
+          match what a recipe or supplier says, or if you find a broken link,
+          a typo, or a page that will not load, please tell me. Corrections
+          to conversion data are the most useful mail I get — please include
+          the source you are working from so the value can be verified before
+          anything is changed.
+        </p>
+
+        <p>
+          Other things worth writing about: a brand of gelatin with a
+          published bloom strength you would like added to the lookup table,
+          a conversion the calculator does not currently handle, or a
+          question about how a number on the site was arrived at. General
+          questions about using gelatin in a recipe are welcome too, though
+          the answer will usually be a pointer to the relevant page rather
+          than recipe-specific advice.
+        </p>
+
+        <h2 class="font-serif text-2xl text-stone-900 mt-10 mb-3">Email</h2>
+        <p>
+          <!--email_off--><a class="text-amber-700 underline underline-offset-4" href="mailto:contact@gelatincalculator.com">
+            contact@gelatincalculator.com
+          </a><!--/email_off-->
+        </p>
+        <p class="text-sm text-stone-500">
+          There is no contact form and no mailing list. Email is the only
+          channel, and nothing you send is added to any list or shared with
+          anyone. See the <a class="text-amber-700 underline underline-offset-4" href="/privacy">privacy policy</a> for
+          what the site does and does not collect.
+        </p>
+      </div>
+    </main>
+
+    <Footer />
+  </body>
+</html>

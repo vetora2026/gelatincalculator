@@ -24,51 +24,119 @@ import Footer from "../../components/Footer.astro";
     </nav>
 
     <main class="max-w-2xl mx-auto px-5 py-16">
-      <h1 class="font-serif text-5xl text-stone-900 mb-3">Articles</h1>
-      <p class="text-stone-500 text-sm mb-12">Reference guides for working with gelatin</p>
+      <h1 class="font-serif text-5xl text-stone-900 mb-4">Articles</h1>
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Almost every gelatin problem a home cook runs into comes down to one
+        thing: the recipe was written for a gelatin that is not the gelatin
+        you have. A French pastry book assumes sheets of a particular grade.
+        An American recipe assumes a supermarket powder. Neither one tells
+        you what to do when you are holding the other, and consumer packaging
+        almost never prints the number that would let you work it out for
+        yourself.
+      </p>
+      <p class="text-stone-600 leading-relaxed mb-12">
+        These pages exist to close that gap. They are written to be read
+        standing in a kitchen rather than studied — short, specific, and
+        honest about which figures are firmly established and which are
+        reasonable estimates. Start with whichever question below is
+        actually yours.
+      </p>
 
-      <div class="space-y-4">
+      <h2 class="font-serif text-3xl text-stone-900 mb-3">Understanding bloom strength</h2>
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Bloom strength is the number that makes gelatin substitutable. If you
+        only read one thing on this site before using the calculator, make it
+        one of these two pages. They cover the same concept from different
+        angles: the first is the more technical explanation, the second is
+        organised around what you are actually trying to make.
+      </p>
+
+      <div class="space-y-4 mb-12">
         <a href="/what-is-gelatin-bloom-strength/" class="block border border-stone-200 rounded-xl p-5 hover:border-amber-300 transition-colors">
           <p class="font-serif text-xl text-stone-900 mb-2">What Is Gelatin Bloom Strength?</p>
-          <p class="text-stone-500 text-sm leading-relaxed">
-            Bloom strength measures how firmly gelatin sets. Here's how the Bloom test works,
-            what the grade scale means (bronze through platinum), and why the number matters
-            when substituting one gelatin for another.
-          </p>
-        </a>
-
-        <a href="/gelatin-sheets-vs-powder/" class="block border border-stone-200 rounded-xl p-5 hover:border-amber-300 transition-colors">
-          <p class="font-serif text-xl text-stone-900 mb-2">Gelatin Sheets vs Powder: What's the Difference?</p>
-          <p class="text-stone-500 text-sm leading-relaxed">
-            Sheets and powder are chemically the same, but they're measured differently and have
-            different bloom strengths. This page covers the grade comparison table, when each
-            format is used, and the conversion math.
-          </p>
-        </a>
-
-        <a href="/how-much-gelatin-per-cup-of-liquid/" class="block border border-stone-200 rounded-xl p-5 hover:border-amber-300 transition-colors">
-          <p class="font-serif text-xl text-stone-900 mb-2">How Much Gelatin Per Cup of Liquid?</p>
-          <p class="text-stone-500 text-sm leading-relaxed">
-            Reference ratios by desired texture — soft set through very firm — plus the
-            variables that change how much you need: acid, sugar, dairy, proteolytic
-            enzymes, and temperature.
+          <p class="text-stone-600 text-sm leading-relaxed">
+            Answers the question "what does this number on a professional
+            recipe actually mean, and why does it change how much gelatin I
+            need?" It defines the Bloom test itself, lays out the sheet grade
+            scale from bronze through platinum in a table giving the bloom
+            range, relative set strength and typical uses of each grade, and then
+            explains why two gelatins of the same weight do not set the same
+            way. It also addresses Knox and generic supermarket powder
+            specifically, and why consumer packaging leaves the value off.
+            Read this one if you want to understand the mechanism rather than
+            just get a number.
           </p>
         </a>
 
         <a href="/what-is-bloom-strength/" class="block border border-stone-200 rounded-xl p-5 hover:border-amber-300 transition-colors">
           <p class="font-serif text-xl text-stone-900 mb-2">Gelatin Bloom Strength — Plain-English Guide</p>
-          <p class="text-stone-500 text-sm leading-relaxed">
-            Which bloom strength to use for panna cotta, gummy bears, mirror glaze, and
-            stabilized whipped cream. Includes a grade table and worked conversion examples.
+          <p class="text-stone-600 text-sm leading-relaxed">
+            The same subject approached from the recipe end. It opens with a
+            short answer for anyone who does not want the theory, gives a
+            table of common products and their bloom values by form, and then
+            works through which strength suits which dish — panna cotta,
+            gummies, mirror glaze, marshmallow, stabilised whipped cream.
+            The most useful section is the last one: what to do when the
+            gelatin in your cupboard does not match the one the recipe was
+            written for. The FAQ also covers agar agar, which behaves
+            differently enough that bloom values do not carry over to it.
+          </p>
+        </a>
+      </div>
+
+      <h2 class="font-serif text-3xl text-stone-900 mb-3">Sheets, powder, and converting between them</h2>
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Sheets and powder are the same ingredient sold in two shapes, and the
+        difference between them causes more failed sets than any other single
+        factor. These two pages cover the comparison and the conversion.
+      </p>
+
+      <div class="space-y-4 mb-12">
+        <a href="/gelatin-sheets-vs-powder/" class="block border border-stone-200 rounded-xl p-5 hover:border-amber-300 transition-colors">
+          <p class="font-serif text-xl text-stone-900 mb-2">Gelatin Sheets vs Powder: What's the Difference?</p>
+          <p class="text-stone-600 text-sm leading-relaxed">
+            For anyone deciding which format to buy, or trying to work out why
+            a recipe insists on one. A side-by-side table compares the two on how
+            each is measured, the bloom grades each is sold in, how each is
+            dissolved, clarity and flavour in the finished dish, and which
+            cooking traditions favour which. The page then explains what
+            happens when a recipe written for one format is cooked with the
+            other. It is the right starting point if you have
+            inherited a recipe that calls for sheets and have only ever used
+            Knox, or the reverse.
           </p>
         </a>
 
         <a href="/sheets-to-powder/" class="block border border-stone-200 rounded-xl p-5 hover:border-amber-300 transition-colors">
           <p class="font-serif text-xl text-stone-900 mb-2">Gelatin Sheets to Powder Conversion</p>
-          <p class="text-stone-500 text-sm leading-relaxed">
-            Convert any sheet grade (bronze, silver, gold, platinum) to grams of powder,
-            accounting for both bloom strength and sheet weight. Includes common conversion
-            scenarios.
+          <p class="text-stone-600 text-sm leading-relaxed">
+            The one page here with a working tool on it. Enter a sheet grade and
+            a number of sheets and it returns the equivalent weight of powder;
+            a toggle runs the same conversion in reverse, from a weight of
+            powder to a count of sheets. The prose around the converter explains why there is no
+            single sheet-to-powder rule that holds — grades differ in both
+            bloom strength and sheet weight, and ignoring either one throws
+            the result off. Worked scenarios cover the grade and quantity
+            combinations that come up most often. Use this when you have a
+            recipe in sheets and a jar of powder.
+          </p>
+        </a>
+      </div>
+
+      <h2 class="font-serif text-3xl text-stone-900 mb-3">Getting the quantity right</h2>
+
+      <div class="space-y-4 mb-12">
+        <a href="/how-much-gelatin-per-cup-of-liquid/" class="block border border-stone-200 rounded-xl p-5 hover:border-amber-300 transition-colors">
+          <p class="font-serif text-xl text-stone-900 mb-2">How Much Gelatin Per Cup of Liquid?</p>
+          <p class="text-stone-600 text-sm leading-relaxed">
+            For the situation where you have no recipe at all, only a liquid
+            and an idea of the texture you want. A table gives quantities per
+            cup for four target textures, from a soft set through to very
+            firm, in both powder and sheets. The rest of the page is
+            about what moves those numbers: acidity, sugar load, dairy, and
+            the proteolytic enzymes in fresh pineapple and papaya that will
+            stop a set from happening at all. A closing section deals with
+            temperature, which is the other half of the same problem.
           </p>
         </a>
       </div>
