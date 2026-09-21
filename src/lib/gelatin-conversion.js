@@ -45,13 +45,34 @@ export const TBSP_ML = 15;
  */
 export const BLOOM_LIQUID_RATIO = 5;
 
-/** Bloom liquid for `powderGrams`, in ml, rounded to the nearest tablespoon. */
+/**
+ * Bloom liquid for `powderGrams`, in ml, rounded to the nearest half
+ * tablespoon. Rounding to the whole tablespoon collapsed adjacent sheet counts
+ * onto the same figure (four and five sheets both read "3 tablespoons"); the
+ * half-tablespoon step is fine enough for the ladder to move.
+ */
 export function bloomLiquidMl(powderGrams) {
-  return Math.round((powderGrams * BLOOM_LIQUID_RATIO) / TBSP_ML) * TBSP_ML;
+  const step = TBSP_ML / 2;
+  return Math.round((powderGrams * BLOOM_LIQUID_RATIO) / step) * step;
 }
 
-/** The same volume in whole tablespoons, which is how the prose states it. */
+/** The same volume in tablespoons, which is how the prose states it. */
 export const bloomLiquidTbsp = (powderGrams) => bloomLiquidMl(powderGrams) / TBSP_ML;
+
+/**
+ * The rendered phrase for a bloom-liquid volume, e.g. "2½ tablespoons
+ * (37.5ml)". Halves are written as a fraction because that is how a cook reads
+ * a tablespoon measure; the ml figure follows so the number stays checkable.
+ */
+export function bloomLiquidPhrase(powderGrams) {
+  const ml = bloomLiquidMl(powderGrams);
+  const tbsp = ml / TBSP_ML;
+  const whole = Math.floor(tbsp);
+  const half = tbsp - whole >= 0.5;
+  const count = whole === 0 ? "½" : `${whole}${half ? "½" : ""}`;
+  const word = tbsp <= 1 ? "tablespoon" : "tablespoons";
+  return `${count} ${word} (${fmtShort(ml)}ml)`;
+}
 
 /**
  * Exponent applied to the bloom ratio when matching gel strength.
