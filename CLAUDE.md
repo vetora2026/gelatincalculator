@@ -17,7 +17,8 @@ Utility site #1 in the portfolio. A free tool that helps home cooks diagnose the
 - **React** integration — used only for the two interactive components (`Diagnostic.jsx`, `Converter.jsx`). Everything else is plain Astro.
 - **Tailwind** via the official Astro integration — no custom CSS framework.
 - **Cloudflare Pages** is the deployment target. Chosen because the domain is already on Cloudflare and Pages has a generous free tier.
-- **No backend, no database, no localStorage, no analytics, no newsletter.** These are intentional v1 constraints.
+- **No backend, no database, no localStorage, no newsletter, no first-party analytics script in the repo.** These are intentional v1 constraints.
+- **Cloudflare Web Analytics is on for this site.** Cloudflare injects it at the edge (`static.cloudflareinsights.com/beacon.min.js`), so it is not in the repo and grep will not find it. Privacy and about copy must never say the site has no analytics.
 
 ## Data policy
 
@@ -35,6 +36,9 @@ Bloom values live in `src/data/gelatin-bloom.json`. Rules:
 ## Tone and voice
 
 Diagnostic and explanatory, not promotional. No stock marketing phrases. The site's credibility comes from being honest about what's verified and what's estimated — this is the single most important brand decision.
+
+- **No personal name or persona anywhere.** The site is maintained by "an independent editor" — no real name, no invented name, no photo, no credentials. The editorial statement lives at `/about/#editorial` and is surfaced site-wide by `src/components/EditorialLine.astro`.
+- **Cloudflare Web Analytics is on for this site.** Cloudflare injects it at the edge, so it is not in the repo. Privacy and about copy must never say the site has no analytics.
 
 ## Known open items (punch list)
 

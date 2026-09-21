@@ -9,6 +9,13 @@ import data from "../data/gelatin-bloom.json";
 
 export const LAST_VERIFIED = data.last_verified;
 
+// The same date written out for prose ("21 September 2026"). Parsed as UTC so
+// the day never shifts with the build machine's timezone.
+export const LAST_VERIFIED_LONG = new Date(`${data.last_verified}T00:00:00Z`).toLocaleDateString(
+  "en-GB",
+  { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" },
+);
+
 export const GRADES = data.sheet_gelatin.map((g) => ({
   id: g.id,
   name: g.name,

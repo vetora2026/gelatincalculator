@@ -2,6 +2,7 @@
 import "../../styles/global.css";
 import BaseHead from "../../components/BaseHead.astro";
 import Footer from "../../components/Footer.astro";
+import EditorialLine from "../../components/EditorialLine.astro";
 import SheetsToPowderConverter from "../../components/SheetsToPowderConverter.jsx";
 import {
   sheetsToPowderGrams,
@@ -114,6 +115,7 @@ const description = `Convert gelatin sheets (or gelatine leaves) to powder for b
 
     <main class="max-w-2xl mx-auto px-5 py-16">
       <h1 class="font-serif text-5xl text-stone-900 mb-3">Gelatin Sheets to Powder Conversion</h1>
+      <EditorialLine class="mb-1" />
       <p class="text-stone-500 text-sm mb-8">For home bakers working across different gelatin formats</p>
 
       <div class="text-stone-700 leading-relaxed space-y-10">

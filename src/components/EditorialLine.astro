@@ -1,0 +1,21 @@
+---
+// One muted line under the H1: who maintains the site, when the bloom data was
+// last reviewed, and where the checking method is written down. The date comes
+// from src/data/gelatin-bloom.json via the conversion module — never typed.
+//
+// Placed on every indexable page except about, contact, privacy and terms.
+// Pages that already carry a muted subtitle under the H1 pass a tighter
+// bottom margin so the two lines read as one block.
+import { LAST_VERIFIED_LONG } from "../lib/gelatin-conversion.js";
+
+const { class: className = "mb-8" } = Astro.props;
+---
+<p class:list={["text-stone-500 text-sm", className]}>
+  Maintained by an independent editor
+  <span class="mx-1 text-stone-300">·</span>
+  Data reviewed {LAST_VERIFIED_LONG}
+  <span class="mx-1 text-stone-300">·</span>
+  <a class="underline underline-offset-4 hover:text-amber-700" href="/about/#editorial">
+    How we check the numbers
+  </a>
+</p>

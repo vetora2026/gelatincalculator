@@ -26,7 +26,7 @@ import Footer from "../components/Footer.astro";
 
     <main class="max-w-2xl mx-auto px-5 py-16">
       <h1 class="font-serif text-5xl text-stone-900 mb-4">Privacy policy</h1>
-      <p class="text-sm text-stone-500 mb-8">Last updated: September 2, 2026</p>
+      <p class="text-sm text-stone-500 mb-8">Last updated: September 21, 2026</p>
 
       <div class="text-stone-700 leading-relaxed space-y-5">
         <h2 class="font-serif text-2xl text-stone-900 mt-6 mb-2">
@@ -36,10 +36,11 @@ import Footer from "../components/Footer.astro";
           gelatincalculator.com does not ask you for personal data and keeps
           no database of its own. There are no accounts, no sign-up, no
           newsletter, and no contact form. We set no cookies of our own, and
-          we do not use localStorage, sessionStorage, or any first-party
-          analytics or tracking script. The one exception is the routine
-          request logging our hosting provider performs on every site it
-          serves, described under Server logs below.
+          we do not use localStorage or sessionStorage. Two things happen at
+          the hosting layer rather than in our code: the routine request
+          logging our hosting provider performs on every site it serves, and
+          Cloudflare Web Analytics, which counts page views. Both are
+          described below.
         </p>
         <p>
           Every page is static HTML, CSS, and JavaScript served from a
@@ -66,8 +67,23 @@ import Footer from "../components/Footer.astro";
           request logs that include IP address, user agent, and the page
           requested. These logs are retained per Cloudflare's standard
           policies and are used only for abuse prevention and operational
-          troubleshooting. We do not run any additional analytics on top of
-          these logs.
+          troubleshooting. The only thing we run on top of these logs is the
+          page-view counting described under Analytics below.
+        </p>
+
+        <h2 class="font-serif text-2xl text-stone-900 mt-8 mb-2">
+          Analytics
+        </h2>
+        <p>
+          Page views are counted with Cloudflare Web Analytics, which
+          Cloudflare runs as part of hosting this site.{" "}
+          <a class="text-amber-700 underline underline-offset-4" href="https://www.cloudflare.com/web-analytics/">
+            Cloudflare states
+          </a>
+          {" "}that it "does not use any client-side state, such as cookies or
+          localStorage, to collect usage metrics" and does not "fingerprint"
+          individuals by IP address or User Agent string. It gives this site
+          page-view totals, not information about you.
         </p>
 
         <h2 class="font-serif text-2xl text-stone-900 mt-8 mb-2">
@@ -111,9 +127,13 @@ import Footer from "../components/Footer.astro";
           from fonts.gstatic.com. Google's own privacy policy applies to
           those requests, which — like any web request — disclose your IP
           address and browser user agent to Google.
+          Cloudflare adds its Web Analytics beacon
+          (<code>static.cloudflareinsights.com/beacon.min.js</code>) to pages
+          as it serves them; that script is described under Analytics above.
           Aside from Google Fonts, the Google AdSense script described in
-          the Advertising section above, and the hosting CDN, no other
-          third-party services are called from our pages.
+          the Advertising section above, and the hosting CDN and its
+          analytics beacon, no other third-party services are called from
+          our pages.
         </p>
 
         <h2 class="font-serif text-2xl text-stone-900 mt-8 mb-2">
