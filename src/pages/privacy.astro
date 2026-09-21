@@ -7,7 +7,7 @@ import Footer from "../components/Footer.astro";
   <head>
     <BaseHead
       title="Privacy Policy"
-      description="Privacy policy for gelatincalculator.com. We collect no personal data and set no cookies of our own. Google AdSense and Google Fonts are loaded."
+      description="Privacy policy for gelatincalculator.com. We collect no personal data and set no cookies of our own. Google AdSense and Cloudflare Web Analytics load."
       path="/privacy/"
     />
   </head>
@@ -51,12 +51,12 @@ import Footer from "../components/Footer.astro";
         </p>
         <p>
           That describes what <em>we</em> do, which is not the whole
-          picture. Pages on this site load two third-party resources from
-          Google — the AdSense advertising script and the Google Fonts
-          stylesheet — and Google may set its own cookies or read device
-          information when those load. That is separate from our own data
+          picture. Pages on this site load the Google AdSense advertising
+          script, and Google may set its own cookies or read device
+          information when it loads. That is separate from our own data
           collection and is described in the Advertising and Third parties
-          sections below.
+          sections below. Our typefaces are not a third-party request: the
+          font files are served from this site.
         </p>
 
         <h2 class="font-serif text-2xl text-stone-900 mt-8 mb-2">
@@ -122,18 +122,18 @@ import Footer from "../components/Footer.astro";
           Third parties
         </h2>
         <p>
-          The site loads the Google Fonts typefaces "DM Serif Display" and
-          "Inter" from fonts.googleapis.com, and the font files themselves
-          from fonts.gstatic.com. Google's own privacy policy applies to
-          those requests, which — like any web request — disclose your IP
-          address and browser user agent to Google.
-          Cloudflare adds its Web Analytics beacon
-          (<code>static.cloudflareinsights.com/beacon.min.js</code>) to pages
-          as it serves them; that script is described under Analytics above.
-          Aside from Google Fonts, the Google AdSense script described in
-          the Advertising section above, and the hosting CDN and its
-          analytics beacon, no other third-party services are called from
-          our pages.
+          Two third-party scripts load on our pages. The first is Google
+          AdSense, described in the Advertising section above; in the
+          European Economic Area and the United Kingdom that script also
+          shows Google's own consent message, and your choice there is
+          recorded by Google, not by us. The second is Cloudflare's Web
+          Analytics beacon
+          (<code>static.cloudflareinsights.com/beacon.min.js</code>), which
+          Cloudflare adds to pages as it serves them; that script is
+          described under Analytics above. Nothing else is called from our
+          pages. The typefaces "DM Serif Display" and "Inter" are served
+          from this site rather than from Google Fonts, so displaying them
+          sends no request to Google.
         </p>
 
         <h2 class="font-serif text-2xl text-stone-900 mt-8 mb-2">

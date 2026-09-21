@@ -59,6 +59,22 @@ Diagnostic and explanatory, not promotional. No stock marketing phrases. The sit
   across those statements, and `bloom_basis` says whether the site's figure is `stated` by every
   source or a `midpoint` of a disagreement.
 - `npm run check` runs `check-meta`, `check-faq` and `check-sources`; `npm run verify` builds first.
+- `npm run check:a11y` runs axe against every sitemap URL at 375px. It needs a running
+  server, so it is deliberately outside `check` and `build`.
+
+## Performance and accessibility
+
+- `/_astro/*` must be served `max-age=31536000, immutable`. On Cloudflare Pages all
+  matching `_headers` rules apply, so never let a catch-all rule set Cache-Control on
+  assets. Where a catch-all must not apply, detach it first with `! Cache-Control`.
+- CSS is inlined (`build.inlineStylesheets: 'always'`).
+- Run `npm run check:a11y` after any colour or layout change; zero `color-contrast` and
+  `target-size` violations.
+- Wrap every email address in `<!--email_off-->…<!--/email_off-->` so Cloudflare does not
+  inject its email-decode script.
+- Fonts are self-hosted via @fontsource. Never add fonts.googleapis.com back without
+  updating the privacy page.
+- No links to the owner's other sites unless the topics are related.
 
 ## Gotchas
 
