@@ -27,11 +27,12 @@ Bloom values live in `src/data/gelatin-bloom.json`. Rules:
 1. **Only add a brand/grade if you can verify its bloom value.** Sources must be a manufacturer spec sheet, a published cookbook, or multiple independent secondary references.
 2. **Confidence levels must be honest:**
    - `verified` — value confirmed by at least two independent sources (e.g., Knox at 225).
-   - `standard` — value is an industry convention with a known range (e.g., sheet gelatin grades).
+   - `standard` — value is stated by multiple published references, with a spread between them (e.g., sheet gelatin grades).
    - `typical` — value is a reasonable estimate for a category, not a specific brand.
    - `low` — fallback/"I don't know" bucket.
 3. **Do not invent bloom values** to pad the list. If we can't verify it, we don't publish it.
 4. **The `last_verified` date at the top of the file must be updated** whenever values are re-checked (planned cadence: every 6 months).
+5. **Every sheet-grade and powder bloom value traces to a URL in `gelatin-bloom.json` `sources`. `scripts/check-sources.mjs` enforces it. Where sources disagree, show the spread; never call a value "industry standard."**
 
 ## Tone and voice
 
@@ -53,7 +54,11 @@ Diagnostic and explanatory, not promotional. No stock marketing phrases. The sit
 - `src/components/Diagnostic.jsx` is the state machine (3 steps). It renders `Converter.jsx` inline once a bloom is resolved.
 - `src/components/Converter.jsx` can also be used standalone; it accepts `userBloom` and `diagnosedName` props.
 - `src/components/TwoLegos.astro` is the hero data-point visual — two stat cards with no connecting copy.
-- `src/data/gelatin-bloom.json` is the single source of truth for bloom values.
+- `src/data/gelatin-bloom.json` is the single source of truth for bloom values. Its `sources` array
+  records what each reference stated and when it was accessed; grade `range` values are the spread
+  across those statements, and `bloom_basis` says whether the site's figure is `stated` by every
+  source or a `midpoint` of a disagreement.
+- `npm run check` runs `check-meta`, `check-faq` and `check-sources`; `npm run verify` builds first.
 
 ## Gotchas
 

@@ -22,7 +22,56 @@ export const GRADES = data.sheet_gelatin.map((g) => ({
   bloom: g.bloom,
   g: g.grams_per_sheet,
   range: g.range,
+  basis: g.bloom_basis,
+  basisNote: g.bloom_note || "",
+  sources: g.sources || [],
 }));
+
+/**
+ * A grade's range as prose. Silver's sources all give the same figure, so its
+ * range is [160, 160]; printing that as "160–160" would read as a spread the
+ * data does not have. One number in, one number out.
+ */
+export const formatRange = (range) =>
+  range[0] === range[1] ? `${range[0]}` : `${range[0]}–${range[1]}`;
+
+// The published references behind the bloom figures, in the order they should
+// be listed. `values` records what each one said on the date it was accessed.
+export const SOURCES = data.sources;
+
+export const getSource = (id) => {
+  const s = data.sources.find((x) => x.id === id);
+  if (!s) throw new Error(`Unknown source id: ${id}`);
+  return s;
+};
+
+// Sources that state a figure for at least one sheet grade. These are the ones
+// the grade comparison table has columns for.
+export const SHEET_SOURCES = data.sources.filter((s) =>
+  data.sheet_gelatin.some((g) => s.values && s.values[g.id]),
+);
+
+/**
+ * One source's figure for one grade, as prose: a number, a range, or "230+"
+ * for a minimum-only statement. Empty string when the source is silent.
+ */
+export function sourceBloomText(source, gradeId) {
+  const v = source.values && source.values[gradeId];
+  if (!v || v.bloom === undefined) return "";
+  const b = v.bloom;
+  if (Array.isArray(b)) return `${b[0]}–${b[1]}`;
+  if (typeof b === "object") return `${b.min}+`;
+  return `${b}`;
+}
+
+// Every bloom figure the site publishes, sheets and powders alike. The bloom
+// range quoted in the prose is computed from these rather than typed.
+const ALL_BLOOMS = [
+  ...data.sheet_gelatin.flatMap((g) => [g.bloom, ...g.range]),
+  ...data.powder_gelatin.flatMap((p) => [p.bloom, ...(p.range || [])]),
+];
+export const BLOOM_MIN = Math.min(...ALL_BLOOMS);
+export const BLOOM_MAX = Math.max(...ALL_BLOOMS);
 
 // The "unknown" bucket is a diagnostic fallback, not a product a reader can
 // buy, so it is excluded from the powder pick-lists.
@@ -34,6 +83,7 @@ export const POWDERS = data.powder_gelatin
     label: p.short_label || p.name,
     bloom: p.bloom,
     range: p.range,
+    sources: p.sources || [],
   }));
 
 export const DEFAULT_SHEET_GRADE = "gold";

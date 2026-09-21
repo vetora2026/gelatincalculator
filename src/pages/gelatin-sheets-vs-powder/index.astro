@@ -10,6 +10,7 @@ import {
   sheetGramsToPowderGrams,
   powderToSheets,
   bloomFactor,
+  formatRange,
   TSP_GRAMS,
   fmt1,
 } from "../../lib/gelatin-conversion.js";
@@ -23,7 +24,7 @@ const platinum = getGrade("platinum");
 const knox = getPowder("knox");
 const euro = getPowder("european-powder");
 
-const bloomRange = (g) => `${g.range[0]}–${g.range[1]}`;
+const bloomRange = (g) => formatRange(g.range);
 const TBSP_GRAMS = TSP_GRAMS * 3;
 const tbspAsGold = fmt1(powderToSheets(TBSP_GRAMS, "grams", "knox", "gold"));
 const tbspAsSilver = fmt1(powderToSheets(TBSP_GRAMS, "grams", "knox", "silver"));
@@ -188,7 +189,7 @@ const faqSchema = {
           <p class="mt-3">
             The problem arises when you cross formats without accounting for bloom strength.
             Sheet grades are named: bronze ({bloomRange(bronze)} bloom), silver (~{silver.bloom}),
-            gold ({bloomRange(gold)}), platinum ({bloomRange(platinum)}). Each grade has a standard
+            gold ({bloomRange(gold)}), platinum ({bloomRange(platinum)}). Each grade has a typical
             weight per sheet as well as a different bloom value. A recipe asking for a bare sheet
             count without naming a grade is ambiguous — the same count of bronze and of platinum
             are very different quantities ({fmt1(sheetMass(3, "bronze"))}g against

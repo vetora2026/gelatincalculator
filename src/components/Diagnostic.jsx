@@ -1,6 +1,6 @@
 import { useState } from "react";
 import data from "../data/gelatin-bloom.json";
-import { getGrade } from "../lib/gelatin-conversion.js";
+import { getGrade, formatRange } from "../lib/gelatin-conversion.js";
 import Converter from "./Converter.jsx";
 
 // The grade this help text recommends when a box carries no colour name.
@@ -8,7 +8,7 @@ const FALLBACK_GRADE = getGrade("gold");
 
 const CONFIDENCE_LABELS = {
   verified: { label: "Confirmed", classes: "bg-emerald-100 text-emerald-800 border-emerald-200" },
-  standard: { label: "Industry standard", classes: "bg-sky-100 text-sky-800 border-sky-200" },
+  standard: { label: "Published range", classes: "bg-sky-100 text-sky-800 border-sky-200" },
   typical: { label: "Typical estimate", classes: "bg-amber-100 text-amber-800 border-amber-200" },
   low: { label: "Rough estimate", classes: "bg-stone-100 text-stone-700 border-stone-200" },
 };
@@ -117,7 +117,7 @@ export default function Diagnostic() {
                   </span>
                 </div>
                 <div className="text-xs text-stone-500 mb-1.5">
-                  bloom (range {item.range[0]}–{item.range[1]})
+                  bloom (sources give {formatRange(item.range)})
                 </div>
                 <div className="text-sm text-stone-600">{item.notes}</div>
               </Card>

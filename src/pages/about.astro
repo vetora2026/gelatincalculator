@@ -2,11 +2,27 @@
 import "../styles/global.css";
 import BaseHead from "../components/BaseHead.astro";
 import Footer from "../components/Footer.astro";
-import { getGrade, getPowder, LAST_VERIFIED_LONG } from "../lib/gelatin-conversion.js";
+import {
+  getGrade,
+  getPowder,
+  getSource,
+  SHEET_SOURCES,
+  LAST_VERIFIED_LONG,
+} from "../lib/gelatin-conversion.js";
 
 // The two bloom values quoted in the prose below come from the bloom data.
 const gold = getGrade("gold");
 const knox = getPowder("knox");
+const silver = getGrade("silver");
+
+// The sourcing paragraph counts its own references rather than stating a
+// number that could drift when a source is added or dropped.
+const sheetSourceCount = SHEET_SOURCES.length;
+
+// Knox's two independent bloom citations, linked by URL in the prose below.
+const knoxCitations = knox.sources
+  .map(getSource)
+  .filter((s) => s.values && s.values.knox);
 ---
 <html lang="en">
   <head>
@@ -81,16 +97,45 @@ const knox = getPowder("knox");
         </p>
         <h2 class="font-serif text-2xl text-stone-900 mt-10 mb-3">How the data was sourced</h2>
         <p>
-          Sheet gelatin grades (titanium, bronze, silver, gold, platinum)
-          correspond to published industry-standard bloom ranges used across
-          European pastry suppliers.
+          The sheet-grade figures (titanium, bronze, silver, gold, platinum)
+          are compiled from {sheetSourceCount} published pastry references,
+          linked below. They agree on silver ({silver.bloom}) and gold
+          ({gold.bloom}) and disagree on the softer and firmer grades, so the
+          site shows the full spread and marks where it uses a midpoint.
         </p>
+        <ul class="list-disc pl-5 space-y-1">
+          {SHEET_SOURCES.map((s) => (
+            <li>
+              <a
+                class="text-amber-700 underline underline-offset-4"
+                href={s.url}
+                rel="nofollow noopener"
+                target="_blank"
+              >
+                {s.publisher}, "{s.title}"
+              </a>
+              <span class="text-stone-500"> — checked {s.accessed}</span>
+            </li>
+          ))}
+        </ul>
         <p>
           The bloom value for Knox Unflavored Gelatin (~{knox.bloom}) is not printed
-          on retail packaging but is consistently cited across independent
-          cooking references including David Lebovitz's
-          <em>How to Use Gelatin</em> and Good Food Gourmet's
-          <em>All About Gelatin</em>. We label that value "Confirmed."
+          on retail packaging but is stated by independent cooking references
+          including{" "}
+          {knoxCitations.map((s, i) => (
+            <>
+              {i > 0 ? " and " : ""}
+              <a
+                class="text-amber-700 underline underline-offset-4"
+                href={s.url}
+                rel="nofollow noopener"
+                target="_blank"
+              >
+                {s.publisher}'s <em>{s.title}</em>
+              </a>
+            </>
+          ))}
+          . We label that value "Confirmed."
         </p>
         <p>
           For generic US grocery powder and European pastry-grade powder
