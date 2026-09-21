@@ -27,7 +27,7 @@ export const COUNT_PAGES = [
       },
       {
         q: "Does one sheet always set the same amount of liquid?",
-        a: `Approximately, and that is the whole point of the grading system — sheets are cut so a count translates across grades. At the medium-set ratio the site uses elsewhere, the powder equivalent of one gold sheet sets on the order of ${v.goldCups} cup of liquid. Acidity, alcohol, sugar and fresh tropical fruit all pull against that, so treat it as a starting figure.`,
+        a: `Approximately, and that is the whole point of the grading system — sheets are cut so a count translates across grades. At the standard-set ratio the site uses elsewhere, the powder equivalent of one gold sheet sets on the order of ${v.goldCups} cup of liquid. Acidity, alcohol, sugar and fresh tropical fruit all pull against that, so treat it as a starting figure.`,
       },
     ],
   },
@@ -105,7 +105,7 @@ export const COUNT_PAGES = [
       },
       {
         q: "How much liquid will four sheets set?",
-        a: `At the medium-set ratio used on the site's <a href="/how-much-gelatin-per-cup-of-liquid/" class="text-amber-700 underline underline-offset-4">per-cup reference</a>, the powder equivalent of four gold sheets covers roughly ${v.goldCups} cups of a water-based liquid. Dairy, sugar, acid and alcohol all shift that figure, so it is a starting point for a test batch rather than a specification.`,
+        a: `At the standard-set ratio used on the site's <a href="/how-much-gelatin-per-cup-of-liquid/" class="text-amber-700 underline underline-offset-4">per-cup reference</a>, the powder equivalent of four gold sheets covers roughly ${v.goldCups} cups of a water-based liquid. Dairy, sugar, acid and alcohol all shift that figure, so it is a starting point for a test batch rather than a specification.`,
       },
     ],
   },

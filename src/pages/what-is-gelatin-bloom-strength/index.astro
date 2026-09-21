@@ -2,7 +2,32 @@
 import "../../styles/global.css";
 import BaseHead from "../../components/BaseHead.astro";
 import Footer from "../../components/Footer.astro";
-import { getGrade, getPowder } from "../../lib/gelatin-conversion.js";
+import {
+  getGrade,
+  getPowder,
+  sheetMass,
+  sheetGramsToPowderGrams,
+  bloomFactor,
+  BLOOM_EXPONENT,
+  fmt1,
+} from "../../lib/gelatin-conversion.js";
+
+// Bloom values in the title and description are read from the bloom data.
+const knox = getPowder("knox");
+const gold = getGrade("gold");
+const silver = getGrade("silver");
+const knoxBloom = knox.bloom;
+const goldBloom = gold.bloom;
+const silverBloom = silver.bloom;
+
+// Worked example: a recipe written for gold sheets, made with what you have.
+const EXAMPLE_GRAMS = 6;
+const exampleAsKnox = fmt1(sheetGramsToPowderGrams(EXAMPLE_GRAMS, "gold", "knox"));
+const exampleAsSilver = fmt1(EXAMPLE_GRAMS * bloomFactor(gold.bloom, silver.bloom));
+const CARD_SHEETS = 4;
+const cardSilverMass = fmt1(sheetMass(CARD_SHEETS, "silver"));
+// Weight of silver needed to match a given weight of gold.
+const silverPenaltyPct = Math.round((bloomFactor(gold.bloom, silver.bloom) - 1) * 100);
 
 const articleSchema = {
   "@context": "https://schema.org",
@@ -46,16 +71,11 @@ const faqSchema = {
       name: "How do I convert between different bloom strengths?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Multiply the recipe quantity by (recipe bloom ÷ your bloom). For example: a recipe calls for 6g of 200-bloom gelatin and you have 225-bloom Knox. Use 6 × (200 ÷ 225) = 5.3g. The bloom strength calculator on this site handles this math automatically.",
+        text: `Multiply the recipe quantity by (recipe bloom ÷ your bloom) raised to the power ${BLOOM_EXPONENT} — the square root. For example: a recipe calls for ${EXAMPLE_GRAMS}g of ${gold.bloom}-bloom gelatin and you have ${knox.bloom}-bloom Knox. Use ${exampleAsKnox}g. The bloom strength calculator on this site handles this math automatically; the method is set out at /sheets-to-powder/#method.`,
       },
     },
   ],
 };
-
-// Bloom values in the title and description are read from the bloom data.
-const knoxBloom = getPowder("knox").bloom;
-const goldBloom = getGrade("gold").bloom;
-const silverBloom = getGrade("silver").bloom;
 const title = `What Is Gelatin Bloom Strength? Knox ${knoxBloom}, Gold ${goldBloom}, Silver ${silverBloom}`;
 const description = `Bloom strength measures gelatin's gelling power: Knox powder is ~${knoxBloom}, gold sheets ~${goldBloom}, silver ~${silverBloom}. What the numbers mean and how to convert.`;
 ---
@@ -149,7 +169,7 @@ const description = `Bloom strength measures gelatin's gelling power: Knox powde
                 </tr>
                 <tr>
                   <td class="py-2.5 px-2 font-medium text-stone-900">Knox powder</td>
-                  <td class="py-2.5 px-2">~225</td>
+                  <td class="py-2.5 px-2">~{knoxBloom}</td>
                   <td class="py-2.5 px-2">Firm</td>
                   <td class="py-2.5 px-2">General home baking</td>
                 </tr>
@@ -162,27 +182,30 @@ const description = `Bloom strength measures gelatin's gelling power: Knox powde
           <h2 class="font-serif text-2xl text-stone-900 mb-4">Why bloom strength matters for conversion</h2>
           <div class="grid grid-cols-2 gap-4 mb-5">
             <div class="border border-stone-200 rounded-xl p-5">
-              <p class="text-xs text-stone-500 uppercase tracking-wide mb-2">4 silver sheets (160 bloom)</p>
-              <p class="font-serif text-3xl text-stone-900 mb-1">6.8 g</p>
-              <p class="text-sm text-stone-600">of gelatin at 160 bloom</p>
+              <p class="text-xs text-stone-500 uppercase tracking-wide mb-2">{CARD_SHEETS} silver sheets ({silver.bloom} bloom)</p>
+              <p class="font-serif text-3xl text-stone-900 mb-1">{cardSilverMass} g</p>
+              <p class="text-sm text-stone-600">of gelatin at {silver.bloom} bloom</p>
             </div>
             <div class="border border-stone-200 rounded-xl p-5">
-              <p class="text-xs text-stone-500 uppercase tracking-wide mb-2">4 gold sheets (200 bloom)</p>
-              <p class="font-serif text-3xl text-stone-900 mb-1">~25% more</p>
-              <p class="text-sm text-stone-600">gelling power than 4 silver sheets</p>
+              <p class="text-xs text-stone-500 uppercase tracking-wide mb-2">{CARD_SHEETS} gold sheets ({gold.bloom} bloom)</p>
+              <p class="font-serif text-3xl text-stone-900 mb-1">~{silverPenaltyPct}% less</p>
+              <p class="text-sm text-stone-600">weight needed than silver for the same set</p>
             </div>
           </div>
           <p>
-            Gel strength scales approximately linearly with the amount of gelatin protein
-            in solution, within the range of bloom values used in cooking. This means
-            substituting one grade for another at the same weight produces a measurably
-            different result — a softer or firmer set depending on the direction of the swap.
+            Bloom is a rigidity reading taken at one fixed concentration, and a gel's rigidity
+            rises with roughly the square of concentration. Substituting one grade for another
+            at the same weight therefore produces a measurably different result — a softer or
+            firmer set depending on the direction of the swap.
           </p>
           <p class="mt-3">
-            The adjustment formula is: <strong class="text-stone-900">recipe quantity × (recipe bloom ÷ your bloom)</strong>.
-            If a recipe calls for 6g of 200-bloom gold gelatin and you have Knox (~225 bloom),
-            you need 6 × (200 ÷ 225) = 5.3g. If you have silver sheets (~160 bloom), you
-            need 6 × (200 ÷ 160) = 7.5g.
+            The adjustment formula is: <strong class="text-stone-900">recipe quantity × (recipe bloom ÷ your bloom)<sup>{BLOOM_EXPONENT}</sup></strong>.
+            If a recipe calls for {EXAMPLE_GRAMS}g of {gold.bloom}-bloom gold gelatin and you have
+            Knox (~{knox.bloom} bloom), you need {exampleAsKnox}g. If you have silver sheets
+            (~{silver.bloom} bloom), you need {exampleAsSilver}g.{" "}
+            <a href="/sheets-to-powder/#method" class="text-amber-700 underline underline-offset-4 hover:text-amber-600">
+              Why the square root, and where the straight ratio disagrees.
+            </a>
           </p>
           <div class="mt-5 p-4 bg-amber-50 border border-amber-200 rounded-xl">
             <p class="text-sm text-amber-900">
@@ -198,15 +221,15 @@ const description = `Bloom strength measures gelatin's gelling power: Knox powde
           <h2 class="font-serif text-2xl text-stone-900 mb-3">Knox and store-bought powder</h2>
           <p>
             Most US store-bought gelatin powder — including Knox Unflavored Gelatin, the
-            most common consumer brand — is approximately 200–225 bloom. Knox specifically
-            is widely cited at ~225 bloom across independent cooking references, though
-            the manufacturer does not print this value on retail packaging.
+            most common consumer brand — is approximately {getPowder("european-powder").bloom}–{knoxBloom} bloom.
+            Knox specifically is widely cited at ~{knoxBloom} bloom across independent cooking
+            references, though the manufacturer does not print this value on retail packaging.
           </p>
           <p class="mt-3">
             When a recipe says "1 packet of gelatin" without specifying bloom, it is
-            assumed to mean Knox or an equivalent US grocery powder. When a recipe says
-            "6g of gelatin" without specifying a bloom, and the recipe is from a European
-            source, it typically assumes gold sheets at approximately 200 bloom.
+            assumed to mean Knox or an equivalent US grocery powder. When a recipe gives a
+            bare weight in grams without specifying a bloom, and the recipe is from a European
+            source, it typically assumes gold sheets at approximately {gold.bloom} bloom.
           </p>
           <p class="mt-3">
             These unstated assumptions are the source of most gelatin substitution errors.
@@ -238,7 +261,7 @@ const description = `Bloom strength measures gelatin's gelling power: Knox powde
             <div>
               <h3 class="font-serif text-lg text-stone-900 mb-2">What bloom strength is Knox gelatin powder?</h3>
               <p class="text-stone-600 leading-relaxed">
-                Knox Unflavored Gelatin is approximately 225 bloom. The manufacturer does not
+                Knox Unflavored Gelatin is approximately {knoxBloom} bloom. The manufacturer does not
                 print this on retail packaging, but the value is consistently confirmed by
                 independent cooking references including David Lebovitz's gelatin reference and
                 several professional pastry handbooks. It is one of the most reliably sourced
@@ -248,25 +271,26 @@ const description = `Bloom strength measures gelatin's gelling power: Knox powde
             <div>
               <h3 class="font-serif text-lg text-stone-900 mb-2">What is the bloom strength of gold sheet gelatin?</h3>
               <p class="text-stone-600 leading-relaxed">
-                Gold grade sheet gelatin is approximately 190–220 bloom, with most suppliers
-                targeting around 200. Gold is the most common grade in European professional
-                pastry and the grade most often assumed when a recipe specifies "gelatin sheets"
-                without naming a grade. Individual sheets typically weigh approximately 2g.
+                Gold grade sheet gelatin is approximately {gold.range[0]}–{gold.range[1]} bloom, with
+                most suppliers targeting around {gold.bloom}. Gold is the most common grade in
+                European professional pastry and the grade most often assumed when a recipe
+                specifies "gelatin sheets" without naming a grade. Individual sheets typically
+                weigh approximately {gold.g}g.
               </p>
             </div>
             <div>
               <h3 class="font-serif text-lg text-stone-900 mb-2">Does higher bloom mean better gelatin?</h3>
               <p class="text-stone-600 leading-relaxed">
                 No. Higher bloom means a firmer set — it is a property measurement, not a
-                quality ranking. A 225-bloom Knox packet is not better or worse than a
-                160-bloom silver sheet. The correct bloom is whichever one matches the
+                quality ranking. A {knoxBloom}-bloom Knox packet is not better or worse than a
+                {silverBloom}-bloom silver sheet. The correct bloom is whichever one matches the
                 texture requirement of your recipe.
               </p>
             </div>
             <div>
               <h3 class="font-serif text-lg text-stone-900 mb-2">How do I convert between different bloom strengths?</h3>
               <p class="text-stone-600 leading-relaxed">
-                Multiply the recipe quantity by (recipe bloom ÷ your bloom). The{" "}
+                Multiply the recipe quantity by the square root of (recipe bloom ÷ your bloom). The{" "}
                 <a href="/" class="text-amber-700 underline underline-offset-4">
                   bloom strength calculator
                 </a>{" "}

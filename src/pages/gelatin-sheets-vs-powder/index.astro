@@ -2,6 +2,36 @@
 import "../../styles/global.css";
 import BaseHead from "../../components/BaseHead.astro";
 import Footer from "../../components/Footer.astro";
+import {
+  getGrade,
+  getPowder,
+  sheetMass,
+  sheetGramsToPowderGrams,
+  powderToSheets,
+  bloomFactor,
+  TSP_GRAMS,
+  fmt1,
+} from "../../lib/gelatin-conversion.js";
+
+// No gelatin figure on this page is typed; every one is computed from the
+// bloom data through the shared conversion module.
+const silver = getGrade("silver");
+const gold = getGrade("gold");
+const bronze = getGrade("bronze");
+const platinum = getGrade("platinum");
+const knox = getPowder("knox");
+const euro = getPowder("european-powder");
+
+const bloomRange = (g) => `${g.range[0]}–${g.range[1]}`;
+const TBSP_GRAMS = TSP_GRAMS * 3;
+const tbspAsGold = fmt1(powderToSheets(TBSP_GRAMS, "grams", "knox", "gold"));
+const tbspAsSilver = fmt1(powderToSheets(TBSP_GRAMS, "grams", "knox", "silver"));
+
+// Worked example: a recipe written for gold sheets, cooked with Knox powder.
+const EXAMPLE_GRAMS = 6;
+const exampleAsKnox = fmt1(sheetGramsToPowderGrams(EXAMPLE_GRAMS, "gold", "knox"));
+// Extra weight of silver needed to match a given weight of gold.
+const silverPenaltyPct = Math.round((bloomFactor(gold.bloom, silver.bloom) - 1) * 100);
 
 const articleSchema = {
   "@context": "https://schema.org",
@@ -21,7 +51,7 @@ const faqSchema = {
       name: "Are gelatin sheets stronger than powder?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "It depends on the grade. Silver sheets (160 bloom) are weaker than Knox powder (~225 bloom). Gold sheets (~200 bloom) are also weaker than Knox. Platinum sheets (~240 bloom) are stronger than Knox. The grade determines strength, not the format itself.",
+        text: `It depends on the grade. Silver sheets (${silver.bloom} bloom) are weaker than Knox powder (~${knox.bloom} bloom). Gold sheets (~${gold.bloom} bloom) are also weaker than Knox. Platinum sheets (~${platinum.bloom} bloom) are stronger than Knox. The grade determines strength, not the format itself.`,
       },
     },
     {
@@ -29,7 +59,7 @@ const faqSchema = {
       name: "How many gelatin sheets equal one tablespoon of gelatin powder?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "One tablespoon of gelatin powder is approximately 9g. At Knox strength (~225 bloom), that's roughly equivalent to 4.5 gold sheets or 5 silver sheets — but the precise number depends on the bloom strength of both the sheet and the powder. Weight-based conversion is more reliable than counting sheets.",
+        text: `One tablespoon of gelatin powder is approximately ${fmt1(TBSP_GRAMS)}g. At Knox strength (~${knox.bloom} bloom), that is roughly equivalent to ${tbspAsGold} gold sheets or ${tbspAsSilver} silver sheets — but the precise number depends on the bloom strength of both the sheet and the powder. Weight-based conversion is more reliable than counting sheets.`,
       },
     },
     {
@@ -85,13 +115,13 @@ const faqSchema = {
           <div class="grid grid-cols-2 gap-4 mb-6">
             <div class="border border-stone-200 rounded-xl p-5">
               <p class="text-xs text-stone-500 uppercase tracking-wide mb-2">One silver sheet</p>
-              <p class="font-serif text-3xl text-stone-900 mb-1">1.7 g</p>
-              <p class="text-sm text-stone-600">of gelatin at 160 bloom</p>
+              <p class="font-serif text-3xl text-stone-900 mb-1">{fmt1(sheetMass(1, "silver"))} g</p>
+              <p class="text-sm text-stone-600">of gelatin at {silver.bloom} bloom</p>
             </div>
             <div class="border border-stone-200 rounded-xl p-5">
               <p class="text-xs text-stone-500 uppercase tracking-wide mb-2">One teaspoon powder</p>
-              <p class="font-serif text-3xl text-stone-900 mb-1">3.1 g</p>
-              <p class="text-sm text-stone-600">of gelatin at ~225 bloom (Knox)</p>
+              <p class="font-serif text-3xl text-stone-900 mb-1">{TSP_GRAMS} g</p>
+              <p class="text-sm text-stone-600">of gelatin at ~{knox.bloom} bloom (Knox)</p>
             </div>
           </div>
           <p class="text-sm text-stone-500">
@@ -121,8 +151,8 @@ const faqSchema = {
                 </tr>
                 <tr>
                   <td class="py-2.5 px-2 font-medium text-stone-900">Bloom grades</td>
-                  <td class="py-2.5 px-2">Bronze (125–155), Silver (160), Gold (190–220), Platinum (235–265)</td>
-                  <td class="py-2.5 px-2">Typically 200–225 bloom (Knox ~225)</td>
+                  <td class="py-2.5 px-2">Bronze ({bloomRange(bronze)}), Silver ({bloomRange(silver)}), Gold ({bloomRange(gold)}), Platinum ({bloomRange(platinum)})</td>
+                  <td class="py-2.5 px-2">Typically {euro.bloom}–{knox.bloom} bloom (Knox ~{knox.bloom})</td>
                 </tr>
                 <tr>
                   <td class="py-2.5 px-2 font-medium text-stone-900">Dissolving method</td>
@@ -159,16 +189,19 @@ const faqSchema = {
           </p>
           <p class="mt-3">
             The problem arises when you cross formats without accounting for bloom strength.
-            Sheet grades are named: bronze (125–155 bloom), silver (~160), gold (190–220),
-            platinum (235–265). Each grade has a standard weight per sheet as well as a
-            different bloom value. A recipe asking for "3 sheets" without naming a grade is
-            ambiguous — 3 bronze sheets and 3 platinum sheets are very different quantities.
+            Sheet grades are named: bronze ({bloomRange(bronze)} bloom), silver (~{silver.bloom}),
+            gold ({bloomRange(gold)}), platinum ({bloomRange(platinum)}). Each grade has a standard
+            weight per sheet as well as a different bloom value. A recipe asking for a bare sheet
+            count without naming a grade is ambiguous — the same count of bronze and of platinum
+            are very different quantities ({fmt1(sheetMass(3, "bronze"))}g against
+            {fmt1(sheetMass(3, "platinum"))}g for three of each).
           </p>
           <p class="mt-3">
-            Powder adds its own variable: Knox is approximately 225 bloom, but European
-            pastry powders often run closer to 200. If a converted recipe says "use X grams
-            of powder," it typically assumes 200-bloom European powder, not 225-bloom Knox.
-            Using Knox at the same weight will produce a firmer result than intended.
+            Powder adds its own variable: Knox is approximately {knox.bloom} bloom, but European
+            pastry powders often run closer to {euro.bloom}. If a converted recipe says "use X grams
+            of powder," it typically assumes {euro.bloom}-bloom European powder, not
+            {knox.bloom}-bloom Knox. Using Knox at the same weight will produce a firmer result
+            than intended.
           </p>
           <p class="mt-3">
             For precise conversions between any sheet grade and any powder, the{" "}
@@ -183,26 +216,30 @@ const faqSchema = {
           <h2 class="font-serif text-2xl text-stone-900 mb-4">The bloom factor</h2>
           <div class="grid grid-cols-2 gap-4 mb-5">
             <div class="border border-stone-200 rounded-xl p-5">
-              <p class="text-xs text-stone-500 uppercase tracking-wide mb-2">Gold sheet at 200 bloom</p>
-              <p class="font-serif text-2xl text-stone-900 mb-1">~20% firmer</p>
-              <p class="text-sm text-stone-600">than a silver sheet (160 bloom) per gram</p>
+              <p class="text-xs text-stone-500 uppercase tracking-wide mb-2">Gold sheet at {gold.bloom} bloom</p>
+              <p class="font-serif text-2xl text-stone-900 mb-1">~{silverPenaltyPct}% less</p>
+              <p class="text-sm text-stone-600">weight needed than silver ({silver.bloom} bloom) for the same set</p>
             </div>
             <div class="border border-stone-200 rounded-xl p-5">
               <p class="text-xs text-stone-500 uppercase tracking-wide mb-2">Knox powder</p>
-              <p class="font-serif text-2xl text-stone-900 mb-1">~225 bloom</p>
+              <p class="font-serif text-2xl text-stone-900 mb-1">~{knox.bloom} bloom</p>
               <p class="text-sm text-stone-600">stronger per gram than gold or silver sheets</p>
             </div>
           </div>
           <p>
-            Bloom strength scales approximately linearly within the range used in cooking.
-            A gram of 200-bloom gelatin provides 25% more gelling power than a gram of
-            160-bloom gelatin. This is why weight and bloom together are the only reliable
-            way to compare across formats.
+            A gram of {gold.bloom}-bloom gelatin gels harder than a gram of {silver.bloom}-bloom
+            gelatin, so matching a set across grades means adjusting the weight: you need about
+            {silverPenaltyPct}% more silver by weight than gold. Weight and bloom together are the
+            only reliable way to compare across formats.
           </p>
           <p class="mt-3">
-            The formula: multiply the recipe quantity by (recipe bloom ÷ your bloom).
-            If a recipe calls for 6g of 200-bloom gold gelatin and you have Knox (~225 bloom),
-            you need 6 × (200 ÷ 225) = 5.3g of Knox — a small but measurable difference.
+            The formula: multiply the recipe quantity by the square root of
+            (recipe bloom ÷ your bloom). If a recipe calls for {EXAMPLE_GRAMS}g of
+            {gold.bloom}-bloom gold gelatin and you have Knox (~{knox.bloom} bloom), you need
+            {exampleAsKnox}g of Knox — a small but measurable difference.{" "}
+            <a href="/sheets-to-powder/#method" class="text-amber-700 underline underline-offset-4 hover:text-amber-600">
+              Why the square root, and where the straight ratio disagrees.
+            </a>
           </p>
           <div class="mt-5 p-4 bg-amber-50 border border-amber-200 rounded-xl">
             <p class="text-sm text-amber-900">
@@ -220,18 +257,19 @@ const faqSchema = {
             <div>
               <h3 class="font-serif text-lg text-stone-900 mb-2">Are gelatin sheets stronger than powder?</h3>
               <p class="text-stone-600 leading-relaxed">
-                It depends on the grade. Silver sheets (160 bloom) are weaker per gram than Knox powder
-                (~225 bloom). Gold sheets (~200 bloom) are also weaker than Knox. Platinum (~240 bloom)
-                is stronger. The format — sheet vs. powder — doesn't determine strength. The bloom value does.
+                It depends on the grade. Silver sheets ({silver.bloom} bloom) are weaker per gram than
+                Knox powder (~{knox.bloom} bloom). Gold sheets (~{gold.bloom} bloom) are also weaker
+                than Knox. Platinum (~{platinum.bloom} bloom) is stronger. The format — sheet vs.
+                powder — doesn't determine strength. The bloom value does.
               </p>
             </div>
             <div>
               <h3 class="font-serif text-lg text-stone-900 mb-2">How many sheets equal one tablespoon of gelatin powder?</h3>
               <p class="text-stone-600 leading-relaxed">
-                One tablespoon of gelatin powder is approximately 9g. At Knox strength (~225 bloom),
-                that's roughly 4.5 gold sheets or 5 silver sheets — but these are approximations that
-                depend on the specific bloom of both the sheet and the powder. Use weight-based math
-                rather than sheet counts for precise work.
+                One tablespoon of gelatin powder is approximately {fmt1(TBSP_GRAMS)}g. At Knox strength
+                (~{knox.bloom} bloom), that's roughly {tbspAsGold} gold sheets or {tbspAsSilver} silver
+                sheets — but these are approximations that depend on the specific bloom of both the
+                sheet and the powder. Use weight-based math rather than sheet counts for precise work.
               </p>
             </div>
             <div>
@@ -253,7 +291,11 @@ const faqSchema = {
                 <a href="/sheets-to-powder/" class="text-amber-700 underline underline-offset-4">
                   sheets converter
                 </a>{" "}
-                handles the math.
+                handles the math, and{" "}
+                <a href="/sheets-to-powder/#method" class="text-amber-700 underline underline-offset-4">
+                  the method is written out
+                </a>{" "}
+                if you want to check it.
               </p>
             </div>
           </div>

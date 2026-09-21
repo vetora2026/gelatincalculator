@@ -4,23 +4,38 @@ import BaseHead from "../../components/BaseHead.astro";
 import Footer from "../../components/Footer.astro";
 import {
   SOFT_SET_G_PER_CUP,
-  MEDIUM_SET_G_PER_CUP,
+  STANDARD_SET_G_PER_CUP,
   FIRM_SET_G_PER_CUP,
   VERY_FIRM_SET_G_PER_CUP,
+  PACKET_GRAMS,
+  DEFAULT_POWDER,
+  getGrade,
   gramsToTsp,
+  powderToSheets,
   fmt1,
 } from "../../lib/gelatin-conversion.js";
 
 // Every gram and teaspoon figure on this page is derived from the shared
 // conversion module, so the page cannot drift from the calculator again.
-const soft = { g: SOFT_SET_G_PER_CUP, tsp: fmt1(gramsToTsp(SOFT_SET_G_PER_CUP)) };
-const medium = { g: MEDIUM_SET_G_PER_CUP, tsp: fmt1(gramsToTsp(MEDIUM_SET_G_PER_CUP)) };
-const firm = { g: FIRM_SET_G_PER_CUP, tsp: fmt1(gramsToTsp(FIRM_SET_G_PER_CUP)) };
-const veryFirm = { g: VERY_FIRM_SET_G_PER_CUP, tsp: fmt1(gramsToTsp(VERY_FIRM_SET_G_PER_CUP)) };
+// The silver-sheet column is the powder figure converted through the shared
+// bloom rule, so it tracks the ladder instead of being typed alongside it.
+const SHEET_COL_GRADE = "silver";
+const sheetCol = getGrade(SHEET_COL_GRADE);
+const gold = getGrade("gold");
+const row = (g) => ({
+  g,
+  tsp: fmt1(gramsToTsp(g)),
+  sheets: fmt1(powderToSheets(g, "grams", DEFAULT_POWDER, SHEET_COL_GRADE)),
+});
+
+const soft = row(SOFT_SET_G_PER_CUP);
+const standard = row(STANDARD_SET_G_PER_CUP);
+const firm = row(FIRM_SET_G_PER_CUP);
+const veryFirm = row(VERY_FIRM_SET_G_PER_CUP);
 
 const path = "/how-much-gelatin-per-cup-of-liquid/";
-const title = `How Much Gelatin Per Cup of Liquid? ${medium.g}g (${medium.tsp} tsp) — Ratio Chart`;
-const description = `${medium.g}g (${medium.tsp} tsp) of gelatin powder sets one cup of liquid to a medium set. Full ratio chart for soft, medium and firm sets, in powder and sheets.`;
+const title = `How Much Gelatin Per Cup of Liquid? ${standard.g}g (${standard.tsp} tsp) — Ratio Chart`;
+const description = `${standard.g}g (${standard.tsp} tsp) of gelatin powder sets one cup of liquid to a standard set. Ratio chart for soft, standard and firm sets, in powder and sheets.`;
 
 const articleSchema = {
   "@context": "https://schema.org",
@@ -39,7 +54,7 @@ const faqSchema = {
       name: "How much gelatin powder do I use per cup of liquid?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: `For a standard medium set (firm enough to unmold, like classic gelatin desserts), use approximately ${medium.tsp} teaspoons (${medium.g}g) of gelatin powder per cup (240ml) of liquid. For a softer panna cotta-style set, use approximately ${soft.tsp} teaspoons (${soft.g}g). These ratios assume powder at approximately 200–225 bloom.`,
+        text: `For a standard set (firm enough to unmold, like classic gelatin desserts), use approximately ${standard.tsp} teaspoons (${standard.g}g) of gelatin powder per cup (240ml) of liquid — the ratio Knox prints on its own packaging, one ${PACKET_GRAMS}g envelope per 2 cups. For a softer panna cotta-style set, use approximately ${soft.tsp} teaspoons (${soft.g}g). These ratios assume powder at approximately 200–225 bloom.`,
       },
     },
     {
@@ -111,7 +126,7 @@ const faqSchema = {
                 <tr class="border-b border-stone-200 text-left text-stone-500">
                   <th class="py-2 px-2 font-medium">Desired Texture</th>
                   <th class="py-2 px-2 font-medium">Powder per Cup (~200–225 bloom)</th>
-                  <th class="py-2 px-2 font-medium">Silver Sheets (160 bloom) per Cup</th>
+                  <th class="py-2 px-2 font-medium">Silver Sheets ({sheetCol.bloom} bloom) per Cup</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-stone-100 text-stone-700">
@@ -121,38 +136,44 @@ const faqSchema = {
                     <p class="text-stone-500 text-xs mt-0.5">Barely holds shape — panna cotta</p>
                   </td>
                   <td class="py-3 px-2">~{soft.tsp} tsp (~{soft.g}g)</td>
-                  <td class="py-3 px-2">~2.5 sheets</td>
+                  <td class="py-3 px-2">~{soft.sheets} sheets</td>
                 </tr>
                 <tr>
                   <td class="py-3 px-2">
-                    <p class="font-medium text-stone-900">Medium set</p>
-                    <p class="text-stone-500 text-xs mt-0.5">Standard jello, mousse, sliceable</p>
+                    <p class="font-medium text-stone-900">Standard set</p>
+                    <p class="text-stone-500 text-xs mt-0.5">Knox’s own guidance — 1 envelope per 2 cups; unmoldable</p>
                   </td>
-                  <td class="py-3 px-2">~{medium.tsp} tsp (~{medium.g}g)</td>
-                  <td class="py-3 px-2">~4 sheets</td>
+                  <td class="py-3 px-2">~{standard.tsp} tsp (~{standard.g}g)</td>
+                  <td class="py-3 px-2">~{standard.sheets} sheets</td>
                 </tr>
                 <tr>
                   <td class="py-3 px-2">
                     <p class="font-medium text-stone-900">Firm set</p>
-                    <p class="text-stone-500 text-xs mt-0.5">Clean-cutting, unmoldable</p>
+                    <p class="text-stone-500 text-xs mt-0.5">Clean-cutting, layered</p>
                   </td>
                   <td class="py-3 px-2">~{firm.tsp} tsp (~{firm.g}g)</td>
-                  <td class="py-3 px-2">~5.5 sheets</td>
+                  <td class="py-3 px-2">~{firm.sheets} sheets</td>
                 </tr>
                 <tr>
                   <td class="py-3 px-2">
                     <p class="font-medium text-stone-900">Very firm</p>
-                    <p class="text-stone-500 text-xs mt-0.5">Aspic, gummy, structural</p>
+                    <p class="text-stone-500 text-xs mt-0.5">One envelope per cup — gummies, aspic</p>
                   </td>
                   <td class="py-3 px-2">~{veryFirm.tsp}+ tsp (~{veryFirm.g}g)</td>
-                  <td class="py-3 px-2">~7+ sheets</td>
+                  <td class="py-3 px-2">~{veryFirm.sheets}+ sheets</td>
                 </tr>
               </tbody>
             </table>
           </div>
+          <p class="text-sm text-stone-600 mt-4 leading-relaxed">
+            Anchor: Knox prints that one {PACKET_GRAMS}g envelope gels 2 cups of liquid —
+            {standard.g}g per cup. Softer and firmer rows are scaled from that.
+          </p>
           <p class="text-xs text-stone-500 mt-3 leading-relaxed">
-            Sheet counts assume standard weight per sheet (~2.5g silver, ~2g gold). Actual sheet
-            weights vary by supplier. For critical applications, weigh rather than count.
+            Sheet counts assume standard weight per sheet (~{sheetCol.g}g {sheetCol.name.toLowerCase()},
+            ~{gold.g}g gold) and are converted from the powder figure by bloom, not counted
+            one-for-one. Actual sheet weights vary by supplier. For critical applications,
+            weigh rather than count.
           </p>
           <div class="mt-5 p-4 bg-amber-50 border border-amber-200 rounded-xl">
             <p class="text-sm text-amber-900">
@@ -194,7 +215,7 @@ const faqSchema = {
                 Cream and milk set slightly softer than water at the same gelatin
                 concentration. Fat content interrupts the gelatin network. Panna cotta —
                 which is primarily cream — typically uses the soft-set ratio ({soft.tsp} tsp
-                per cup) rather than the medium-set ratio used for water-based
+                per cup) rather than the standard-set ratio used for water-based
                 preparations.
               </p>
             </div>
@@ -247,8 +268,9 @@ const faqSchema = {
             <div>
               <h3 class="font-serif text-lg text-stone-900 mb-2">How much gelatin powder do I use per cup of liquid?</h3>
               <p class="text-stone-600 leading-relaxed">
-                For a standard medium set, approximately {medium.tsp} teaspoons ({medium.g}g) of gelatin
-                powder per cup (240ml) of liquid. For a softer panna cotta-style set,
+                For a standard set, approximately {standard.tsp} teaspoons ({standard.g}g) of gelatin
+                powder per cup (240ml) of liquid — Knox’s own guidance, one {PACKET_GRAMS}g
+                envelope per 2 cups. For a softer panna cotta-style set,
                 approximately {soft.tsp} teaspoons ({soft.g}g). These ratios assume powder at
                 approximately 200–225 bloom in a water-based preparation. For dairy or
                 acidic liquids, adjust upward.

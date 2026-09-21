@@ -32,20 +32,20 @@ const packetAsSheetGrams = fmt1(powderGramsToSheetGrams(PACKET_GRAMS, DEFAULT_SH
 
 const path = "/gelatin-grams-sheets-to-powder/";
 const title = `Gelatin Sheets to Powder in Grams: ${GRAM_ROWS[0]}g–${GRAM_ROWS[GRAM_ROWS.length - 1]}g Chart (${FEATURED}g = ${answer}g)`;
-const description = `${FEATURED}g of sheet gelatin converts to ${answer}g of powdered gelatin (gold sheets to Knox). Full gram-by-gram chart for every sheet grade, 1g to 20g.`;
+const description = `${FEATURED}g of sheet gelatin converts to ${answer}g of powdered gelatin (gold sheets to Knox). Full gram-by-gram chart for every sheet grade, ${GRAM_ROWS[0]}g to ${GRAM_ROWS[GRAM_ROWS.length - 1]}g.`;
 
 const faqs = [
   {
-    q: `Does 5g of gelatin mean 5g of sheets or 5g of powder?`,
+    q: `Does ${FEATURED}g of gelatin mean ${FEATURED}g of sheets or ${FEATURED}g of powder?`,
     a: `It depends on what the recipe was written around, and the two are not interchangeable. ${FEATURED}g of gold sheet gelatin converts to ${answer}g of ${powder.label.toLowerCase()}, because the powder gels harder per gram. If the recipe is European and lists grams without naming a format, sheet gelatin is the more likely reading; if it is American, powder is. The clue is usually elsewhere in the method — a recipe that says "soak the gelatin in cold water and squeeze" means sheets, one that says "sprinkle over cold water" means powder.`,
   },
   {
-    q: `How many sheets is 5 grams of gelatin?`,
+    q: `How many sheets is ${FEATURED} grams of gelatin?`,
     a: `At gold grade, ${FEATURED}g works out to about ${featuredSheets} sheets, since a gold sheet weighs ${grade.g}g. The count changes with grade — the same ${FEATURED}g is a different number of sheets in every row of the chart above. If your recipe gives you a sheet count rather than a weight, the <a href="/${COUNT_PAGES[4].slug}/" class="text-amber-700 underline underline-offset-4">5-sheet page</a> starts from the count instead.`,
   },
   {
     q: `Why isn't the gram-to-gram conversion one-to-one?`,
-    a: `Because grams measure mass and bloom measures gelling power. A gram of ${grade.name.toLowerCase()} sheet stock at ${grade.bloom} bloom does not gel as hard as a gram of ${powder.label.toLowerCase()} at ${powder.bloom} bloom, so matching the recipe's set means matching gelling power rather than weight. The ratio between the two bloom values is the entire conversion. Where the two blooms happen to be equal, the conversion is one-to-one.`,
+    a: `Because grams measure mass and bloom measures gelling power. A gram of ${grade.name.toLowerCase()} sheet stock at ${grade.bloom} bloom does not gel as hard as a gram of ${powder.label.toLowerCase()} at ${powder.bloom} bloom, so matching the recipe's set means matching gelling power rather than weight. The square root of the ratio between the two bloom values is the entire conversion — the <a href="/sheets-to-powder/#method" class="text-amber-700 underline underline-offset-4">method note</a> explains why it is the square root and not the ratio itself. Where the two blooms happen to be equal, the conversion is one-to-one.`,
   },
 ];
 

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { bloomFactor } from "../lib/gelatin-conversion.js";
 
 const RECIPE_PRESETS = [
   { label: "Silver (160)", value: 160 },
@@ -29,7 +30,7 @@ export default function Converter({ userBloom: initialUserBloom, diagnosedName }
   const amt = Number(recipeAmount);
 
   const ready = userB > 0 && recB > 0 && amt > 0;
-  const adjusted = ready ? amt * (recB / userB) : null;
+  const adjusted = ready ? amt * bloomFactor(recB, userB) : null;
   const adjRounded = adjusted != null ? Math.round(adjusted * 10) / 10 : null;
 
   let note = null;

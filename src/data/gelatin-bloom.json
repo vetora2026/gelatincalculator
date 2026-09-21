@@ -1,5 +1,11 @@
 {
-  "last_verified": "2026-04-22",
+  "last_verified": "2026-09-21",
+  "sources_checked": [
+    "Knox packaging statement via knoxgelatine.com (7g envelope ≈ 2½ tsp; gels 2 cups)",
+    "Modernist Pantry — The Confusion over Conversion (sheet weights; 10g titanium ≈ 7.1g platinum)",
+    "spycook.blogspot.com Gelatin Conversion Factors (grade weights and bloom ranges)",
+    "dessertisans.com How to Convert Gelatin (grade weights and blooms)"
+  ],
   "sheet_gelatin": [
     { "id": "titanium", "name": "Titanium", "bloom": 115, "grams_per_sheet": 5.0, "range": [100, 125], "confidence": "standard", "notes": "Softest common sheet grade. Industry standard." },
     { "id": "bronze", "name": "Bronze", "bloom": 135, "grams_per_sheet": 3.3, "range": [125, 140], "confidence": "standard", "notes": "Industry-standard sheet grade." },

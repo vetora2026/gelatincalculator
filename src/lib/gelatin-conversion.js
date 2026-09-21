@@ -14,6 +14,7 @@ export const GRADES = data.sheet_gelatin.map((g) => ({
   name: g.name,
   bloom: g.bloom,
   g: g.grams_per_sheet,
+  range: g.range,
 }));
 
 // The "unknown" bucket is a diagnostic fallback, not a product a reader can
@@ -25,6 +26,7 @@ export const POWDERS = data.powder_gelatin
     name: p.name,
     label: p.short_label || p.name,
     bloom: p.bloom,
+    range: p.range,
   }));
 
 export const DEFAULT_SHEET_GRADE = "gold";
@@ -33,6 +35,15 @@ export const DEFAULT_POWDER = "knox";
 // Unit equivalences for powdered gelatin.
 export const PACKET_GRAMS = 7;
 export const TSP_GRAMS = 2.8;
+
+/**
+ * Exponent applied to the bloom ratio when matching gel strength.
+ * 0.5 = square-root rule (gel rigidity ~ concentration², so equal strength
+ * scales mass by sqrt of the bloom ratio). 1 = the linear rule many consumer
+ * calculators use. See /sheets-to-powder/#method.
+ */
+export const BLOOM_EXPONENT = 0.5;
+export const bloomFactor = (fromBloom, toBloom) => Math.pow(fromBloom / toBloom, BLOOM_EXPONENT);
 
 export function getGrade(id) {
   const grade = GRADES.find((g) => g.id === id);
@@ -53,24 +64,24 @@ export function sheetMass(count, gradeId) {
 
 /**
  * Powder equivalent, in grams, for `count` sheets of `gradeId`.
- * Mass is scaled by the bloom ratio so the gelling power matches.
+ * Mass is scaled by `bloomFactor` so the gelling power matches.
  */
 export function sheetsToPowderGrams(count, gradeId, powderId = DEFAULT_POWDER) {
   const grade = getGrade(gradeId);
   const powder = getPowder(powderId);
-  return count * grade.g * (grade.bloom / powder.bloom);
+  return count * grade.g * bloomFactor(grade.bloom, powder.bloom);
 }
 
 /** Powder equivalent, in grams, for a mass of sheet gelatin given in grams. */
 export function sheetGramsToPowderGrams(grams, gradeId, powderId = DEFAULT_POWDER) {
   const grade = getGrade(gradeId);
   const powder = getPowder(powderId);
-  return grams * (grade.bloom / powder.bloom);
+  return grams * bloomFactor(grade.bloom, powder.bloom);
 }
 
 /** Mass of sheet gelatin, in grams, equivalent to a mass of powder. */
 export function powderGramsToSheetGrams(grams, gradeId = DEFAULT_SHEET_GRADE, powderId = DEFAULT_POWDER) {
-  return (grams * getPowder(powderId).bloom) / getGrade(gradeId).bloom;
+  return grams * bloomFactor(getPowder(powderId).bloom, getGrade(gradeId).bloom);
 }
 
 /** Convert a powder quantity in grams / packets / teaspoons into grams. */
@@ -85,7 +96,7 @@ export function powderToSheets(amount, unit, powderId = DEFAULT_POWDER, gradeId 
   const grams = powderToGrams(amount, unit);
   const powder = getPowder(powderId);
   const grade = getGrade(gradeId);
-  return (grams * powder.bloom) / (grade.bloom * grade.g);
+  return (grams * bloomFactor(powder.bloom, grade.bloom)) / grade.g;
 }
 
 export const gramsToPackets = (grams) => grams / PACKET_GRAMS;
@@ -95,15 +106,17 @@ export const gramsToTsp = (grams) => grams / TSP_GRAMS;
 export const fmt1 = (n) => n.toFixed(1);
 export const fmt2 = (n) => n.toFixed(2);
 
-// Liquid-setting reference ratios, taken from the site's existing
-// /how-much-gelatin-per-cup-of-liquid/ page so the two stay in step.
-// All are grams of ~200-225 bloom powder per US cup (240ml) of liquid.
-export const MEDIUM_SET_G_PER_CUP = 7;
-export const SOFT_SET_G_PER_CUP = 4.7;
-export const FIRM_SET_G_PER_CUP = 9.4;
-export const VERY_FIRM_SET_G_PER_CUP = 12.5;
+// Grams of ~225-bloom powder per US cup (240 ml). Anchor: Knox states one 7g
+// envelope gels 2 cups (500 ml) — 3.5g per cup — which is the "standard" row.
+export const SOFT_SET_G_PER_CUP = 2.4;       // ~1%  — spoonable, panna cotta
+export const STANDARD_SET_G_PER_CUP = 3.5;   // ~1.5% — Knox's own guidance; unmoldable
+export const FIRM_SET_G_PER_CUP = 4.8;       // ~2%  — clean-cutting, layered
+export const VERY_FIRM_SET_G_PER_CUP = 7;    // ~3%  — one envelope per cup; gummies, aspic
+
+/** Retained alias so existing importers keep resolving. */
+export const MEDIUM_SET_G_PER_CUP = STANDARD_SET_G_PER_CUP;
 
 /** How many cups of liquid a given mass of powder sets, at a chosen ratio. */
-export function cupsSetBy(powderGrams, gPerCup = MEDIUM_SET_G_PER_CUP) {
+export function cupsSetBy(powderGrams, gPerCup = STANDARD_SET_G_PER_CUP) {
   return powderGrams / gPerCup;
 }

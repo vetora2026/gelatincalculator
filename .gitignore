@@ -23,3 +23,6 @@ pnpm-debug.log*
 .idea/
 
 .playwright-mcp/
+
+# audit artifacts
+audit-*/
