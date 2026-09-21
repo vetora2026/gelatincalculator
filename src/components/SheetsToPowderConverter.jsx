@@ -7,10 +7,12 @@ import {
   PACKET_GRAMS,
   getGrade,
   getPowder,
+  sheetMass,
   sheetsToPowderGrams,
   powderToSheets,
   gramsToPackets,
   gramsToTsp,
+  fmt1,
 } from "../lib/gelatin-conversion.js";
 
 const inputCls =
@@ -123,7 +125,7 @@ export default function SheetsToPowderConverter() {
                 ≈ {gramsToPackets(powderResult).toFixed(2)} Knox packets &nbsp;·&nbsp; ≈ {gramsToTsp(powderResult).toFixed(1)} tsp
               </p>
               <p className="text-xs text-stone-400 mt-2">
-                Total gelatin in sheets: {(parseFloat(sheetCount) * grade.g).toFixed(1)}g at {grade.bloom} bloom.
+                Total gelatin in sheets: {fmt1(sheetMass(parseFloat(sheetCount), grade.id))}g at {grade.bloom} bloom.
                 Bloom powder in cold water before heating.
               </p>
             </div>
@@ -199,7 +201,7 @@ export default function SheetsToPowderConverter() {
                 Round to the nearest whole or half sheet for practical use
               </p>
               <p className="text-xs text-stone-400 mt-2">
-                Equivalent mass: {(sheetResult * gTarget.g).toFixed(1)}g of {gTarget.name} sheets at {gTarget.bloom} bloom
+                Equivalent mass: {fmt1(sheetMass(sheetResult, gTarget.id))}g of {gTarget.name} sheets at {gTarget.bloom} bloom
               </p>
             </div>
           )}

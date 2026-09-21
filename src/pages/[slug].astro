@@ -17,7 +17,11 @@ import {
   gramsToPackets,
   gramsToTsp,
   cupsSetBy,
+  BLOOM_LIQUID_RATIO,
+  bloomLiquidMl,
+  bloomLiquidTbsp,
   fmt1,
+  fmtShort,
 } from "../lib/gelatin-conversion.js";
 
 export function getStaticPaths() {
@@ -45,6 +49,15 @@ const v = {
   goldCups: fmt1(cupsSetBy(powderGrams(DEFAULT_SHEET_GRADE))),
   titaniumOverGold: fmt1(getGrade("titanium").g / getGrade("gold").g),
   oneSheet: Object.fromEntries(GRADES.map((g) => [g.id, fmt1(sheetMass(1, g.id))])),
+  // Bloom liquid for this page's gold-sheet powder figure, one rule sitewide.
+  bloomRatio: BLOOM_LIQUID_RATIO,
+  bloomMl: bloomLiquidMl(powderGrams(DEFAULT_SHEET_GRADE)),
+  bloomTbsp: bloomLiquidTbsp(powderGrams(DEFAULT_SHEET_GRADE)),
+  bloomTbspWord: bloomLiquidTbsp(powderGrams(DEFAULT_SHEET_GRADE)) === 1 ? "tablespoon" : "tablespoons",
+  // How far this page's gold figure falls short of one powder packet.
+  packetShortPct: Math.round((1 - powderGrams(DEFAULT_SHEET_GRADE) / PACKET_GRAMS) * 100),
+  // Gold sheet mass against a bare "5 grams", for the 5-sheet page's warning.
+  goldMassOver5g: fmtShort(sheetMass(n, DEFAULT_SHEET_GRADE) / 5),
 };
 for (const g of GRADES) {
   v[g.id] = fmt1(powderGrams(g.id));

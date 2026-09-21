@@ -1,18 +1,31 @@
 import { useState, useEffect } from "react";
-import { bloomFactor } from "../lib/gelatin-conversion.js";
+import {
+  GRADES,
+  bloomFactor,
+  getGrade,
+  getPowder,
+} from "../lib/gelatin-conversion.js";
 
+// The presets a recipe is most likely to have been written for: the two
+// mid-range sheet grades, platinum, and the US grocery powder. Built from the
+// bloom data so a corrected value moves the dropdown with it.
+const PRESET_GRADES = ["silver", "gold", "platinum"];
+const knoxPreset = getPowder("knox");
 const RECIPE_PRESETS = [
-  { label: "Silver (160)", value: 160 },
-  { label: "Gold (200)", value: 200 },
-  { label: "Knox equivalent (225)", value: 225 },
-  { label: "Platinum (240)", value: 240 },
+  ...GRADES.filter((g) => PRESET_GRADES.includes(g.id))
+    .sort((a, b) => a.bloom - b.bloom)
+    .map((g) => ({ label: `${g.name} (${g.bloom})`, value: g.bloom })),
+  { label: `Knox equivalent (${knoxPreset.bloom})`, value: knoxPreset.bloom },
   { label: "Custom", value: "custom" },
-];
+].sort((a, b) => (a.value === "custom" ? 1 : b.value === "custom" ? -1 : a.value - b.value));
+
+// The converter opens on the grade most professional pastry recipes assume.
+const DEFAULT_RECIPE_BLOOM = getGrade("gold").bloom;
 
 export default function Converter({ userBloom: initialUserBloom, diagnosedName }) {
   const [userBloom, setUserBloom] = useState(initialUserBloom ?? "");
-  const [recipePreset, setRecipePreset] = useState("200");
-  const [recipeBloom, setRecipeBloom] = useState(200);
+  const [recipePreset, setRecipePreset] = useState(String(DEFAULT_RECIPE_BLOOM));
+  const [recipeBloom, setRecipeBloom] = useState(DEFAULT_RECIPE_BLOOM);
   const [recipeAmount, setRecipeAmount] = useState("");
 
   useEffect(() => {
@@ -66,7 +79,7 @@ export default function Converter({ userBloom: initialUserBloom, diagnosedName }
             value={userBloom}
             onChange={(e) => setUserBloom(e.target.value)}
             className="w-full rounded-lg border border-stone-300 px-3 py-2.5 text-stone-900 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 outline-none transition"
-            placeholder="e.g. 225"
+            placeholder={`e.g. ${knoxPreset.bloom}`}
           />
         </label>
 

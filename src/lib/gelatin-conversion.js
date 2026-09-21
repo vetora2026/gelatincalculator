@@ -35,6 +35,23 @@ export const DEFAULT_POWDER = "knox";
 // Unit equivalences for powdered gelatin.
 export const PACKET_GRAMS = 7;
 export const TSP_GRAMS = 2.8;
+export const TBSP_ML = 15;
+
+/**
+ * Cold liquid needed to bloom powdered gelatin, as a multiple of the powder's
+ * own weight. The pages used to say "four to five times" and then quote cup
+ * fractions that worked out at eight to eleven times; one constant keeps the
+ * rule and the volumes in agreement.
+ */
+export const BLOOM_LIQUID_RATIO = 5;
+
+/** Bloom liquid for `powderGrams`, in ml, rounded to the nearest tablespoon. */
+export function bloomLiquidMl(powderGrams) {
+  return Math.round((powderGrams * BLOOM_LIQUID_RATIO) / TBSP_ML) * TBSP_ML;
+}
+
+/** The same volume in whole tablespoons, which is how the prose states it. */
+export const bloomLiquidTbsp = (powderGrams) => bloomLiquidMl(powderGrams) / TBSP_ML;
 
 /**
  * Exponent applied to the bloom ratio when matching gel strength.
@@ -105,6 +122,9 @@ export const gramsToTsp = (grams) => grams / TSP_GRAMS;
 /** Display helper: one decimal place, as used everywhere on the site. */
 export const fmt1 = (n) => n.toFixed(1);
 export const fmt2 = (n) => n.toFixed(2);
+
+/** fmt1 without a trailing ".0", for prose where "2×" beats "2.0×". */
+export const fmtShort = (n) => fmt1(n).replace(/\.0$/, "");
 
 // Grams of ~225-bloom powder per US cup (240 ml). Anchor: Knox states one 7g
 // envelope gels 2 cups (500 ml) — 3.5g per cup — which is the "standard" row.

@@ -30,8 +30,11 @@ const tbspAsSilver = fmt1(powderToSheets(TBSP_GRAMS, "grams", "knox", "silver"))
 // Worked example: a recipe written for gold sheets, cooked with Knox powder.
 const EXAMPLE_GRAMS = 6;
 const exampleAsKnox = fmt1(sheetGramsToPowderGrams(EXAMPLE_GRAMS, "gold", "knox"));
-// Extra weight of silver needed to match a given weight of gold.
+// The two directions of the same swap are not the same percentage. "More
+// silver than gold" is measured against the gold weight; "less gold than
+// silver" is measured against the silver weight, which is the larger base.
 const silverPenaltyPct = Math.round((bloomFactor(gold.bloom, silver.bloom) - 1) * 100);
+const goldSavingPct = Math.round((1 - bloomFactor(silver.bloom, gold.bloom)) * 100);
 
 const articleSchema = {
   "@context": "https://schema.org",
@@ -42,43 +45,36 @@ const articleSchema = {
   url: "https://gelatincalculator.com/gelatin-sheets-vs-powder/",
 };
 
+// One array feeds both the visible FAQ and the JSON-LD, so the two cannot
+// drift apart. Links are stripped for the schema, as on the count pages.
+const faqs = [
+  {
+    q: "Are gelatin sheets stronger than powder?",
+    a: `It depends on the grade. Silver sheets (${silver.bloom} bloom) are weaker per gram than Knox powder (~${knox.bloom} bloom). Gold sheets (~${gold.bloom} bloom) are also weaker than Knox. Platinum (~${platinum.bloom} bloom) is stronger. The format — sheet vs. powder — doesn't determine strength. The bloom value does.`,
+  },
+  {
+    q: "How many sheets equal one tablespoon of gelatin powder?",
+    a: `One tablespoon of gelatin powder is approximately ${fmt1(TBSP_GRAMS)}g. At Knox strength (~${knox.bloom} bloom), that's roughly ${tbspAsGold} gold sheets or ${tbspAsSilver} silver sheets — but these are approximations that depend on the specific bloom of both the sheet and the powder. Use weight-based math rather than sheet counts for precise work.`,
+  },
+  {
+    q: "Why do professional recipes use sheets instead of powder?",
+    a: `Sheet gelatin produces a clearer result with fewer impurities, which matters for mirror glazes, aspics, and transparent preparations where visual clarity is part of the recipe goal. Sheets also make it easier to measure a consistent quantity when using the standard-weight sheets from a known supplier. European professional kitchens standardized on sheets, so translated books carry that format forward.`,
+  },
+  {
+    q: "Can I substitute sheets for powder in any recipe?",
+    a: `Yes. The formats are chemically the same — both are hydrolyzed collagen. What changes is the amount needed to hit the same firmness, since the bloom values usually differ. The <a href="/sheets-to-powder/" class="text-amber-700 underline underline-offset-4">sheets converter</a> handles the math, and <a href="/sheets-to-powder/#method" class="text-amber-700 underline underline-offset-4">the method is written out</a> if you want to check it.`,
+  },
+];
+
+const stripTags = (s) => s.replace(/<[^>]+>/g, "");
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "Are gelatin sheets stronger than powder?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: `It depends on the grade. Silver sheets (${silver.bloom} bloom) are weaker than Knox powder (~${knox.bloom} bloom). Gold sheets (~${gold.bloom} bloom) are also weaker than Knox. Platinum sheets (~${platinum.bloom} bloom) are stronger than Knox. The grade determines strength, not the format itself.`,
-      },
-    },
-    {
-      "@type": "Question",
-      name: "How many gelatin sheets equal one tablespoon of gelatin powder?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: `One tablespoon of gelatin powder is approximately ${fmt1(TBSP_GRAMS)}g. At Knox strength (~${knox.bloom} bloom), that is roughly equivalent to ${tbspAsGold} gold sheets or ${tbspAsSilver} silver sheets — but the precise number depends on the bloom strength of both the sheet and the powder. Weight-based conversion is more reliable than counting sheets.`,
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Why do professional recipes use sheets instead of powder?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Sheet gelatin produces a clearer result with fewer impurities than powder. It's also easier to measure precisely when using standard-weight sheets. European professional kitchens adopted sheets as the standard format, which is why translated pastry recipes often specify them.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Can I substitute sheets for powder in any recipe?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Yes, but not one-for-one by weight. You need to account for the bloom strength of both the sheet grade and the powder. A sheets-to-powder converter handles this calculation automatically.",
-      },
-    },
-  ],
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: stripTags(f.a) },
+  })),
 };
 ---
 
@@ -147,7 +143,7 @@ const faqSchema = {
                 <tr>
                   <td class="py-2.5 px-2 font-medium text-stone-900">Measured by</td>
                   <td class="py-2.5 px-2">Count (sheets)</td>
-                  <td class="py-2.5 px-2">Weight (tsp / tbsp / grams)</td>
+                  <td class="py-2.5 px-2">Volume or weight (tsp / tbsp / grams)</td>
                 </tr>
                 <tr>
                   <td class="py-2.5 px-2 font-medium text-stone-900">Bloom grades</td>
@@ -217,7 +213,7 @@ const faqSchema = {
           <div class="grid grid-cols-2 gap-4 mb-5">
             <div class="border border-stone-200 rounded-xl p-5">
               <p class="text-xs text-stone-500 uppercase tracking-wide mb-2">Gold sheet at {gold.bloom} bloom</p>
-              <p class="font-serif text-2xl text-stone-900 mb-1">~{silverPenaltyPct}% less</p>
+              <p class="font-serif text-2xl text-stone-900 mb-1">~{goldSavingPct}% less</p>
               <p class="text-sm text-stone-600">weight needed than silver ({silver.bloom} bloom) for the same set</p>
             </div>
             <div class="border border-stone-200 rounded-xl p-5">
@@ -254,50 +250,12 @@ const faqSchema = {
         <section>
           <h2 class="font-serif text-2xl text-stone-900 mb-7">Frequently asked questions</h2>
           <div class="space-y-7">
-            <div>
-              <h3 class="font-serif text-lg text-stone-900 mb-2">Are gelatin sheets stronger than powder?</h3>
-              <p class="text-stone-600 leading-relaxed">
-                It depends on the grade. Silver sheets ({silver.bloom} bloom) are weaker per gram than
-                Knox powder (~{knox.bloom} bloom). Gold sheets (~{gold.bloom} bloom) are also weaker
-                than Knox. Platinum (~{platinum.bloom} bloom) is stronger. The format — sheet vs.
-                powder — doesn't determine strength. The bloom value does.
-              </p>
-            </div>
-            <div>
-              <h3 class="font-serif text-lg text-stone-900 mb-2">How many sheets equal one tablespoon of gelatin powder?</h3>
-              <p class="text-stone-600 leading-relaxed">
-                One tablespoon of gelatin powder is approximately {fmt1(TBSP_GRAMS)}g. At Knox strength
-                (~{knox.bloom} bloom), that's roughly {tbspAsGold} gold sheets or {tbspAsSilver} silver
-                sheets — but these are approximations that depend on the specific bloom of both the
-                sheet and the powder. Use weight-based math rather than sheet counts for precise work.
-              </p>
-            </div>
-            <div>
-              <h3 class="font-serif text-lg text-stone-900 mb-2">Why do professional recipes use sheets instead of powder?</h3>
-              <p class="text-stone-600 leading-relaxed">
-                Sheet gelatin produces a clearer result with fewer impurities, which matters for
-                mirror glazes, aspics, and transparent preparations where visual clarity is part of
-                the recipe goal. Sheets also make it easier to measure a consistent quantity when
-                using the standard-weight sheets from a known supplier. European professional
-                kitchens standardized on sheets, so translated books carry that format forward.
-              </p>
-            </div>
-            <div>
-              <h3 class="font-serif text-lg text-stone-900 mb-2">Can I substitute sheets for powder in any recipe?</h3>
-              <p class="text-stone-600 leading-relaxed">
-                Yes. The formats are chemically the same — both are hydrolyzed collagen.
-                What changes is the amount needed to hit the same firmness, since the bloom
-                values usually differ. The{" "}
-                <a href="/sheets-to-powder/" class="text-amber-700 underline underline-offset-4">
-                  sheets converter
-                </a>{" "}
-                handles the math, and{" "}
-                <a href="/sheets-to-powder/#method" class="text-amber-700 underline underline-offset-4">
-                  the method is written out
-                </a>{" "}
-                if you want to check it.
-              </p>
-            </div>
+            {faqs.map((f) => (
+              <div>
+                <h3 class="font-serif text-lg text-stone-900 mb-2">{f.q}</h3>
+                <p class="text-stone-600 leading-relaxed" set:html={f.a} />
+              </div>
+            ))}
           </div>
         </section>
 

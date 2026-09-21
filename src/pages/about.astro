@@ -2,6 +2,11 @@
 import "../styles/global.css";
 import BaseHead from "../components/BaseHead.astro";
 import Footer from "../components/Footer.astro";
+import { getGrade, getPowder } from "../lib/gelatin-conversion.js";
+
+// The two bloom values quoted in the prose below come from the bloom data.
+const gold = getGrade("gold");
+const knox = getPowder("knox");
 ---
 <html lang="en">
   <head>
@@ -45,7 +50,7 @@ import Footer from "../components/Footer.astro";
         <p>
           Home cooks, pastry enthusiasts, and anyone working from a recipe
           that specifies a bloom value (for example, a translated French
-          pastry book that calls for "200-bloom gelatin") using gelatin from
+          pastry book that calls for "{gold.bloom}-bloom gelatin") using gelatin from
           a different source.
         </p>
         <h2 class="font-serif text-2xl text-stone-900 mt-10 mb-3">How the data was sourced</h2>
@@ -55,7 +60,7 @@ import Footer from "../components/Footer.astro";
           European pastry suppliers. Those values are well-established.
         </p>
         <p>
-          The bloom value for Knox Unflavored Gelatin (~225) is not printed
+          The bloom value for Knox Unflavored Gelatin (~{knox.bloom}) is not printed
           on retail packaging but is consistently cited across independent
           cooking references including David Lebovitz's
           <em>How to Use Gelatin</em> and Good Food Gourmet's

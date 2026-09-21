@@ -10,6 +10,7 @@ import {
   DEFAULT_POWDER,
   TSP_GRAMS,
   PACKET_GRAMS,
+  BLOOM_LIQUID_RATIO,
   getGrade,
   getPowder,
   sheetGramsToPowderGrams,
@@ -186,7 +187,7 @@ const td = "px-3 py-2.5 border-t border-stone-100 whitespace-nowrap";
             teaspoons and gets unreliable past that, because each additional spoonful carries its own
             packing error in the same direction. The blooming step also has to be adapted. A recipe
             written for sheets assumes the gelatin arrives already hydrated and wrung out, contributing
-            no liquid. Powder arrives dry and needs roughly four to five times its own weight in cold
+            no liquid. Powder arrives dry and needs about {BLOOM_LIQUID_RATIO} times its own weight in cold
             liquid to swell in, and that liquid stays in the finished dish — take it from the recipe's
             cold ingredients rather than adding it. Let the granules stand until they look like wet
             sand with no dry centres before any heat goes near them.

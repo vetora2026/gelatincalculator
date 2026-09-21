@@ -3,6 +3,7 @@ import "../../styles/global.css";
 import BaseHead from "../../components/BaseHead.astro";
 import Footer from "../../components/Footer.astro";
 import {
+  GRADES,
   getGrade,
   getPowder,
   sheetMass,
@@ -26,58 +27,62 @@ const exampleAsKnox = fmt1(sheetGramsToPowderGrams(EXAMPLE_GRAMS, "gold", "knox"
 const exampleAsSilver = fmt1(EXAMPLE_GRAMS * bloomFactor(gold.bloom, silver.bloom));
 const CARD_SHEETS = 4;
 const cardSilverMass = fmt1(sheetMass(CARD_SHEETS, "silver"));
-// Weight of silver needed to match a given weight of gold.
-const silverPenaltyPct = Math.round((bloomFactor(gold.bloom, silver.bloom) - 1) * 100);
+// The card states the saving on the gold side, so it is measured against the
+// silver weight. The reverse figure — extra silver needed to match gold — is
+// larger, because it is measured against the smaller gold weight.
+const goldSavingPct = Math.round((1 - bloomFactor(silver.bloom, gold.bloom)) * 100);
+
+// The grade table's numbers come from the bloom data. Only the prose columns
+// are written here, keyed by grade id.
+const GRADE_NOTES = {
+  titanium: { set: "Softest", uses: "Delicate creams, spoonable sets" },
+  bronze: { set: "Soft, delicate", uses: "Bavarian creams, soft mousses" },
+  silver: { set: "Medium (industry standard)", uses: "Panna cotta, general desserts" },
+  gold: { set: "Firm", uses: "Aspics, firmer desserts" },
+  platinum: { set: "Very firm", uses: "Mirror glazes, structural applications" },
+};
+
+const title = `What Is Gelatin Bloom Strength? Knox ${knoxBloom}, Gold ${goldBloom}, Silver ${silverBloom}`;
+const description = `Bloom strength measures gelatin's gelling power: Knox powder is ~${knoxBloom}, gold sheets ~${goldBloom}, silver ~${silverBloom}. What the numbers mean and how to convert.`;
 
 const articleSchema = {
   "@context": "https://schema.org",
   "@type": "Article",
   headline: "What Is Gelatin Bloom Strength?",
-  description:
-    "Bloom strength measures gelatin's gelling power. Silver grade is 160, Gold is 190–220. Here's what the numbers mean and why they matter for recipe conversions.",
+  description,
   url: "https://gelatincalculator.com/what-is-gelatin-bloom-strength/",
 };
 
+// One array feeds both the visible FAQ and the JSON-LD.
+const faqs = [
+  {
+    q: "What bloom strength is Knox gelatin powder?",
+    a: `Knox Unflavored Gelatin is approximately ${knoxBloom} bloom. The manufacturer does not print this on retail packaging, but the value is consistently confirmed by independent cooking references including David Lebovitz's gelatin reference and several professional pastry handbooks. It is one of the most reliably sourced consumer bloom values.`,
+  },
+  {
+    q: "What is the bloom strength of gold sheet gelatin?",
+    a: `Gold grade sheet gelatin is approximately ${gold.range[0]}–${gold.range[1]} bloom, with most suppliers targeting around ${gold.bloom}. Gold is the most common grade in European professional pastry and the grade most often assumed when a recipe specifies "gelatin sheets" without naming a grade. Individual sheets typically weigh approximately ${gold.g}g.`,
+  },
+  {
+    q: "Does higher bloom mean better gelatin?",
+    a: `No. Higher bloom means a firmer set — it is a property measurement, not a quality ranking. A ${knoxBloom}-bloom Knox packet is not better or worse than a ${silverBloom}-bloom silver sheet. The correct bloom is whichever one matches the texture requirement of your recipe.`,
+  },
+  {
+    q: "How do I convert between different bloom strengths?",
+    a: `Multiply the recipe quantity by the square root of (recipe bloom ÷ your bloom). A recipe calling for ${EXAMPLE_GRAMS}g of ${gold.bloom}-bloom gelatin comes to ${exampleAsKnox}g of ${knox.bloom}-bloom Knox. The <a href="/" class="text-amber-700 underline underline-offset-4">bloom strength calculator</a> on this site handles this calculation, with a diagnostic step if you're not sure what bloom value your gelatin is.`,
+  },
+];
+
+const stripTags = (s) => s.replace(/<[^>]+>/g, "");
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "What bloom strength is Knox gelatin powder?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Knox Unflavored Gelatin is approximately 225 bloom. This value is not printed on retail packaging but is consistently confirmed by independent culinary references including David Lebovitz and several professional pastry handbooks.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "What is the bloom strength of gold sheet gelatin?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Gold grade sheet gelatin is approximately 190–220 bloom, with most suppliers targeting around 200. It is the most common grade used in European professional pastry and the grade most often assumed when a recipe specifies 'gelatin sheets' without naming a grade.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Does higher bloom mean better gelatin?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "No. Higher bloom means a firmer set — it is a property measurement, not a quality ranking. A 225-bloom Knox packet is not better or worse than a 160-bloom silver sheet. Each is suited to different applications. The correct bloom is whichever matches your recipe.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "How do I convert between different bloom strengths?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: `Multiply the recipe quantity by (recipe bloom ÷ your bloom) raised to the power ${BLOOM_EXPONENT} — the square root. For example: a recipe calls for ${EXAMPLE_GRAMS}g of ${gold.bloom}-bloom gelatin and you have ${knox.bloom}-bloom Knox. Use ${exampleAsKnox}g. The bloom strength calculator on this site handles this math automatically; the method is set out at /sheets-to-powder/#method.`,
-      },
-    },
-  ],
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: stripTags(f.a) },
+  })),
 };
-const title = `What Is Gelatin Bloom Strength? Knox ${knoxBloom}, Gold ${goldBloom}, Silver ${silverBloom}`;
-const description = `Bloom strength measures gelatin's gelling power: Knox powder is ~${knoxBloom}, gold sheets ~${goldBloom}, silver ~${silverBloom}. What the numbers mean and how to convert.`;
 ---
 
 <html lang="en">
@@ -143,32 +148,16 @@ const description = `Bloom strength measures gelatin's gelling power: Knox powde
                 </tr>
               </thead>
               <tbody class="divide-y divide-stone-100 text-stone-700">
+                {GRADES.map((g) => (
+                  <tr>
+                    <td class="py-2.5 px-2 font-medium text-stone-900">{g.name}</td>
+                    <td class="py-2.5 px-2">{g.range[0]}–{g.range[1]}</td>
+                    <td class="py-2.5 px-2">{GRADE_NOTES[g.id].set}</td>
+                    <td class="py-2.5 px-2">{GRADE_NOTES[g.id].uses}</td>
+                  </tr>
+                ))}
                 <tr>
-                  <td class="py-2.5 px-2 font-medium text-stone-900">Bronze</td>
-                  <td class="py-2.5 px-2">125–155</td>
-                  <td class="py-2.5 px-2">Soft, delicate</td>
-                  <td class="py-2.5 px-2">Bavarian creams, soft mousses</td>
-                </tr>
-                <tr>
-                  <td class="py-2.5 px-2 font-medium text-stone-900">Silver</td>
-                  <td class="py-2.5 px-2">~160</td>
-                  <td class="py-2.5 px-2">Medium (industry standard)</td>
-                  <td class="py-2.5 px-2">Panna cotta, general desserts</td>
-                </tr>
-                <tr>
-                  <td class="py-2.5 px-2 font-medium text-stone-900">Gold</td>
-                  <td class="py-2.5 px-2">190–220</td>
-                  <td class="py-2.5 px-2">Firm</td>
-                  <td class="py-2.5 px-2">Aspics, firmer desserts</td>
-                </tr>
-                <tr>
-                  <td class="py-2.5 px-2 font-medium text-stone-900">Platinum</td>
-                  <td class="py-2.5 px-2">235–265</td>
-                  <td class="py-2.5 px-2">Very firm</td>
-                  <td class="py-2.5 px-2">Mirror glazes, structural applications</td>
-                </tr>
-                <tr>
-                  <td class="py-2.5 px-2 font-medium text-stone-900">Knox powder</td>
+                  <td class="py-2.5 px-2 font-medium text-stone-900">{knox.name}</td>
                   <td class="py-2.5 px-2">~{knoxBloom}</td>
                   <td class="py-2.5 px-2">Firm</td>
                   <td class="py-2.5 px-2">General home baking</td>
@@ -188,7 +177,7 @@ const description = `Bloom strength measures gelatin's gelling power: Knox powde
             </div>
             <div class="border border-stone-200 rounded-xl p-5">
               <p class="text-xs text-stone-500 uppercase tracking-wide mb-2">{CARD_SHEETS} gold sheets ({gold.bloom} bloom)</p>
-              <p class="font-serif text-3xl text-stone-900 mb-1">~{silverPenaltyPct}% less</p>
+              <p class="font-serif text-3xl text-stone-900 mb-1">~{goldSavingPct}% less</p>
               <p class="text-sm text-stone-600">weight needed than silver for the same set</p>
             </div>
           </div>
@@ -258,46 +247,12 @@ const description = `Bloom strength measures gelatin's gelling power: Knox powde
         <section>
           <h2 class="font-serif text-2xl text-stone-900 mb-7">Frequently asked questions</h2>
           <div class="space-y-7">
-            <div>
-              <h3 class="font-serif text-lg text-stone-900 mb-2">What bloom strength is Knox gelatin powder?</h3>
-              <p class="text-stone-600 leading-relaxed">
-                Knox Unflavored Gelatin is approximately {knoxBloom} bloom. The manufacturer does not
-                print this on retail packaging, but the value is consistently confirmed by
-                independent cooking references including David Lebovitz's gelatin reference and
-                several professional pastry handbooks. It is one of the most reliably sourced
-                consumer bloom values.
-              </p>
-            </div>
-            <div>
-              <h3 class="font-serif text-lg text-stone-900 mb-2">What is the bloom strength of gold sheet gelatin?</h3>
-              <p class="text-stone-600 leading-relaxed">
-                Gold grade sheet gelatin is approximately {gold.range[0]}–{gold.range[1]} bloom, with
-                most suppliers targeting around {gold.bloom}. Gold is the most common grade in
-                European professional pastry and the grade most often assumed when a recipe
-                specifies "gelatin sheets" without naming a grade. Individual sheets typically
-                weigh approximately {gold.g}g.
-              </p>
-            </div>
-            <div>
-              <h3 class="font-serif text-lg text-stone-900 mb-2">Does higher bloom mean better gelatin?</h3>
-              <p class="text-stone-600 leading-relaxed">
-                No. Higher bloom means a firmer set — it is a property measurement, not a
-                quality ranking. A {knoxBloom}-bloom Knox packet is not better or worse than a
-                {silverBloom}-bloom silver sheet. The correct bloom is whichever one matches the
-                texture requirement of your recipe.
-              </p>
-            </div>
-            <div>
-              <h3 class="font-serif text-lg text-stone-900 mb-2">How do I convert between different bloom strengths?</h3>
-              <p class="text-stone-600 leading-relaxed">
-                Multiply the recipe quantity by the square root of (recipe bloom ÷ your bloom). The{" "}
-                <a href="/" class="text-amber-700 underline underline-offset-4">
-                  bloom strength calculator
-                </a>{" "}
-                on this site handles this calculation, with a diagnostic step if you're not
-                sure what bloom value your gelatin is.
-              </p>
-            </div>
+            {faqs.map((f) => (
+              <div>
+                <h3 class="font-serif text-lg text-stone-900 mb-2">{f.q}</h3>
+                <p class="text-stone-600 leading-relaxed" set:html={f.a} />
+              </div>
+            ))}
           </div>
         </section>
 

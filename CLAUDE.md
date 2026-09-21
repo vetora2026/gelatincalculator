@@ -41,7 +41,7 @@ Diagnostic and explanatory, not promotional. No stock marketing phrases. The sit
 - [ ] Deploy to Cloudflare Pages (next prompt)
 - [ ] Set up 6-month re-verification cron/reminder
 - [ ] Apply for Google AdSense after launch
-- [ ] Configure email forwarding for `contact@gelatincalculator.com`
+- [ ] Configure email forwarding for `contact@gelatincalculator.com` → `vetorainfo@gmail.com`
 - [ ] Brand lookup table intentionally small in v1 — expand only with verified additions
 
 ## File structure notes
@@ -67,4 +67,4 @@ Diagnostic and explanatory, not promotional. No stock marketing phrases. The sit
 - **Output directory:** `dist`
 - **Node version:** 20 or newer
 - **Custom domain:** `gelatincalculator.com` (registered on Cloudflare)
-- **Email forwarding:** `contact@gelatincalculator.com` → user's personal inbox, via Cloudflare Email Routing
+- **Email forwarding:** `contact@gelatincalculator.com` → `vetorainfo@gmail.com`, via Cloudflare Email Routing

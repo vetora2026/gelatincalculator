@@ -10,6 +10,7 @@ import {
   PACKET_GRAMS,
   DEFAULT_POWDER,
   getGrade,
+  getPowder,
   gramsToTsp,
   powderToSheets,
   fmt1,
@@ -22,6 +23,11 @@ import {
 const SHEET_COL_GRADE = "silver";
 const sheetCol = getGrade(SHEET_COL_GRADE);
 const gold = getGrade("gold");
+// The ratios below are quoted for powder across the common grocery range,
+// which is the European pastry value at the bottom and Knox at the top.
+const euro = getPowder("european-powder");
+const knox = getPowder("knox");
+const powderRange = `${euro.bloom}–${knox.bloom}`;
 const row = (g) => ({
   g,
   tsp: fmt1(gramsToTsp(g)),
@@ -45,43 +51,36 @@ const articleSchema = {
   url: "https://gelatincalculator.com" + path,
 };
 
+// One array feeds both the visible FAQ and the JSON-LD, so the schema cannot
+// paraphrase what the page actually says.
+const faqs = [
+  {
+    q: "How much gelatin powder do I use per cup of liquid?",
+    a: `For a standard set, approximately ${standard.tsp} teaspoons (${standard.g}g) of gelatin powder per cup (240ml) of liquid — Knox’s own guidance, one ${PACKET_GRAMS}g envelope per 2 cups. For a softer panna cotta-style set, approximately ${soft.tsp} teaspoons (${soft.g}g). These ratios assume powder at approximately ${powderRange} bloom in a water-based preparation. For dairy or acidic liquids, adjust upward.`,
+  },
+  {
+    q: "Does acid affect how gelatin sets?",
+    a: "Yes. Acid weakens the gelatin network. A dessert with a high proportion of acidic liquid — citrus juice, wine, vinegar — may require up to 50% more gelatin than a water-based preparation to achieve the same set. The exact adjustment depends on the pH and proportion of acidic liquid in the recipe.",
+  },
+  {
+    q: "Why won’t my gelatin set with fresh pineapple?",
+    a: "Fresh pineapple contains bromelain, an enzyme that breaks down the protein chains gelatin relies on. The same effect occurs with fresh kiwi (actinidin), fresh papaya (papain), fresh mango, and fresh figs. Canned or cooked versions of these fruits are safe because the heat from processing deactivates the enzymes.",
+  },
+  {
+    q: "At what temperature does gelatin set?",
+    a: "Gelatin begins to set at approximately 59°F (15°C) and melts at approximately 95°F (35°C) — just below body temperature. Standard refrigerators run at 35–38°F, which is well within the setting range. Most preparations reach a stable set within 4–6 hours; overnight chilling is recommended for preparations that need to be unmolded cleanly.",
+  },
+];
+
+const stripTags = (s) => s.replace(/<[^>]+>/g, "");
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "How much gelatin powder do I use per cup of liquid?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: `For a standard set (firm enough to unmold, like classic gelatin desserts), use approximately ${standard.tsp} teaspoons (${standard.g}g) of gelatin powder per cup (240ml) of liquid — the ratio Knox prints on its own packaging, one ${PACKET_GRAMS}g envelope per 2 cups. For a softer panna cotta-style set, use approximately ${soft.tsp} teaspoons (${soft.g}g). These ratios assume powder at approximately 200–225 bloom.`,
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Does acid affect how gelatin sets?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Yes. Acid weakens the gelatin network. A dessert with a high proportion of acidic liquid — citrus juice, wine, vinegar — may require up to 50% more gelatin than a water-based preparation to achieve the same set. Highly acidic ingredients should be added after the gelatin has partially set, if possible.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Why won't my gelatin set with fresh pineapple?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Fresh pineapple, kiwi, papaya, mango, and figs contain proteolytic enzymes (bromelain in pineapple, actinidin in kiwi) that break down the protein chains gelatin relies on for gelling. The gelatin is destroyed before it can set. Canned or cooked versions of these fruits are safe — the heat from processing deactivates the enzymes.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "At what temperature does gelatin set?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Gelatin begins to set at approximately 59°F (15°C) and melts at approximately 95°F (35°C) — just below body temperature. This melt-in-mouth property is why gelatin-set desserts feel different from agar-set ones, which remain firm at room temperature.",
-      },
-    },
-  ],
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: stripTags(f.a) },
+  })),
 };
 ---
 
@@ -117,7 +116,7 @@ const faqSchema = {
         <section>
           <h2 class="font-serif text-2xl text-stone-900 mb-4">Ratios by desired texture</h2>
           <p class="text-stone-500 text-sm mb-4">
-            Based on gelatin powder at approximately 200–225 bloom (Knox or equivalent US grocery powder)
+            Based on gelatin powder at approximately {powderRange} bloom (Knox or equivalent US grocery powder)
             in a water-based preparation at standard kitchen temperature. One cup = 240ml.
           </p>
           <div class="overflow-x-auto -mx-1">
@@ -125,7 +124,7 @@ const faqSchema = {
               <thead>
                 <tr class="border-b border-stone-200 text-left text-stone-500">
                   <th class="py-2 px-2 font-medium">Desired Texture</th>
-                  <th class="py-2 px-2 font-medium">Powder per Cup (~200–225 bloom)</th>
+                  <th class="py-2 px-2 font-medium">Powder per Cup (~{powderRange} bloom)</th>
                   <th class="py-2 px-2 font-medium">Silver Sheets ({sheetCol.bloom} bloom) per Cup</th>
                 </tr>
               </thead>
@@ -265,47 +264,12 @@ const faqSchema = {
         <section>
           <h2 class="font-serif text-2xl text-stone-900 mb-7">Frequently asked questions</h2>
           <div class="space-y-7">
-            <div>
-              <h3 class="font-serif text-lg text-stone-900 mb-2">How much gelatin powder do I use per cup of liquid?</h3>
-              <p class="text-stone-600 leading-relaxed">
-                For a standard set, approximately {standard.tsp} teaspoons ({standard.g}g) of gelatin
-                powder per cup (240ml) of liquid — Knox’s own guidance, one {PACKET_GRAMS}g
-                envelope per 2 cups. For a softer panna cotta-style set,
-                approximately {soft.tsp} teaspoons ({soft.g}g). These ratios assume powder at
-                approximately 200–225 bloom in a water-based preparation. For dairy or
-                acidic liquids, adjust upward.
-              </p>
-            </div>
-            <div>
-              <h3 class="font-serif text-lg text-stone-900 mb-2">Does acid affect how gelatin sets?</h3>
-              <p class="text-stone-600 leading-relaxed">
-                Yes. Acid weakens the gelatin network. A dessert with a high proportion
-                of acidic liquid — citrus juice, wine, vinegar — may require up to 50%
-                more gelatin than a water-based preparation to achieve the same set.
-                The exact adjustment depends on the pH and proportion of acidic liquid
-                in the recipe.
-              </p>
-            </div>
-            <div>
-              <h3 class="font-serif text-lg text-stone-900 mb-2">Why won't my gelatin set with fresh pineapple?</h3>
-              <p class="text-stone-600 leading-relaxed">
-                Fresh pineapple contains bromelain, an enzyme that breaks down the
-                protein chains gelatin relies on. The same effect occurs with fresh kiwi
-                (actinidin), fresh papaya (papain), fresh mango, and fresh figs.
-                Canned or cooked versions of these fruits are safe because the heat
-                from processing deactivates the enzymes.
-              </p>
-            </div>
-            <div>
-              <h3 class="font-serif text-lg text-stone-900 mb-2">At what temperature does gelatin set?</h3>
-              <p class="text-stone-600 leading-relaxed">
-                Gelatin begins to set at approximately 59°F (15°C) and melts at
-                approximately 95°F (35°C) — just below body temperature. Standard
-                refrigerators run at 35–38°F, which is well within the setting range.
-                Most preparations reach a stable set within 4–6 hours; overnight chilling
-                is recommended for preparations that need to be unmolded cleanly.
-              </p>
-            </div>
+            {faqs.map((f) => (
+              <div>
+                <h3 class="font-serif text-lg text-stone-900 mb-2">{f.q}</h3>
+                <p class="text-stone-600 leading-relaxed" set:html={f.a} />
+              </div>
+            ))}
           </div>
         </section>
 

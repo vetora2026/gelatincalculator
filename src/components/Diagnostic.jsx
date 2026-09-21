@@ -1,6 +1,10 @@
 import { useState } from "react";
 import data from "../data/gelatin-bloom.json";
+import { getGrade } from "../lib/gelatin-conversion.js";
 import Converter from "./Converter.jsx";
+
+// The grade this help text recommends when a box carries no colour name.
+const FALLBACK_GRADE = getGrade("gold");
 
 const CONFIDENCE_LABELS = {
   verified: { label: "Confirmed", classes: "bg-emerald-100 text-emerald-800 border-emerald-200" },
@@ -139,7 +143,11 @@ export default function Diagnostic() {
                 </p>
                 <p>
                   Check the packaging for a color name. If you truly can't find
-                  one, picking <strong>gold (200 bloom)</strong> is the safest
+                  one, picking{" "}
+                  <strong>
+                    {FALLBACK_GRADE.name.toLowerCase()} ({FALLBACK_GRADE.bloom} bloom)
+                  </strong>{" "}
+                  is the safest
                   middle-ground choice — it's what most professional pastry
                   recipes assume.
                 </p>
