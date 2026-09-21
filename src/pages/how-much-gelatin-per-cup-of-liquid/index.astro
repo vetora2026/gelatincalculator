@@ -2,14 +2,32 @@
 import "../../styles/global.css";
 import BaseHead from "../../components/BaseHead.astro";
 import Footer from "../../components/Footer.astro";
+import {
+  SOFT_SET_G_PER_CUP,
+  MEDIUM_SET_G_PER_CUP,
+  FIRM_SET_G_PER_CUP,
+  VERY_FIRM_SET_G_PER_CUP,
+  gramsToTsp,
+  fmt1,
+} from "../../lib/gelatin-conversion.js";
+
+// Every gram and teaspoon figure on this page is derived from the shared
+// conversion module, so the page cannot drift from the calculator again.
+const soft = { g: SOFT_SET_G_PER_CUP, tsp: fmt1(gramsToTsp(SOFT_SET_G_PER_CUP)) };
+const medium = { g: MEDIUM_SET_G_PER_CUP, tsp: fmt1(gramsToTsp(MEDIUM_SET_G_PER_CUP)) };
+const firm = { g: FIRM_SET_G_PER_CUP, tsp: fmt1(gramsToTsp(FIRM_SET_G_PER_CUP)) };
+const veryFirm = { g: VERY_FIRM_SET_G_PER_CUP, tsp: fmt1(gramsToTsp(VERY_FIRM_SET_G_PER_CUP)) };
+
+const path = "/how-much-gelatin-per-cup-of-liquid/";
+const title = `How Much Gelatin Per Cup of Liquid? ${medium.g}g (${medium.tsp} tsp) — Ratio Chart`;
+const description = `${medium.g}g (${medium.tsp} tsp) of gelatin powder sets one cup of liquid to a medium set. Full ratio chart for soft, medium and firm sets, in powder and sheets.`;
 
 const articleSchema = {
   "@context": "https://schema.org",
   "@type": "Article",
   headline: "How Much Gelatin Per Cup of Liquid?",
-  description:
-    "Standard ratio: 2.25 tsp gelatin powder per cup of liquid for a medium set. Here's the full reference by texture, plus what affects gelling strength.",
-  url: "https://gelatincalculator.com/how-much-gelatin-per-cup-of-liquid/",
+  description,
+  url: "https://gelatincalculator.com" + path,
 };
 
 const faqSchema = {
@@ -21,7 +39,7 @@ const faqSchema = {
       name: "How much gelatin powder do I use per cup of liquid?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "For a standard medium set (firm enough to unmold, like classic gelatin desserts), use approximately 2.25 teaspoons (7g) of gelatin powder per cup (240ml) of liquid. For a softer panna cotta-style set, use approximately 1.5 teaspoons (4.7g). These ratios assume powder at approximately 200–225 bloom.",
+        text: `For a standard medium set (firm enough to unmold, like classic gelatin desserts), use approximately ${medium.tsp} teaspoons (${medium.g}g) of gelatin powder per cup (240ml) of liquid. For a softer panna cotta-style set, use approximately ${soft.tsp} teaspoons (${soft.g}g). These ratios assume powder at approximately 200–225 bloom.`,
       },
     },
     {
@@ -55,9 +73,9 @@ const faqSchema = {
 <html lang="en">
   <head>
     <BaseHead
-      title="How Much Gelatin Per Cup of Liquid? (Reference Table) | gelatincalculator.com"
-      description="Standard ratio: 2.25 tsp gelatin powder per cup of liquid for a medium set. Here's the full reference by texture, plus what affects gelling strength."
-      path="/how-much-gelatin-per-cup-of-liquid/"
+      title={title}
+      description={description}
+      path={path}
     />
     <Fragment set:html={`<script type="application/ld+json">${JSON.stringify(articleSchema)}</script>`} />
     <Fragment set:html={`<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>`} />
@@ -102,7 +120,7 @@ const faqSchema = {
                     <p class="font-medium text-stone-900">Soft set</p>
                     <p class="text-stone-500 text-xs mt-0.5">Barely holds shape — panna cotta</p>
                   </td>
-                  <td class="py-3 px-2">~1.5 tsp (~4.7g)</td>
+                  <td class="py-3 px-2">~{soft.tsp} tsp (~{soft.g}g)</td>
                   <td class="py-3 px-2">~2.5 sheets</td>
                 </tr>
                 <tr>
@@ -110,7 +128,7 @@ const faqSchema = {
                     <p class="font-medium text-stone-900">Medium set</p>
                     <p class="text-stone-500 text-xs mt-0.5">Standard jello, mousse, sliceable</p>
                   </td>
-                  <td class="py-3 px-2">~2.25 tsp (~7g)</td>
+                  <td class="py-3 px-2">~{medium.tsp} tsp (~{medium.g}g)</td>
                   <td class="py-3 px-2">~4 sheets</td>
                 </tr>
                 <tr>
@@ -118,7 +136,7 @@ const faqSchema = {
                     <p class="font-medium text-stone-900">Firm set</p>
                     <p class="text-stone-500 text-xs mt-0.5">Clean-cutting, unmoldable</p>
                   </td>
-                  <td class="py-3 px-2">~3 tsp (~9.4g)</td>
+                  <td class="py-3 px-2">~{firm.tsp} tsp (~{firm.g}g)</td>
                   <td class="py-3 px-2">~5.5 sheets</td>
                 </tr>
                 <tr>
@@ -126,7 +144,7 @@ const faqSchema = {
                     <p class="font-medium text-stone-900">Very firm</p>
                     <p class="text-stone-500 text-xs mt-0.5">Aspic, gummy, structural</p>
                   </td>
-                  <td class="py-3 px-2">~4+ tsp (~12.5g)</td>
+                  <td class="py-3 px-2">~{veryFirm.tsp}+ tsp (~{veryFirm.g}g)</td>
                   <td class="py-3 px-2">~7+ sheets</td>
                 </tr>
               </tbody>
@@ -175,7 +193,7 @@ const faqSchema = {
               <p class="text-stone-600 text-sm leading-relaxed">
                 Cream and milk set slightly softer than water at the same gelatin
                 concentration. Fat content interrupts the gelatin network. Panna cotta —
-                which is primarily cream — typically uses the soft-set ratio (1.5 tsp
+                which is primarily cream — typically uses the soft-set ratio ({soft.tsp} tsp
                 per cup) rather than the medium-set ratio used for water-based
                 preparations.
               </p>
@@ -229,9 +247,9 @@ const faqSchema = {
             <div>
               <h3 class="font-serif text-lg text-stone-900 mb-2">How much gelatin powder do I use per cup of liquid?</h3>
               <p class="text-stone-600 leading-relaxed">
-                For a standard medium set, approximately 2.25 teaspoons (7g) of gelatin
+                For a standard medium set, approximately {medium.tsp} teaspoons ({medium.g}g) of gelatin
                 powder per cup (240ml) of liquid. For a softer panna cotta-style set,
-                approximately 1.5 teaspoons (4.7g). These ratios assume powder at
+                approximately {soft.tsp} teaspoons ({soft.g}g). These ratios assume powder at
                 approximately 200–225 bloom in a water-based preparation. For dairy or
                 acidic liquids, adjust upward.
               </p>

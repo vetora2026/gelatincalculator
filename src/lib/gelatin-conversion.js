@@ -97,9 +97,11 @@ export const fmt2 = (n) => n.toFixed(2);
 
 // Liquid-setting reference ratios, taken from the site's existing
 // /how-much-gelatin-per-cup-of-liquid/ page so the two stay in step.
-// Both are grams of ~200-225 bloom powder per US cup (240ml) of liquid.
+// All are grams of ~200-225 bloom powder per US cup (240ml) of liquid.
 export const MEDIUM_SET_G_PER_CUP = 7;
 export const SOFT_SET_G_PER_CUP = 4.7;
+export const FIRM_SET_G_PER_CUP = 9.4;
+export const VERY_FIRM_SET_G_PER_CUP = 12.5;
 
 /** How many cups of liquid a given mass of powder sets, at a chosen ratio. */
 export function cupsSetBy(powderGrams, gPerCup = MEDIUM_SET_G_PER_CUP) {

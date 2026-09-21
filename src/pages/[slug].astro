@@ -53,7 +53,12 @@ for (const g of GRADES) {
 }
 
 const sheetWord = n === 1 ? "sheet" : "sheets";
-const title = `${n} Gelatin ${n === 1 ? "Sheet" : "Sheets"} to Powder = ${headline} Grams (Chart)`;
+// The single-sheet page also answers "what does one sheet weigh?", which the
+// n >= 2 pages are not asked. Its title carries the weight; the rest do not.
+const title =
+  n === 1
+    ? `${n} Gelatin Sheet to Powder = ${headline}g (a Gold Sheet Weighs ${fmt1(sheetMass(1, "gold"))}g)`
+    : `${n} Gelatin Sheets to Powder = ${headline} Grams (Chart)`;
 const description = `${n} gelatin ${sheetWord} converts to ${headline}g of powdered gelatin (gold sheets, Knox powder). Chart for bronze, silver, gold, platinum and titanium.`;
 const path = `/${page.slug}/`;
 

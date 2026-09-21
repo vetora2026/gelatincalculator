@@ -4,6 +4,7 @@ import BaseHead from "../components/BaseHead.astro";
 import Diagnostic from "../components/Diagnostic.jsx";
 import TwoLegos from "../components/TwoLegos.astro";
 import Footer from "../components/Footer.astro";
+import { getGrade, getPowder } from "../lib/gelatin-conversion.js";
 
 const faqSchema = {
   "@context": "https://schema.org",
@@ -75,12 +76,20 @@ const webAppSchema = {
   description:
     "Convert gelatin amounts between bloom strengths. Covers Knox (~225), gold (~200), silver (~160), platinum (~240), and more.",
 };
+
+// Title, H1 and description values come from the bloom data, never typed.
+const knox = getPowder("knox");
+const gold = getGrade("gold");
+const silver = getGrade("silver");
+const platinum = getGrade("platinum");
+const title = "Gelatin Conversion Calculator — Bloom, Sheets to Powder, Knox";
+const description = `Convert gelatin amounts between bloom strengths: Knox (~${knox.bloom}), gold (~${gold.bloom}), silver (~${silver.bloom}), platinum (~${platinum.bloom}). Free diagnostic tool for home bakers.`;
 ---
 <html lang="en">
   <head>
     <BaseHead
-      title="Gelatin Bloom Calculator — Knox, Gold Sheet, Silver & More | gelatincalculator.com"
-      description="Convert gelatin amounts between bloom strengths. Covers Knox (~225), gold (~200), silver (~160), platinum (~240), and more. Free diagnostic tool for home bakers working from pastry recipes."
+      title={title}
+      description={description}
       path="/"
     />
     <Fragment set:html={`<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>`} />
@@ -103,7 +112,7 @@ const webAppSchema = {
 
     <header class="max-w-5xl mx-auto px-5 pt-16 sm:pt-24 pb-12 sm:pb-20 text-center">
       <h1 class="font-serif text-5xl sm:text-6xl md:text-7xl text-stone-900 mb-10">
-        Know your gelatin.
+        Gelatin Conversion Calculator
       </h1>
       <TwoLegos />
     </header>
@@ -114,7 +123,7 @@ const webAppSchema = {
       </div>
 
       <div class="mt-8 max-w-3xl mx-auto flex flex-wrap gap-x-6 gap-y-2 text-sm text-stone-500">
-        <a href="/what-is-bloom-strength/" class="hover:text-amber-700 underline underline-offset-4">
+        <a href="/what-is-gelatin-bloom-strength/" class="hover:text-amber-700 underline underline-offset-4">
           What is bloom strength?
         </a>
         <a href="/sheets-to-powder/" class="hover:text-amber-700 underline underline-offset-4">

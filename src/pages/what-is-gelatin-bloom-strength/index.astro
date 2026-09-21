@@ -2,6 +2,7 @@
 import "../../styles/global.css";
 import BaseHead from "../../components/BaseHead.astro";
 import Footer from "../../components/Footer.astro";
+import { getGrade, getPowder } from "../../lib/gelatin-conversion.js";
 
 const articleSchema = {
   "@context": "https://schema.org",
@@ -50,13 +51,20 @@ const faqSchema = {
     },
   ],
 };
+
+// Bloom values in the title and description are read from the bloom data.
+const knoxBloom = getPowder("knox").bloom;
+const goldBloom = getGrade("gold").bloom;
+const silverBloom = getGrade("silver").bloom;
+const title = `What Is Gelatin Bloom Strength? Knox ${knoxBloom}, Gold ${goldBloom}, Silver ${silverBloom}`;
+const description = `Bloom strength measures gelatin's gelling power: Knox powder is ~${knoxBloom}, gold sheets ~${goldBloom}, silver ~${silverBloom}. What the numbers mean and how to convert.`;
 ---
 
 <html lang="en">
   <head>
     <BaseHead
-      title="What Is Gelatin Bloom Strength? Explained for Home Cooks | gelatincalculator.com"
-      description="Bloom strength measures gelatin's gelling power. Silver grade is 160, Gold is 190–220. Here's what the numbers mean and why they matter for recipe conversions."
+      title={title}
+      description={description}
       path="/what-is-gelatin-bloom-strength/"
     />
     <Fragment set:html={`<script type="application/ld+json">${JSON.stringify(articleSchema)}</script>`} />

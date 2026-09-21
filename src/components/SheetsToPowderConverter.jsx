@@ -209,7 +209,7 @@ export default function SheetsToPowderConverter() {
       <p className="text-xs text-stone-400 mt-5 pt-4 border-t border-stone-100 leading-relaxed">
         Sheet weights vary by manufacturer. Values use common European standard weights (
         {GRADES.map((g, i) => `${i ? ", " : ""}${g.name.toLowerCase()} ~${g.g}g`).join("")}).{" "}
-        <a href="/what-is-bloom-strength/" className="text-amber-700 underline underline-offset-4">
+        <a href="/what-is-gelatin-bloom-strength/" className="text-amber-700 underline underline-offset-4">
           What is bloom strength?
         </a>
       </p>
